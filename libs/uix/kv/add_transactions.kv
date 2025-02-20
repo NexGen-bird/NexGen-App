@@ -1,0 +1,329 @@
+<Check@MDCheckbox>:
+    group: 'group'
+    size_hint: None, None
+    size: dp(48), dp(48)
+<CheckBoxButton>:
+    padding:"7dp"
+    adaptive_height: True
+    MDButton:
+        style: "filled"
+        on_release: app.screen_manager.get_screen("addTxn").close_shift_pop_up()
+
+        MDButtonText:
+            text: "Close"
+<CheckItem>:
+    padding:"7dp"
+    adaptive_height: True
+
+    MDCheckbox:
+        group: root.group
+        color_active: "green"
+        active: root.active_val
+        on_active: app.screen_manager.get_screen("addTxn").on_checkbox_active(*args,root.text,root.checkvalue)
+
+    MDLabel:
+        text: root.text
+        adaptive_height: True
+        padding_x: "12dp"
+        pos_hint: {"center_y": .5}
+<AddTransactions>:
+    name: "addTxn"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        # padding: "20dp"
+        spacing: "20dp"
+
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "40dp"
+            padding: "20dp"
+            spacing: "18dp"
+
+            MDButton:
+                id: back
+                style: "filled"
+                pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                on_release: root.parent.previous_screen()
+
+                MDButtonText:
+                    text: "Back"
+            MDLabel:
+                text: " Add Transaction "
+                pos_hint: {"center_x": .5}
+            MDIconButton:
+                icon: "qrcode"
+                style: "standard"
+                pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                on_release: root.show_qr()
+
+                
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "20dp"
+                spacing: "20dp"
+                adaptive_height: True
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+
+                    MDButton:
+                        id: txnbtn
+                        style: "outlined"
+                        theme_width: "Custom"
+                        size_hint_x: .8
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        on_release: 
+                            root.menu_txn_open()
+                        MDButtonText:
+                            id: txntext
+                            text: root.txn_of
+                            on_text: root.txn_of = self.text
+                            pos_hint: {"center_x": .5, "center_y": .5}
+                            
+
+                # MDBoxLayout:
+                #     orientation: "horizontal"
+                #     adaptive_height: True
+                #     size_hint: .8,None
+                #     pos_hint:{"center_x": 0.5}
+                #     spacing: "15dp"
+                #     MDTextField:
+                #         id: receipt_id
+                #         mode: "outlined"
+                #         text: root.receipt_id
+                #         on_text: root.receipt_id = self.text
+                #         size_hint: .3,None
+                #         # pos_hint:{"center_x": 0.5}
+                #         disabled:False
+                #         MDTextFieldHintText:
+                #             text: "ID"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.transaction_date
+                        on_text: root.transaction_date = self.text
+                        size_hint: .3,None
+                        # pos_hint:{"center_x": 0.5}
+                        disabled:True
+                        MDTextFieldHintText:
+                            text: "Date (YYYY/MM/DD)"
+                    MDIconButton:
+                        # icon: "heart-outline"
+                        icon: "calendar-month"
+                        style: "standard"
+                        on_release: root.show_modal_date_picker()
+                # MDButton:
+                #     style: "text"
+                #     pos_hint: {"center_x": 0.5}
+                #     on_release: 
+                #         root.show_modal_date_picker()
+                #     MDButtonText:
+                #         text: root.date_of_birth
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDDropDownItem:
+                        id: plan_type_id
+                        # pos_hint: {"center_x": .5, "center_y": .5}
+                        size_hint:.2,None
+                        disabled: True if root.txn_of != "Addmission" else False
+                        on_release: root.open_plantype_menu(self)
+
+                        MDDropDownItemText:
+                            id: plan_type
+                            font_style: "Title"
+                            role:"medium"
+                            text: "Select Plan Type"
+                
+                    MDDropDownItem:
+                        id:shift_menu_id
+                        # pos_hint: {"center_x": .5, "center_y": .5}
+                        size_hint:.2,None
+                        disabled: True if root.txn_of != "Addmission" else False
+                        on_release: root.open_shift_menu(self)
+
+                        MDDropDownItemText:
+                            id: shift
+                            font_style: "Title"
+                            role:"medium"
+                            text: "Select Shift"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDTextField:
+                        id: startdate
+                        mode: "outlined"
+                        text: root.transaction_startdate
+                        on_text: root.transaction_startdate = self.text
+                        size_hint: .5,None
+                        disabled: True if root.txn_of != "Addmission" else False
+                        pos_hint:{"center_x": 0.5}
+                        
+                        MDTextFieldHintText:
+                            text: "Start Date"
+                       
+                    MDTextField:
+                        id: enddate
+                        mode: "outlined"
+                        text: root.transaction_enddate
+                        on_text: root.transaction_enddate = self.text
+                        size_hint: .5,None
+                        disabled: True if root.txn_of != "Addmission" else False
+                        pos_hint:{"center_x": 0.5}
+                        MDTextFieldHintText:
+                            text: "End Date"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    Check:
+                        # active: True
+                        pos_hint: {'center_x': .4, 'center_y': .5}
+                        disabled: True if root.txn_of != "Addmission" else False
+                        on_active:root.update_batch(False)
+                    MDLabel:
+                        text: "Regular"
+                        adaptive_height: True
+                        padding_x: "7dp"
+                        pos_hint: {"center_y": .5}
+
+                    Check:
+                        pos_hint: {'center_x': .6, 'center_y': .5}
+                        disabled: True if root.txn_of != "Addmission" else False
+                        on_active:root.update_batch(True)
+                    MDLabel:
+                        text: "Week-End"
+                        adaptive_height: True
+                        padding_x: "7dp"
+                        pos_hint: {"center_y": .5}
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    MDGridLayout:
+                        cols: 1
+                        spacing: "10dp"
+                        size_hint_y: None
+                        height: self.minimum_height
+                        MDTextField:
+                            mode: "outlined"
+                            text: root.amount
+                            on_text: root.amount = self.text
+                            size_hint: .8,None
+                            pos_hint:{"center_x": 0.5}
+                            input_filter:"int"
+                            MDTextFieldHintText:
+                                text: "Amount (₹)"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDDropDownItem:
+                        # pos_hint: {"center_x": .5, "center_y": .5}
+                        size_hint:.2,None
+                        on_release: root.open_txnmode_menu(self)
+
+                        MDDropDownItemText:
+                            id: txn_mode
+                            font_style: "Title"
+                            role:"medium"
+                            text: "Txn Mode"
+                
+                    MDDropDownItem:
+                        # pos_hint: {"center_x": .5, "center_y": .5}
+                        size_hint:.2,None
+                        on_release: root.open_txntype_menu(self)
+
+                        MDDropDownItemText:
+                            id: txntype_text
+                            font_style: "Title"
+                            role:"medium"
+                            text: "Txn Type"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.transaction_made_by
+                        on_text: root.transaction_made_by = self.text
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        
+                        MDTextFieldHintText:
+                            text: "Txn Made By"
+                       
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.transaction_made_to
+                        on_text: root.transaction_made_to = self.text
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        MDTextFieldHintText:
+                            text: "Txn Made To"
+                        
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.transaction_made_for
+                        on_text: root.transaction_made_for = self.text
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        MDTextFieldHintText:
+                            text: "Description"
+
+                    
+                
+                
+                MDButton:
+                    style: "filled"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: 
+                        root.submit_form()
+                    MDButtonText:
+                        text: "Submit"

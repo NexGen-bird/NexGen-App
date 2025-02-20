@@ -1,0 +1,219 @@
+<AdmissionFormScreen>:
+    name: "admission_form"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        # padding: "20dp"
+        spacing: "10dp"
+
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "40dp"
+            padding: "20dp"
+            spacing: "18dp"
+
+            MDButton:
+                id: back
+                style: "filled"
+                pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                on_release: root.parent.previous_screen()
+
+                MDButtonText:
+                    text: "Back"
+            MDLabel:
+                text: " Admission Form "
+                pos_hint: {"center_x": .5}
+
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "20dp"
+                spacing: "20dp"
+                adaptive_height: True
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDTextField:
+                        id: contact_field
+                        mode: "outlined"
+                        text: root.contact_number
+                        on_text: root.update_menu(self.text)
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        input_filter:"int"
+                        MDTextFieldLeadingIcon:
+                            icon: "phone"
+                        MDTextFieldHintText:
+                            text: "Contact Number"
+                        MDTextFieldMaxLengthText:
+                            max_text_length: 12
+                MDTextField:
+                    mode: "outlined"
+                    text: root.full_name
+                    on_text: root.full_name = self.text
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    MDTextFieldHintText:
+                        text: "Full Name"
+                # MDButton:
+                #     style: "text"
+                #     pos_hint: {"center_x": 0.5}
+                #     on_release: 
+                #         root.show_modal_date_picker()
+                #     MDButtonText:
+                #         text: root.date_of_birth
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    MDGridLayout:
+                        cols: 2
+                        spacing: "10dp"
+                        size_hint_y: None
+                        height: self.minimum_height
+                        MDTextField:
+                            mode: "outlined"
+                            text: root.date_of_birth
+                            on_text: root.date_of_birth = self.text
+                            size_hint: .3,None
+                            # pos_hint:{"center_x": 0.5}
+                            disabled:True
+                            MDTextFieldHintText:
+                                text: "DOB (YYYY/MM/DD)"
+                        MDIconButton:
+                            # icon: "heart-outline"
+                            icon: "calendar-month"
+                            style: "standard"
+                            on_release: root.show_modal_date_picker()
+                        
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"  
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.age
+                        on_text: root.age = self.text
+                        size_hint: .2,None
+                        # pos_hint:{"center_x": 0.5}
+                        disabled:True
+                        MDTextFieldHintText:
+                            text: "Age"  
+                    
+                    MDDropDownItem:
+                        # pos_hint: {"center_x": .5, "center_y": .5}
+                        size_hint:.2,None
+                        on_release: root.open_gender_menu(self)
+
+                        MDDropDownItemText:
+                            id: drop_text
+                            font_style: "Title"
+                            role:"medium"
+                            text: "Gender"
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.email_id
+                        on_text: root.email_id = self.text
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        validator: "email"
+                        MDTextFieldHintText:
+                            text: "Email ID"
+                        MDTextFieldHelperText:
+                            text: "user@gmail.com"
+                            # mode: "persistent"
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.education_qualification
+                        on_text: root.education_qualification = self.text
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        MDTextFieldHintText:
+                            text: "Educational Qualification"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    size_hint: .8,None
+                    pos_hint:{"center_x": 0.5}
+                    spacing: "15dp"
+                    MDTextField:
+                        mode: "outlined"
+                        text: root.joining_for
+                        on_text: root.joining_for = self.text
+                        size_hint: .5,None
+                        pos_hint:{"center_x": 0.5}
+                        MDTextFieldHintText:
+                            text: "NexGen Study Center Joining For"
+                MDTextField:
+                    mode: "outlined"
+                    text: root.address
+                    on_text: root.address = self.text
+                    multiline: True
+                    size_hint: .8,None
+                    max_height: "200dp"
+                    pos_hint:{"center_x": 0.5}
+                    MDTextFieldHintText:
+                        text: "Address"
+                MDButton:
+                    id: btn
+                    style: "outlined"
+                    theme_width: "Custom"
+                    size_hint_x: .8
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    on_release: 
+                        root.file_manager_open()
+                    MDButtonIcon:
+                        x: text.x - (self.width + dp(10))
+                        icon: "file-image-plus"
+
+                    MDButtonText:
+                        id: text
+                        text: "Upload Image"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                MDButton:
+                    style: "filled"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: 
+                        root.submit_form()
+                    MDButtonText:
+                        text: "Submit"

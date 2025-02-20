@@ -1,0 +1,184 @@
+<CustomOneLineIconListItem>
+    padding: "10dp"
+    size_hint: None, None
+    size: "640dp", "100dp"
+    theme_bg_color: "Custom"
+    md_bg_color: "white"
+    style: "outlined"
+
+    MDRelativeLayout:
+        MDLabel:
+            text: root.txn_type
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"top": 1, "right": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.Name[:25]+str("...") if len(root.Name)>25 else root.Name
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"top": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.Date
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"bottom": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+
+        MDLabel:
+            text: "₹ "+str(root.Amount)
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"bottom": 1, "right": 1}
+            bold: True
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: root.Color if root.Color else "green"
+<OverviewCards>
+    padding: "10dp"
+    # size_hint: None, None
+    # size: "240dp", "100dp"
+    size_hint: .3,1.3
+    pos_hint:{"center_x": 0.5}
+    theme_bg_color: "Custom"
+    md_bg_color: "white"
+    style: "outlined"
+
+    MDRelativeLayout:
+         
+        MDLabel:
+            text: root.cardlabel
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"top": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"small"
+        
+
+        MDLabel:
+            text: "₹ "+str(root.amount)
+            adaptive_size: True
+            color: "grey"
+            pos: "12dp", "12dp"
+            bold: True
+            font_style: "Title"
+            role:"small"
+            theme_text_color: "Custom"
+            text_color: root.color
+            pos_hint: {"bottom": 1, "left": 1}
+
+        # MDFabButton:
+        #     icon: "calendar"
+        #     # style: "small"
+        #     size_hint: .3,.5
+        #     pos_hint: {"top": 1, "right": 1}
+<Transactions>:
+    name: "transactions"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        # Fixed Top App Bar
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout() 
+        
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: dp(10)
+            padding: dp(20)
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "40dp"
+                padding: "20dp"
+                spacing: "28dp"
+
+                MDButton:
+                    id: back
+                    style: "filled"
+                    pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                    on_release: root.parent.previous_screen()
+
+                    MDButtonText:
+                        text: "Back"
+                MDLabel:
+                    text: " Transactions "
+                    pos_hint: {"center_x": .5}
+            MDBoxLayout:
+                id: box
+                adaptive_size: True
+                spacing: "22dp"
+                padding: "15dp"
+                size_hint: 1,None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                
+
+            MDBoxLayout:
+                id: filters
+                adaptive_height: True
+                size_hint: .88,None
+                pos_hint:{"center_x": 0.5}
+
+                # MDIconButton:
+                #     icon: 'account-search'
+
+                MDTextField:
+                    id: search_field
+                    hint_text: 'Search Transaction'
+                    # mode: "round"
+                    on_text: root.set_txns(self.text, True)
+                    MDTextFieldLeadingIcon:
+                        icon: "magnify"
+                    MDTextFieldHintText:
+                        text: "Search Transaction"
+                        # mode: "persistent"
+                # MDIconButton:
+                #     id: filter_btn
+                #     icon: 'plus'
+                #     on_release: root.parent.change_screen("addTxn")
+                # MDIconButton:
+                #     id: search_btn
+                #     icon: 'magnify'
+                #     on_release: root.change_lay()
+            
+
+            RecycleView:
+                id: rv
+                key_viewclass: 'viewclass'
+                key_size: 'height'
+                size_hint: .9,dp(70)
+                pos_hint:{"center_x": 0.5}
+
+                RecycleBoxLayout:
+                    spacing: dp(10)
+                    padding: dp(10)
+                    default_size: None, dp(70)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    
+                    height: self.minimum_height
+                    orientation: 'vertical'
+
+           

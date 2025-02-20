@@ -1,0 +1,85 @@
+<ListItems>:
+    theme_bg_color:"Custom"
+    divider:True
+    md_bg_color:self.theme_cls.transparentColor
+    # on_release: print("Test --- >",root.name,root.custid)
+    on_release:app.screen_manager.get_screen("customers_list").get_text(root.custid) 
+    MDListItemLeadingAvatar:
+        source:root.avatar_source
+    MDListItemHeadlineText:
+        text: root.name
+
+    MDListItemSupportingText:
+        text:"Joined On : "+ str(root.join_date)
+
+    MDListItemTertiaryText:
+        text:root.status
+        theme_text_color:"Custom"
+        text_color:"#3cb043" if root.status == "Active" else "#ff0f0f"
+
+<CustomersList>:
+    name:"customers_list"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        
+        # Fixed Top App Bar
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+        MDBoxLayout:
+            id: mainbox
+            orientation: 'vertical'
+            spacing: dp(10)
+            padding: dp(20)
+            MDBoxLayout:
+                id: filters
+                adaptive_height: True
+                size_hint: .88,None
+                pos_hint:{"center_x": 0.5}
+
+                # MDIconButton:
+                #     icon: 'account-search'
+
+                MDTextField:
+                    id: search_field
+                    hint_text: 'Search Customer'
+                    # mode: "round"
+                    on_text: root.set_list_items(self.text, True)
+                    MDTextFieldLeadingIcon:
+                        icon: "magnify"
+                    MDTextFieldHintText:
+                        text: "Search Transaction"
+                        # mode: "persistent"
+            # MDScrollView:
+            #     do_scroll_x: False
+
+            #     MDBoxLayout:
+            #         id: main_scroll
+            #         orientation: "vertical"
+            #         adaptive_height: True
+            RecycleView:
+                id: rv
+                key_viewclass: 'viewclass'
+                key_size: 'height'
+
+                RecycleBoxLayout:
+                    padding: dp(10)
+                    default_size: None, dp(67)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'

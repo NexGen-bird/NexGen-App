@@ -1,0 +1,422 @@
+<LandingScreen>:
+    name: "land"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        # Fixed Top App Bar
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+           
+        ScrollView:  # Replaces the ScrollView
+            id: refresh_layout  # Add this to reference for refresh completion
+            refresh_callback: root.refresh_data  # Call the refresh method when pulled down
+            MDBoxLayout:
+                id:mainbox
+                orientation: "vertical"
+                adaptive_height: True
+                padding: "16dp"
+                spacing: "5dp"
+                # size_hint_y: "100dp"
+                # Total Members Card
+                MDBoxLayout:
+                    id:subbox
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#42a5f5"  # Blue color
+                        
+                        FitImage:
+                            source: "assets/project_icons/partner_4237167.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]
+                        
+                        MDLabel:
+                            text: "Total Members"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        MDLabel:
+                            text: root.total_members
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                            
+                    # Active members
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#42a5f5"  # Blue color
+                        
+                        FitImage:
+                            source: "assets/project_icons/live-streaming_13437574.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]  # Ensures circular shape
+
+                        MDLabel:
+                            text: "Active Members"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        MDLabel:
+                            text: root.active_members
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                # Expired & P&L
+                MDBoxLayout:
+                    id:subbox
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#42a5f5"  # Blue color
+                        
+                        FitImage:
+                            source: "assets/project_icons/partner_4237167.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]
+                        
+                        MDLabel:
+                            text: "Expired Subcriptions"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        MDLabel:
+                            text: root.expired_count
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                            
+                    # Active members
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#42a5f5"  # Blue color
+                        
+                        FitImage:
+                            source: "assets/project_icons/trend_2601595.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]  # Ensures circular shape
+
+                        MDLabel:
+                            text: "Previous Month P&L"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        # MDLabel:
+                        #     text: "15 Feb 2025 - 15 Mar 2025"
+                        #     font_style: "Title"
+                        #     role: "small"
+                        #     halign: "left"
+                        #     halign: "center"
+                        #     adaptive_height: True
+                        #     pos_hint: {"center_y": 0.5}
+                        MDLabel:
+                            text: root.pnl_amount
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                
+                # Expired & Due Amount 
+                MDBoxLayout:
+                    id:subbox1
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#42a5f5"  # Blue color
+                        
+                        FitImage:
+                            source: "assets/project_icons/pay_625599.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]
+                        
+                        MDLabel:
+                            text: "Total Collection"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        MDLabel:
+                            text: root.collection_amount
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                            
+                    # Total Expense
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#42a5f5"  # Blue color
+                        
+                        FitImage:
+                            source: "assets/project_icons/money_13680601.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]  # Ensures circular shape
+
+                        MDLabel:
+                            text: "Total Expense"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        MDLabel:
+                            text: root.expense_amount
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                        
+                    
+                
+                # Spacer between cards
+                Widget:
+                    size_hint_y: None
+                    height: "20dp"
+                # Available Seats Card (with right arrow)
+                MDCard:
+                    orientation: "vertical"
+                    padding: "16dp"
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: self.minimum_height
+                    pos_hint: {"center_x": 0.5}
+                    radius: [20, 20, 20, 20]
+                    theme_bg_color: "Custom"
+                    md_bg_color: "#f7bb22"
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: "10dp"
+                        adaptive_height: True
+                        MDLabel:
+                            text: "Available Seats"
+                            font_style: "Title"
+                            role:"large"
+                            halign: "left"
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                        # MDIconButton:
+                        #     icon: "arrow-right"
+                        #     pos_hint: {"center_y": 0.5}
+                        #     on_release: root.availble_seats_popup()  # Right arrow opens popup
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        adaptive_height: True
+                        spacing: "10dp"
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "1st Shift"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: 1, 1, 1, 1
+                            MDLabel:
+                                id: morningshift
+                                text: "0"
+                                font_style: "Title"
+                                role:"medium"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: "#00008B"
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "2nd Shift"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: 1, 1, 1, 1
+                            MDLabel:
+                                id: afternoonshift
+                                text: "0"
+                                font_style: "Title"
+                                role:"medium"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: "#00008B"
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "3rd Shift"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: 1, 1, 1, 1
+                            MDLabel:
+                                id: eveningshift
+                                text: "0"
+                                font_style: "Title"
+                                role:"medium"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: "#00008B"
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "4th Shift"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: 1, 1, 1, 1
+                            MDLabel:
+                                id: nightshift
+                                text: "0"
+                                font_style: "Title"
+                                role:"medium"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: "#00008B"
+
+                        
+
+                # Spacer between cards
+                Widget:
+                    size_hint_y: None
+                    height: "15dp"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    padding: ("39dp",0,"48dp","15dp")
+                    MDLabel:
+                        text: "Expiring Subscriptions"
+                        font_style: "Title"
+                        role:"large"
+                        halign: "left"
+                        adaptive_height: True
+                    MDIconButton:
+                        icon: "arrow-right"
+                        pos_hint: {"center_x": 1,"center_x":0.88}
+                        on_release: app.screen_manager.change_screen("expired_list") # Right arrow opens pop
+                MDBoxLayout:
+                    id:mainboxx
+                    orientation: "vertical"
+                    adaptive_height: True
+                    padding: "16dp"
+                    spacing: "5dp"        
+            
+<Item>:
+    on_release: app.screen_manager.get_screen("land").item_clicked()
+    
+    MDListItemLeadingAvatar:
+        source: root.source

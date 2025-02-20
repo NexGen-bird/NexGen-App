@@ -1,0 +1,82 @@
+<SeatRegisterScreen>:
+    name:"seat"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        
+        # Fixed Top App Bar
+        MDTopAppBar:
+            title: ""
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+
+        ScrollView:
+        # Widget:
+        #     size_hint_y: None
+        #     height: "20dp"
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: "16dp"
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "40dp"
+                    padding: "10dp"
+                    spacing: "18dp"
+
+                    MDButton:
+                        id: back
+                        style: "filled"
+                        pos_hint: {"center_x": 0.5}
+                        on_release: root.parent.previous_screen()
+
+                        MDButtonText:
+                            text: "Back"
+                        
+                            
+                    MDButton:
+                        pos_hint: {"center_x": 0.5}
+                        on_release: root.menu.open()
+                        MDButtonText:
+                            id: shift_selector
+                            text: root.selected_shift
+                            
+                
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    padding: "10dp"
+                    adaptive_height: True
+
+                    MDCard:
+                        orientation: "vertical"
+                        size_hint: None, None
+                        size_hint_x: "750dp"
+                        adaptive_height: True
+                        pos_hint: {"center_x": 0.5}
+                        padding: "10dp"
+
+                        MDGridLayout:
+                            cols: 4
+                            spacing: "10dp"
+                            size_hint_y: None
+                            height: self.minimum_height
+                            id: seats_grid
+<SItem>:
+    # on_release: app.screen_manager.get_screen("seat").items_clicked(self.MDButtonText.text)
+    
+    MDListItemLeadingAvatar:
+        source: root.source

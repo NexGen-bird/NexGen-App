@@ -1,0 +1,180 @@
+<ExpansionPanelItem>
+
+    MDExpansionPanelHeader:
+
+        MDListItem:
+            theme_bg_color: "Custom"
+            md_bg_color: self.theme_cls.surfaceContainerLowColor
+            ripple_effect: False
+
+            MDListItemSupportingText:
+                text: "Supporting text"
+
+            TrailingPressedIconButton:
+                id: chevron
+                icon: "chevron-right"
+                on_release: app.screen_manager.get_screen("customer_profile").tap_expansion_chevron(root, chevron)
+
+    MDExpansionPanelContent:
+        orientation: "vertical"
+        padding: 0
+        md_bg_color: self.theme_cls.surfaceContainerLowestColor
+
+        MDLabel:
+            text: "Channel information"
+            adaptive_height: True
+            padding_x: "5dp"
+            padding_y: "5dp"
+
+        MDListItem:
+            theme_bg_color: "Custom"
+            md_bg_color: self.theme_cls.surfaceContainerLowestColor
+
+            MDListItemLeadingIcon:
+                icon: "email"
+
+            MDListItemHeadlineText:
+                text: "Email"
+
+            MDListItemSupportingText:
+                text: "kivydevelopment@gmail.com"
+
+        MDListItem:
+            theme_bg_color: "Custom"
+            md_bg_color: self.theme_cls.surfaceContainerLowestColor
+
+            MDListItemLeadingIcon:
+                icon: "instagram"
+
+            MDListItemHeadlineText:
+                text: "Instagram"
+
+            MDListItemSupportingText:
+                text: "Account"
+
+            MDListItemTertiaryText:
+                text: "www.instagram.com/KivyMD"
+<CustomerProfile>:
+    name:"customer_profile"
+    md_bg_color: "#fcfbff"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: "#192134"
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+
+        MDFloatLayout:
+
+            # Back Arrow Icon
+            # MDButton:
+            MDIconButton:
+                icon: "arrow-left"
+                pos_hint: {"left": 1, "top": 1}
+                user_font_size: "24sp"
+                on_release: root.go_back(self)
+
+            # Profile Card
+            MDCard:
+                orientation: "vertical"
+                size_hint: 0.9, 0.45
+                pos_hint: {"center_x": 0.5, "top": 0.9}
+                padding: "20dp"
+                radius: [15, 15, 15, 15]
+                style:"outlined"
+                theme_bg_color: "Custom"
+                md_bg_color: "#fcfbff"
+
+                FitImage:
+                    source: root.profile_image
+                    size_hint: None, None
+                    size: "100dp", "100dp"
+                    radius: [self.width,]
+                    pos_hint: {"center_x": 0.5, "center_y": 1}
+
+                MDLabel:
+                    text: root.username
+                    font_style: "Headline"
+                    role:"small"
+                    halign: "center"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                MDLabel:
+                    text: "Joined on " + root.join_date
+                    font_style: "Body"
+                    role:"large"
+                    halign: "center"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.40}
+                    color: "#7E8899"
+
+                MDLabel:
+                    text: "Subscription Expires on " + root.expiry_date
+                    font_style: "Body"
+                    role:"large"
+                    halign: "center"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.25}
+                    color: "#7E8899"
+
+            # Transactional History Button
+            MDCard:
+                size_hint: 0.9, 0.15
+                pos_hint: {"center_x": 0.5, "center_y": 0.35}
+                orientation: "horizontal"
+                padding: "10dp"
+                style:"outlined"
+                ripple_behavior: True
+                on_release: root.navigate_transactions()
+                theme_bg_color: "Custom"
+                md_bg_color: "#fcfbff"
+
+                MDLabel:
+                    text: "Transactional History"
+                    font_style: "Title"
+                    role:"large"
+                    halign: "left"
+
+                MDIconButton:
+                    icon: "chevron-right"
+                    pos_hint: {"center_y": 0.5}
+                    on_release: root.navigate_transactions()
+
+            # User Details Button
+            MDCard:
+                size_hint: 0.9, 0.15
+                pos_hint: {"center_x": 0.5, "center_y": 0.15}
+                orientation: "horizontal"
+                padding: "10dp"
+                ripple_behavior: True
+                on_release: root.go_to_user_details()
+                style:"outlined"
+                theme_bg_color: "Custom"
+                md_bg_color: "#fcfbff"
+
+                MDLabel:
+                    text: root.username + " Details"
+                    font_style: "Title"
+                    role:"large"
+                    halign: "left"
+
+                MDIconButton:
+                    icon: "chevron-right"
+                    pos_hint: {"center_y": 0.5}
+                    on_release: root.go_to_user_details()
+            # ScrollView:
+            #     size_hint_x: .9
+            #     pos_hint: {"center_x": 0.5, "center_y": -0.05}
+            #     # pos_hint: {"center_x": .5, "center_y": .5}
+            #     MDList:
+            #         id: container

@@ -1,0 +1,1 @@
+webencodings, pdfkit, brotli, zopfli, tinyhtml5, tinycss2, Pyphen, pydyf, pycparser, Pillow, fonttools, cssselect2, cffi, weasyprint
