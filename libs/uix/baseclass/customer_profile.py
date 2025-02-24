@@ -120,3 +120,7 @@ class CustomerProfile(MDScreen):
     def navigate_transactions(self):
         self.parent.get_screen("transactions").profile_redirect = self.username
         self.parent.change_screen("transactions")
+    def navigate_subcriptions(self):
+        print(self.username)
+        self.parent.get_screen("expired_list").profile_redirect1 = self.username
+        self.parent.change_screen("expired_list")

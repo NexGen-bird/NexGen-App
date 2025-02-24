@@ -89,7 +89,7 @@
             # Profile Card
             MDCard:
                 orientation: "vertical"
-                size_hint: 0.9, 0.45
+                size_hint: 0.9, 0.39
                 pos_hint: {"center_x": 0.5, "top": 0.9}
                 padding: "20dp"
                 radius: [15, 15, 15, 15]
@@ -129,8 +129,8 @@
 
             # Transactional History Button
             MDCard:
-                size_hint: 0.9, 0.15
-                pos_hint: {"center_x": 0.5, "center_y": 0.35}
+                size_hint: 0.9, 0.09
+                pos_hint: {"center_x": 0.5, "center_y": 0.39}
                 orientation: "horizontal"
                 padding: "10dp"
                 style:"outlined"
@@ -149,11 +149,32 @@
                     icon: "chevron-right"
                     pos_hint: {"center_y": 0.5}
                     on_release: root.navigate_transactions()
+            MDCard:
+                size_hint: 0.9, 0.09
+                pos_hint: {"center_x": 0.5, "center_y": 0.25}
+                orientation: "horizontal"
+                padding: "10dp"
+                style:"outlined"
+                ripple_behavior: True
+                on_release: root.navigate_subcriptions()
+                theme_bg_color: "Custom"
+                md_bg_color: "#fcfbff"
+
+                MDLabel:
+                    text: "Subcription History"
+                    font_style: "Title"
+                    role:"large"
+                    halign: "left"
+
+                MDIconButton:
+                    icon: "chevron-right"
+                    pos_hint: {"center_y": 0.5}
+                    on_release: root.navigate_subcriptions()
 
             # User Details Button
             MDCard:
-                size_hint: 0.9, 0.15
-                pos_hint: {"center_x": 0.5, "center_y": 0.15}
+                size_hint: 0.9, 0.09
+                pos_hint: {"center_x": 0.5, "center_y": 0.11}
                 orientation: "horizontal"
                 padding: "10dp"
                 ripple_behavior: True

@@ -53,7 +53,7 @@
             
         MDButton:
             style: "filled"
-            pos_hint:{"center_x":.5,"center_y":.40}
+            pos_hint:{"center_x":.5,"center_y":.35}
             size_hint:.66,.065
             background_color:0,0,0,0
             font_name: "assets/fonts/Poppins-Bold.ttf"
@@ -63,13 +63,22 @@
             MDButtonText:
                 text: "LOGIN"
                 # app.screen_manager.change_screen("home")
-            # canvas.before:
-            #     Color:
-            #         rgb: rgba(242, 129, 42)
-            #     RoundedRectangle:
-            #         size:self.size
-            #         pos:self.pos
-            #         radius:[5]
+        MDFloatLayout:
+            orientation: "horizontal"
+            size_hint: .80,.07
+            pos_hint:{"center_x":0.35,"center_y":.43}
+            MDCheckbox:
+                id: rem_check
+                pos_hint:{"center_x":.19,"center_y":0.43}
+                active: root.is_remember
+                on_active: root.on_checkbox_active(*args)
+            MDLabel:
+                text: "Remember Password"
+                pos_hint:{"x":0.27,"center_y":.39}
+                adaptive_height: True
+                # padding_x: "12dp"
+                # pos_hint: {"center_y": .5}
+            
         MDButton:
             style: "text"
             pos_hint:{"center_x":0.5,"center_y":.25}

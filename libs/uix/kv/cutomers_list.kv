@@ -10,7 +10,7 @@
         text: root.name
 
     MDListItemSupportingText:
-        text:"Joined On : "+ str(root.join_date)
+        text:"Expired On : "+ str(root.expiry_date)
 
     MDListItemTertiaryText:
         text:root.status
@@ -40,11 +40,29 @@
                 MDActionTopAppBarButton:
                     icon: "logout"
                     on_release: app.logout()
+
         MDBoxLayout:
             id: mainbox
             orientation: 'vertical'
             spacing: dp(10)
             padding: dp(20)
+            MDBoxLayout:
+                id: mainbox
+                orientation: 'horizontal'
+                adaptive_height: True
+                # spacing: dp(10)
+                # padding: dp(20)
+                MDButton:
+                    id: back
+                    style: "filled"
+                    pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                    on_release: root.parent.previous_screen()
+
+                    MDButtonText:
+                        text: "Back"
+                MDLabel:
+                    text: "         Customer List "
+                    # pos_hint: {"x": 1}
             MDBoxLayout:
                 id: filters
                 adaptive_height: True
@@ -62,7 +80,7 @@
                     MDTextFieldLeadingIcon:
                         icon: "magnify"
                     MDTextFieldHintText:
-                        text: "Search Transaction"
+                        text: "Search Customers"
                         # mode: "persistent"
             # MDScrollView:
             #     do_scroll_x: False

@@ -155,7 +155,7 @@
                         id: plan_type_id
                         # pos_hint: {"center_x": .5, "center_y": .5}
                         size_hint:.2,None
-                        disabled: True if root.txn_of != "Addmission" else False
+                        disabled: True if root.txn_of != "Admission" else False
                         on_release: root.open_plantype_menu(self)
 
                         MDDropDownItemText:
@@ -168,7 +168,7 @@
                         id:shift_menu_id
                         # pos_hint: {"center_x": .5, "center_y": .5}
                         size_hint:.2,None
-                        disabled: True if root.txn_of != "Addmission" else False
+                        disabled: True if root.txn_of != "Admission" else False
                         on_release: root.open_shift_menu(self)
 
                         MDDropDownItemText:
@@ -188,7 +188,7 @@
                         text: root.transaction_startdate
                         on_text: root.transaction_startdate = self.text
                         size_hint: .5,None
-                        disabled: True if root.txn_of != "Addmission" else False
+                        disabled: True if root.txn_of != "Admission" else False
                         pos_hint:{"center_x": 0.5}
                         
                         MDTextFieldHintText:
@@ -200,7 +200,7 @@
                         text: root.transaction_enddate
                         on_text: root.transaction_enddate = self.text
                         size_hint: .5,None
-                        disabled: True if root.txn_of != "Addmission" else False
+                        disabled: True if root.txn_of != "Admission" else False
                         pos_hint:{"center_x": 0.5}
                         MDTextFieldHintText:
                             text: "End Date"
@@ -213,7 +213,7 @@
                     Check:
                         # active: True
                         pos_hint: {'center_x': .4, 'center_y': .5}
-                        disabled: True if root.txn_of != "Addmission" else False
+                        disabled: True if root.txn_of != "Admission" else False
                         on_active:root.update_batch(False)
                     MDLabel:
                         text: "Regular"
@@ -223,7 +223,7 @@
 
                     Check:
                         pos_hint: {'center_x': .6, 'center_y': .5}
-                        disabled: True if root.txn_of != "Addmission" else False
+                        disabled: True if root.txn_of != "Admission" else False
                         on_active:root.update_batch(True)
                     MDLabel:
                         text: "Week-End"
@@ -264,7 +264,7 @@
                             id: txn_mode
                             font_style: "Title"
                             role:"medium"
-                            text: "Txn Mode"
+                            text: "Txn Mode" 
                 
                     MDDropDownItem:
                         # pos_hint: {"center_x": .5, "center_y": .5}

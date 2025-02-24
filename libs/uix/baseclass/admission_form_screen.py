@@ -234,22 +234,27 @@ class AdmissionFormScreen(MDScreen):
 
     def submit_form(self):
         add_txn = self.parent.get_screen("addTxn")
-        # add_txn.addmission_form_data
+        # add_txn.addmission_form_data 
         # Logic for form submission (printing entered data as a placeholder)
-        form_data = {
-            "customer_name": self.full_name,
-            "customer_dob": self.date_of_birth,
-            "customer_gender": self.gender,
-            "customer_phone_number": self.contact_number,
-            "customer_email": self.email_id,
-            "customer_education": self.education_qualification,
-            "customer_joining_for": self.joining_for,
-            "customer_address": self.address,
-            "customer_profile_image": self.profile_image,
-        }
-        # create_customer = supabase_db.create_customer(name=self.full_name,dob=self.date_of_birth,gender=self.gender,phone_number=self.contact_number,email=self.email_id,education=self.education_qualification,joining_for=self.joining_for,address=self.address,profile_image=self.profile_image)
-        # print(create_customer)
-        utils.snack(color="green",text="Admission Form Submitted Successfully!")
-        # print(form_data)  # Replace this with actual form submission logic
-        add_txn.addmission_form_data = form_data
-        self.parent.change_screen("addTxn")
+        if self.full_name!="" and self.date_of_birth!="" and self.gender!="" and self.contact_number!="" and self.email_id!="" and self.education_qualification!="" and self.joining_for!="" and self.address!="":
+
+            form_data = {
+                "customer_name": self.full_name,
+                "customer_dob": self.date_of_birth,
+                "customer_gender": self.gender,
+                "customer_phone_number": self.contact_number,
+                "customer_email": self.email_id,
+                "customer_education": self.education_qualification,
+                "customer_joining_for": self.joining_for,
+                "customer_address": self.address,
+                "customer_profile_image": self.profile_image,
+            }
+            # create_customer = supabase_db.create_customer(name=self.full_name,dob=self.date_of_birth,gender=self.gender,phone_number=self.contact_number,email=self.email_id,education=self.education_qualification,joining_for=self.joining_for,address=self.address,profile_image=self.profile_image)
+            # print(create_customer)
+            utils.snack(color="green",text="Admission Form Submitted Successfully!")
+            # print(form_data)  # Replace this with actual form submission logic
+            add_txn.addmission_form_data = form_data
+            self.parent.change_screen("addTxn")
+        else:
+            utils.snack(color="red",text="Please fill all the fields..")
+            

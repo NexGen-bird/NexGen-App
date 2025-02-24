@@ -47,7 +47,7 @@ class AddTransactions(MDScreen):
         print("Transactions >>>>>",AS.contact_number)
         if AS.contact_number:
             print("inside if ")
-            self.txn_of="Addmission"
+            self.txn_of="Admission"
 
         else:
             print("inside else ")
@@ -72,6 +72,8 @@ class AddTransactions(MDScreen):
         self.shifts_selected1.clear()
         self.is_weekend = False
         self.plantypeid = 0
+        self.ids.txn_mode.text = "Txn Mode"
+        self.ids.txntype_text.text = "Txn Type"
     
     def show_qr(self):
         qr = QRDialog_cls()
@@ -96,9 +98,9 @@ class AddTransactions(MDScreen):
                 "on_release": lambda z="General": self.menu_txn_callback(z),
             },
             {
-                "text": "Addmission",
+                "text": "Admission",
                 "leading_icon": "account-plus",
-                "on_release": lambda z="Addmission": self.menu_txn_callback(z),
+                "on_release": lambda z="Admission": self.menu_txn_callback(z),
             },
         ]
         self.menu=MDDropdownMenu(
@@ -451,31 +453,37 @@ class AddTransactions(MDScreen):
         final = self.addmission_form_data.update(data)
         print("After --- > ",self.addmission_form_data)
         # try:
-        if self.txn_of != "Addmission":
+        if self.txn_of != "Admission":
             print("Inside only insert Full ")
-            res = create_transaction(transaction_type=self.transaction_type,
-                                    amount=int(self.amount),
-                                    txn_made_by=self.transaction_made_by.lower(),
-                                    payment_method=self.transaction_mode,
-                                    transaction_for=self.txn_of,
-                                    description=self.transaction_made_for,
-                                    transaction_made_to= self.transaction_made_to)
-            result = res.split(":")[0]
-            if result.strip()=="Pass":
-                utils.snack(color="green",text="Transaction Submitted Successfully!")
-                self.parent.change_screen("transactions")
+            if self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
+                res = create_transaction(transaction_type=self.transaction_type,
+                                        amount=int(self.amount),
+                                        txn_made_by=self.transaction_made_by.lower(),
+                                        payment_method=self.transaction_mode,
+                                        transaction_for=self.txn_of,
+                                        description=self.transaction_made_for,
+                                        transaction_made_to= self.transaction_made_to)
+                result = res.split(":")[0]
+                if result.strip()=="Pass":
+                    utils.snack(color="green",text="Transaction Submitted Successfully!")
+                    self.parent.change_screen("transactions")
+                else:
+                    utils.snack(color="red",text= str(res.split(":")[1]))
             else:
-                utils.snack(color="red",text= str(res.split(":")[1]))
+                utils.snack(color="red",text= "Please Fill all Fields..")
 
         else:
             print("Inside only insert Transaction ")
-            res = insert_addmission(self.addmission_form_data)
-            result = res.split(":")[0]
-            if result.strip()=="Pass":
-                utils.snack(color="green",text="Addmission Submitted Successfully!")
-                self.parent.change_screen("customers_list")
+            if "customer_phone_number" in self.addmission_form_data:
+                res = insert_addmission(self.addmission_form_data)
+                result = res.split(":")[0]
+                if result.strip()=="Pass":
+                    utils.snack(color="green",text="Admission Submitted Successfully!")
+                    self.parent.change_screen("customers_list")
+                else:
+                    utils.snack(color="red",text="Admission Submition Fail!")
             else:
-                utils.snack(color="red",text="Addmission Submition Fail!")
+                utils.snack(color="red",text="Admission form data not present.")
 
 
         print(data)

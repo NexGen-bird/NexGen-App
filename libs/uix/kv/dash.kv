@@ -404,10 +404,11 @@
                         role:"large"
                         halign: "left"
                         adaptive_height: True
+                    
                     MDIconButton:
                         icon: "arrow-right"
-                        pos_hint: {"center_x": 1,"center_x":0.88}
-                        on_release: app.screen_manager.change_screen("expired_list") # Right arrow opens pop
+                        pos_hint: {"center_x": 1,"center_x":1}
+                        on_release: root.rediret_expired_customer() # Right arrow opens pop
                 MDBoxLayout:
                     id:mainboxx
                     orientation: "vertical"

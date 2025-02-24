@@ -3,6 +3,7 @@ import configparser
 from kivy.core.window import Window
 from kivy.metrics import dp
 import socket
+import json
 from main_imports import Builder,MDButton,MDDialog,MDSnackbarText,Image, MDSnackbarActionButtonText,MDDropdownMenu,MDSnackbar,MDSnackbarActionButton,MDLabel
 selected_group = ""
 
@@ -117,17 +118,17 @@ def get_background_color(planexpirydate):
     days_left = (expiry_date - today).days
 
     if days_left == 0:
-        return "#FF4C4C"  # Red (Expiring today)
+        return "#cc3300"  # Red (Expiring today)
     elif days_left == 1:
-        return "#FF7F7F"  # Light Red
+        return "#cc3300"  # Light Red
     elif days_left == 2:
-        return "#FFA500"  # Orange
+        return "#ff9966"  # Orange
     elif days_left == 3:
         return "#FFBF69"  # Light Orange
     elif 4 <= days_left <= 7:
-        return "#FFD700"  # Yellow
+        return "#ffcc00"  # Yellow
     else:
-        return "#90EE90"  # Light Green (More than a week left)
+        return "#339900"  # Light Green (More than a week left)
 
 def date_format(input_date):
 
@@ -228,3 +229,21 @@ def get_previous_month_range(input_date=None):
         end_date = date(input_date.year, input_date.month - 1, 14) if input_date.month > 1 else date(input_date.year - 1, 12, 14)
 
     return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
+
+
+def write_json_file(filename, username, password,is_remember):
+    """Writes a JSON file with the given username and password."""
+    data = [{"username": username, "password": password,"is_remember":str(is_remember)}]
+    
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+
+def read_json_file(filename):
+    """Reads and returns the data from the JSON file."""
+    try:
+        with open(filename, "r") as file:
+            data = json.load(file)
+        return data[0]
+    except FileNotFoundError:
+        print("File not found.")
+        return None

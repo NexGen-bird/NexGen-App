@@ -30,7 +30,7 @@ class Transactions(MDScreen):
         if response:
             self.transaction_list = response
             loader.close_dlg()
-            print("L2 enter")
+            print(self.transaction_list)
         else:
             loader.close_dlg()
             print("L3 enter")
@@ -57,6 +57,8 @@ class Transactions(MDScreen):
 
     def on_leave(self):
         self.profile_redirect = ""
+        self.ids.search_field.text = ""
+
         self.ids.rv.data = []
         self.set_txns()
     def change_lay(self):
@@ -104,7 +106,7 @@ class Transactions(MDScreen):
                     "viewclass": "CustomOneLineIconListItem",
                     "Name": "No Name" if txn["name"]==None else txn["name"],                    
                     "Date":str(utils.date_format(txn["transaction_date"])),
-                    "txn_type": txn["transaction_type"],
+                    "txn_type": "None" if txn["transaction_type"]==None else txn["transaction_type"],
                     "Amount": int(txn["amount"]),
                     "Color": txn["color"] if txn["color"]!=None else "black",
                     "callback": lambda x: x,
@@ -118,7 +120,7 @@ class Transactions(MDScreen):
                     add_txn(txn)
                 elif text in str(int(txn["amount"])):
                     add_txn(txn)
-                elif text in txn["transaction_type"].lower():
+                elif text in ("No Txn_type" if txn["transaction_type"]==None else txn["transaction_type"]).lower():
                     add_txn(txn)
         elif txnfilter:
             ll =[]
@@ -158,3 +160,4 @@ class Transactions(MDScreen):
         else:
             for txn in self.transaction_list:
                 add_txn(txn)
+        print(self.ids.rv.data)

@@ -6,16 +6,31 @@ from kivy.core.window import Window
 utils.load_kv("login.kv")
 
 class Login_Screen(MDScreen):
+    is_remember = True
     def on_enter(self):
         """
         This method used in development to avoid login 
         """
-        pass
+        data = utils.read_json_file(r"libs/applibs/remember_login.json")
+        self.is_remember = False if data["is_remember"]!= "True" else True
+        if data["username"]!="" and data["password"]!="":
+            self.ids.Email.text = data["username"]
+            self.ids.Password.text = data["password"]
+    def on_checkbox_active(self, checkbox, value):
+        if checkbox.state == "down":
+            self.is_remember = True
+            print("Checked...")
+        else:
+            self.is_remember = False
+            utils.write_json_file(r"libs/applibs/remember_login.json","","",False)
+            print('The checkbox', checkbox, 'is inactive', 'and', checkbox.state, 'state')
     def on_leave(self):
         self.ids.Email.text = ""
         self.ids.Password.text = ""
     def login(self, email: str, password: str):
         # Validate input fields
+        if self.is_remember:
+            utils.write_json_file(r"libs/applibs/remember_login.json",email,password,True)
         if not email.strip():
             utils.snack(color="red", text="Please enter your email.")
             return

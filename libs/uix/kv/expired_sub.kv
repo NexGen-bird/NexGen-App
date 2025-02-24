@@ -1,21 +1,132 @@
-<EListItems>:
-    theme_bg_color:"Custom"
-    divider:True
-    md_bg_color:self.theme_cls.transparentColor
-    # on_release: print("Test --- >",root.name,root.custid)
-    on_release:app.screen_manager.get_screen("expired_list").get_text(root.custid) 
-    MDListItemLeadingAvatar:
-        source:root.avatar_source
-    MDListItemHeadlineText:
-        text: root.name
+<SubcriptionCard>
+    padding: "10dp"
+    # spacing: "10dp"
+    size_hint: None, None
+    size: "640dp", "150dp"
+    theme_bg_color: "Custom"
+    md_bg_color: "white"
+    style: "outlined"
+ 
+    MDRelativeLayout:
+        MDLabel:
+            text: root.name[:28]+str("...") if len(root.name)>25 else root.name
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"top": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.status
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"top": 1, "right": 1}
+            bold: True
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: root.Color if root.Color else "green"
+        MDLabel:
+            text: "Plan Type"
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"y": 0.6, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.plan
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: "Shift"
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"y": 0.6, "center_x": 0.5}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.shift
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "center_x": 0.5}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: "Seat No."
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"y": 0.6, "right": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.seatid
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "right": 1}
+            bold: False
+            halign: "center"
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: "Start Date"
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"y": 0.2, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.startdate
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"bottom": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: "Expiry Date"
+            adaptive_size: True
+            color: "grey"
+            pos_hint: {"y": 0.2, "right": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDLabel:
+            text: root.expirydate
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"bottom": 1, "right": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
 
-    MDListItemSupportingText:
-        text:"Expired on : "+ str(root.Expired_on)
+            
+# <EListItems>:
+    # theme_bg_color:"Custom"
+    # divider:True
+    # md_bg_color:self.theme_cls.transparentColor
+    # # on_release: print("Test --- >",root.name,root.custid)
+    # on_release:app.screen_manager.get_screen("expired_list").get_text(root.custid) 
+    # MDListItemLeadingAvatar:
+    #     source:root.avatar_source
+    # MDListItemHeadlineText:
+    #     text: root.name
 
-    MDListItemTertiaryText:
-        text:root.status
-        theme_text_color:"Custom"
-        text_color:"#3cb043" if root.status == "Active" else "#ff0f0f"
+    # MDListItemSupportingText:
+    #     text:"Expired on : "+ str(root.Expired_on)
+
+    # MDListItemTertiaryText:
+    #     text:root.status
+    #     theme_text_color:"Custom"
+    #     text_color:"#3cb043" if root.status == "Active" else "#ff0f0f"
 
 <ExpiredCustomersList>:
     name:"expired_list"
@@ -58,7 +169,7 @@
                     MDButtonText:
                         text: "Back"
                 MDLabel:
-                    text: " Expired Subcriptions "
+                    text: " Subcriptions "
                     pos_hint: {"center_x": .5}
             MDBoxLayout:
                 id: filters
@@ -90,10 +201,13 @@
                 id: rv
                 key_viewclass: 'viewclass'
                 key_size: 'height'
+                # spacing:dp(10)
+                # padding: dp(10)
 
                 RecycleBoxLayout:
+                    spacing: dp(10)
                     padding: dp(10)
-                    default_size: None, dp(67)
+                    default_size: None, None
                     default_size_hint: 1, None
                     size_hint_y: None
                     height: self.minimum_height

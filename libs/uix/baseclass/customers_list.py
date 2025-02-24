@@ -9,12 +9,13 @@ class ListItems(MDListItem):
     custid = StringProperty()
     avatar_source = StringProperty()
     name = StringProperty()
-    join_date = StringProperty()
+    expiry_date = StringProperty()
     status = StringProperty()
 
 class CustomersList(MDScreen):
     temp_list = []
     customer_list = []
+    search_redirect = ""
     def on_enter(self):
         self.temp_list.clear()
     # Define the dialog
@@ -50,7 +51,7 @@ class CustomersList(MDScreen):
                     "custid":x["id"],
                     "avatar_source":"assets/img/blank_profile.png",
                     "name":x["name"],
-                    "join_date":utils.date_format(x["created_at"]),
+                    "expiry_date":utils.date_format(x["planexpirydate"]),
                     "status":"Active" if x["isactive"] == 1 else "Expired"
                 }
                 print("All Customers----->",(list_item))
@@ -66,6 +67,15 @@ class CustomersList(MDScreen):
             loader.close_dlg()
             self.ids.mainbox.add_widget(no_data)
             utils.snack("red","No Customer Data found...")
+        if self.search_redirect!="":
+            self.set_list_items(self.search_redirect,True)
+        else:
+            self.set_list_items()
+    def on_leave(self):
+        self.search_redirect = ""
+        self.ids.search_field.text = ""
+
+        self.ids.rv.data = []
         self.set_list_items()
     def set_list_items(self, text="", search=False):
         '''Builds a list of icons for the screen MDIcons.'''
@@ -77,7 +87,7 @@ class CustomersList(MDScreen):
                     "custid": item["custid"],
                     "avatar_source":item["avatar_source"],
                     "name":item["name"],
-                    "join_date":item["join_date"],
+                    "expiry_date":item["expiry_date"],
                     "status":item["status"],
                     "callback": lambda x: self.get_text(item["custid"]),
                 }
@@ -87,6 +97,8 @@ class CustomersList(MDScreen):
         for Name in self.temp_list:
             if search:
                 if text in Name["name"].lower():
+                    add_item(Name)
+                elif text in Name["status"].lower():
                     add_item(Name)
             else:
                 add_item(Name)

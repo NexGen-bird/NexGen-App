@@ -9,7 +9,6 @@ from kivymd.uix.label.label import MDLabel
 from kivy.metrics import dp
 from supabase_lib.supabase_auth import *
 
-
 #--[Start platform specific code]
 """This code to detect it's Android or not 
 if it's not android than app window size change in android phone size"""
@@ -46,7 +45,7 @@ from libs.uix.baseclass.expired_sub import ExpiredCustomersList
 
 #--[End Import All Baseclasses from lib.baseclass ]
 
-from main_imports import App,MDApp,MDNavigationLayout,MDNavigationDrawer,MDNavigationDrawerItemText,MDNavigationDrawerMenu,MDNavigationDrawerLabel,MDNavigationDrawerItem,MDNavigationDrawerDivider,MDNavigationDrawerHeader
+from main_imports import MDApp,MDNavigationLayout,MDNavigationDrawer,MDNavigationDrawerItemText,MDNavigationDrawerMenu,MDNavigationDrawerLabel,MDNavigationDrawerItem,MDNavigationDrawerDivider,MDNavigationDrawerHeader
 
 #--[ Register custom classes ]
 # from kivy.factory import Factory
@@ -60,9 +59,10 @@ class NexGenApp(MDApp):
     def __init__(self, **kwargs):
         super(NexGenApp, self).__init__(**kwargs)
     
-    
     def on_start(self):
-        login_with_email_password("abhijit.shinde@test.com","india@123")
+        pass
+        # login_with_email_password("abhijit.shinde@test.com","india@123")
+    
     def build(self):
         """
         This method call before on_start() method so anything
@@ -126,6 +126,13 @@ class NexGenApp(MDApp):
             ),
             on_release=lambda x : self.switch_screen("addTxn")
         )
+        drawer_item7 = MDNavigationDrawerItem(
+            MDNavigationDrawerItemText(text="Subcriptions",
+            focus_color="#192134",
+            text_color="#ed991f",
+            ),
+            on_release=lambda x : self.switch_screen("expired_list")
+        )
         # Add items to the drawer menu
         drawer_menu.add_widget(drawer_header)
         drawer_menu.add_widget(MDNavigationDrawerDivider())
@@ -140,6 +147,8 @@ class NexGenApp(MDApp):
         drawer_menu.add_widget(drawer_item5)
         drawer_menu.add_widget(MDNavigationDrawerDivider())
         drawer_menu.add_widget(drawer_item6)
+        drawer_menu.add_widget(MDNavigationDrawerDivider())
+        drawer_menu.add_widget(drawer_item7)
 
         # Add menu to the drawer
         nav_drawer.add_widget(drawer_menu)

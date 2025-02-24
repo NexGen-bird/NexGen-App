@@ -200,10 +200,10 @@ class LandingScreen(MDScreen):
                 spacing = "5dp",
                 pos_hint= {"center_x": 0.5},
                 radius= [20, 20, 20, 20],
-                theme_bg_color= "Custom",
+                # theme_bg_color= "Custom",
                 # md_bg_color= "#fcfbff",
                 style= "elevated",
-                md_bg_color= utils.get_background_color(expdate)
+                # md_bg_color= utils.get_background_color(expdate)
             )
 
         # Profile image
@@ -232,12 +232,13 @@ class LandingScreen(MDScreen):
         )
         date_label = MDLabel(
             text=utils.date_format(expdate),
-            theme_text_color="Secondary",
+            theme_text_color="Custom",
+            text_color= utils.get_background_color(expdate),
             halign="center",
             adaptive_size= True,
             height="20dp",
             font_style="Title",
-            role="small",
+            role="medium",
             pos_hint= {"center_y": 0.2,"right": 1}
         )
 
@@ -418,15 +419,9 @@ class LandingScreen(MDScreen):
         # self.populate_subscription_list()  # Refresh subscription list if needed
         Clock.schedule_once(self.refresh_complete, 2)  # Simulate refresh delay
 
-    def refresh_shift_data(self):
-        # Fetch and update shift data from Firebase
-        shift_info = {
-            "Single Shift": "4" or 37,
-            "Double Shift": "30" or 37,
-            "Ultimate Shift": "4" or 37,
-            "Flexi Shift": "11" or 37
-        }
-        # You can also update your UI with the new shift data here
+    def rediret_expired_customer(self):
+        self.parent.get_screen("customers_list").search_redirect = "expired"
+        self.parent.change_screen("customers_list")
     def refresh_complete(self, dt):
         # Notify the RefreshLayout that the refresh is done
         self.ids.refresh_layout.refresh_done()  # This will stop the loading indicator
@@ -441,14 +436,4 @@ class LandingScreen(MDScreen):
                     "callback": lambda x: x,
                 }
             )
-            # self.ids.rh.data.append(
-            #     {
-            #         "viewclass": "ExpiryList",
-            #         "Name": txn["name"],                    
-            #         "Date":txn["Date"],
-            #         "txn_type": txn["txn_type"],
-            #         "Amount": txn["Amount"],
-            #         "callback": lambda x: x,
-            #     }
-            # )
-            print("inside add_txn")
+            
