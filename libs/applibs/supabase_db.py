@@ -2,8 +2,6 @@ from supabase_lib.supabase_config import supabase
 from supabase_lib.supabase_auth import *
 from main_imports import MDApp
 
-root = MDApp.get_running_app()
-
 # Create a new customer
 def create_customer(name, dob, gender, phone_number, email, education, joining_for, address, profile_image):
     data = {
@@ -23,8 +21,8 @@ def create_customer(name, dob, gender, phone_number, email, education, joining_f
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+            utils.snack("red","No active session. please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -32,7 +30,7 @@ def create_customer(name, dob, gender, phone_number, email, education, joining_f
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
     # supabase.auth.sign_out()
 
@@ -44,8 +42,8 @@ def get_all_customers():
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -53,7 +51,7 @@ def get_all_customers():
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 # Get customer details
 def get_customers_details(contact_number):
@@ -73,8 +71,8 @@ def update_customer(contact_number, updates):
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -82,7 +80,7 @@ def update_customer(contact_number, updates):
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
 
 # Delete a customer
 def delete_customer(customer_name):
@@ -92,8 +90,8 @@ def delete_customer(customer_name):
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -101,7 +99,7 @@ def delete_customer(customer_name):
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
 
 def get_all_customers_contact():
     isinternet = utils.is_internet_available()
@@ -110,8 +108,8 @@ def get_all_customers_contact():
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -119,11 +117,12 @@ def get_all_customers_contact():
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 #  Add Transaction
-def create_transaction(transaction_type,amount,txn_made_by, payment_method, description, transaction_for,transaction_made_to):
+def create_transaction(txn_date,transaction_type,amount,txn_made_by, payment_method, description, transaction_for,transaction_made_to):
     data = {
+        "txn_date": txn_date,
         "txn_made_by": txn_made_by,
         "customer_transaction_type": transaction_type,
         "customer_amount": amount,
@@ -138,8 +137,8 @@ def create_transaction(transaction_type,amount,txn_made_by, payment_method, desc
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -149,7 +148,7 @@ def create_transaction(transaction_type,amount,txn_made_by, payment_method, desc
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 
 #  Get All Transactions
@@ -160,8 +159,8 @@ def get_all_transactions():
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -169,7 +168,7 @@ def get_all_transactions():
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 def get_transactionspagedata():
     isinternet = utils.is_internet_available()
@@ -178,16 +177,17 @@ def get_transactionspagedata():
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
             response = supabase.rpc("fetch_transaction_details").execute()
+            #  
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 def get_subcriptionpagedata():
     isinternet = utils.is_internet_available()
@@ -196,8 +196,8 @@ def get_subcriptionpagedata():
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -205,7 +205,7 @@ def get_subcriptionpagedata():
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
     
 def get_net_profit(start_date,end_date):
@@ -215,8 +215,8 @@ def get_net_profit(start_date,end_date):
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -224,7 +224,7 @@ def get_net_profit(start_date,end_date):
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 def get_expense_profit():
     isinternet = utils.is_internet_available()
@@ -233,8 +233,8 @@ def get_expense_profit():
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -244,7 +244,7 @@ def get_expense_profit():
             return response_in.data,response_out.data
             
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 #  Delete transaction by id 
 def delete_transaction(transaction_id):
@@ -254,8 +254,8 @@ def delete_transaction(transaction_id):
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -263,7 +263,7 @@ def delete_transaction(transaction_id):
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 
 def insert_addmission(data):
@@ -273,8 +273,8 @@ def insert_addmission(data):
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -282,7 +282,7 @@ def insert_addmission(data):
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 
 def run_sql(query):
@@ -292,8 +292,8 @@ def run_sql(query):
         user = supabase.auth.get_user()
 
         if not user:
-            root.screen_manager.change_screen("login")
-            utils.snack("red","No active session. Redirecting to login.")
+             
+             utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -301,5 +301,5 @@ def run_sql(query):
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}")
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     

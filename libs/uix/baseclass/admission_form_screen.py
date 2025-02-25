@@ -239,15 +239,15 @@ class AdmissionFormScreen(MDScreen):
         if self.full_name!="" and self.date_of_birth!="" and self.gender!="" and self.contact_number!="" and self.email_id!="" and self.education_qualification!="" and self.joining_for!="" and self.address!="":
 
             form_data = {
-                "customer_name": self.full_name,
+                "customer_name": self.full_name.strip(),
                 "customer_dob": self.date_of_birth,
                 "customer_gender": self.gender,
-                "customer_phone_number": self.contact_number,
-                "customer_email": self.email_id,
-                "customer_education": self.education_qualification,
-                "customer_joining_for": self.joining_for,
-                "customer_address": self.address,
-                "customer_profile_image": self.profile_image,
+                "customer_phone_number": self.contact_number.strip(),
+                "customer_email": self.email_id.strip(),
+                "customer_education": self.education_qualification.strip(),
+                "customer_joining_for": self.joining_for.strip(),
+                "customer_address": self.address.strip(),
+                "customer_profile_image": self.profile_image.strip(),
             }
             # create_customer = supabase_db.create_customer(name=self.full_name,dob=self.date_of_birth,gender=self.gender,phone_number=self.contact_number,email=self.email_id,education=self.education_qualification,joining_for=self.joining_for,address=self.address,profile_image=self.profile_image)
             # print(create_customer)

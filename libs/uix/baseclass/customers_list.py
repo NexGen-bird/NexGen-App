@@ -152,9 +152,9 @@ class CustomersList(MDScreen):
             print("Customer data --- >",data)
             if data:
                 customer_profile.username = data[0]["name"]
-                customer_profile.join_date = data[0]["planstartdate"]
-                customer_profile.expiry_date = data[0]["planexpirydate"]
-                customer_profile.dob = data[0]["dob"]
+                customer_profile.join_date = str(utils.date_format(data[0]["planstartdate"]))
+                customer_profile.expiry_date = str(utils.date_format(data[0]["planexpirydate"]))
+                customer_profile.dob = str(utils.date_format(data[0]["dob"]))
                 customer_profile.email = data[0]["email"]
                 customer_profile.phone = data[0]["phone_number"]
                 customer_profile.address = data[0]["address"]

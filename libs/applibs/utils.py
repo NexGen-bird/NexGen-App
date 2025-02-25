@@ -247,3 +247,24 @@ def read_json_file(filename):
     except FileNotFoundError:
         print("File not found.")
         return None
+
+from datetime import datetime
+
+def add_current_time_to_date(date_str):
+    """
+    Takes a date string (YYYY-MM-DD) and adds the current time (HH:MM:SS.ffffff).
+    
+    :param date_str: str, Date in 'YYYY-MM-DD' format
+    :return: str, Timestamp in 'YYYY-MM-DD HH:MM:SS.ffffff' format
+    """
+    # Convert the input date string to a datetime object
+    date_part = datetime.strptime(date_str, "%Y-%m-%d").date()
+    
+    # Get the current time
+    current_time = datetime.now().time()
+    
+    # Combine the date with the current time
+    full_datetime = datetime.combine(date_part, current_time)
+    
+    # Format the result
+    return full_datetime.strftime("%Y-%m-%d %H:%M:%S.%f")

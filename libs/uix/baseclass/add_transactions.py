@@ -5,7 +5,8 @@ from datetime import date
 from libs.applibs.supabase_db import *
 # from libs.uix.baseclass.admission_form_screen import AdmissionFormScreen
 from libs.applibs.paymentQR import QRDialog_cls
-import os
+from datetime import datetime
+
 
 utils.load_kv("add_transactions.kv")
 class CheckBoxButton(MDBoxLayout):
@@ -74,6 +75,10 @@ class AddTransactions(MDScreen):
         self.plantypeid = 0
         self.ids.txn_mode.text = "Txn Mode"
         self.ids.txntype_text.text = "Txn Type"
+        self.ids.shift.text = "Select Shift"
+        self.ids.plan_type.text = "Select Plan Type"
+
+        self.addmission_form_data.clear()
     
     def show_qr(self):
         qr = QRDialog_cls()
@@ -433,13 +438,16 @@ class AddTransactions(MDScreen):
 
     def submit_form(self):
         # Logic for form submission (printing entered data as a placeholder)
+        # Get the current date and time with microseconds
+        txn_date = utils.add_current_time_to_date(self.transaction_date)
         data = {
+            "customer_transaction_date": txn_date,
             "customer_transaction_type": self.transaction_type,
-            "customer_amount": self.amount,
+            "customer_amount": self.amount.strip(),
             "customer_payment_method": self.transaction_mode,
-            "customer_description": self.transaction_made_for,
-            "customer_transaction_for": self.txn_of,
-            "customer_transaction_made_to": self.transaction_made_to,
+            "customer_description": self.transaction_made_for.strip(),
+            "customer_transaction_for": self.txn_of.strip(),
+            "customer_transaction_made_to": self.transaction_made_to.strip(),
             "customer_plantypeid": self.plantypeid,
             "customer_planduerationid": self.plan_type,
             "customer_shiftid": self.shifts_selected,  # Pass multiple shift IDs as a list
@@ -456,13 +464,14 @@ class AddTransactions(MDScreen):
         if self.txn_of != "Admission":
             print("Inside only insert Full ")
             if self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
-                res = create_transaction(transaction_type=self.transaction_type,
+                res = create_transaction(txn_date=txn_date,
+                                        transaction_type=self.transaction_type,
                                         amount=int(self.amount),
-                                        txn_made_by=self.transaction_made_by.lower(),
+                                        txn_made_by=(self.transaction_made_by.lower()).strip(),
                                         payment_method=self.transaction_mode,
-                                        transaction_for=self.txn_of,
-                                        description=self.transaction_made_for,
-                                        transaction_made_to= self.transaction_made_to)
+                                        transaction_for=self.txn_of.strip(),
+                                        description=self.transaction_made_for.strip(),
+                                        transaction_made_to= self.transaction_made_to.strip())
                 result = res.split(":")[0]
                 if result.strip()=="Pass":
                     utils.snack(color="green",text="Transaction Submitted Successfully!")

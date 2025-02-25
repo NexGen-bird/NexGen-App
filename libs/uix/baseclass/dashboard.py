@@ -105,7 +105,7 @@ class LandingScreen(MDScreen):
         if active_members:
             self.active_members = str("0" if active_members[0]['count']==None else active_members[0]['count'])
         month_start,month_end = utils.get_previous_month_range()
-        self.pnl_amount = str(get_net_profit(month_start,month_end))
+        self.pnl_amount = str(0 if get_net_profit(month_start,month_end)==None else get_net_profit(month_start,month_end))
         
         self.ids.morningshift.text = self.shifts['morning']
         self.ids.afternoonshift.text = self.shifts['afternoon']
@@ -121,12 +121,6 @@ class LandingScreen(MDScreen):
                                 INNER JOIN "subscription"  p ON c.id = p.customerid
                                 where p.planexpirydate > current_date
                                 """
-        isinternet=utils.is_internet_available()
-        if isinternet:
-            expiring_members = run_sql(exp_members_query)
-        else:
-            utils.snack("red","No Internet Connection..")
-        sorted_data = sorted(expiring_members, key=lambda x: datetime.strptime(x['planexpirydate'], "%Y-%m-%d"), reverse=False)
         expired_count = """
                         select count(distinct customerid)
                         from subscription
@@ -141,9 +135,23 @@ class LandingScreen(MDScreen):
         else:
             utils.snack("red","No Internet Connection..")
        
-
-        for x in sorted_data:
-            self.expCard(name=x['name'],expdate=x['planexpirydate'])
+        isinternet=utils.is_internet_available()
+        if isinternet:
+            expiring_members = run_sql(exp_members_query)
+        else:
+            utils.snack("red","No Internet Connection..")
+        if expiring_members:
+            sorted_data = sorted(expiring_members, key=lambda x: datetime.strptime(x['planexpirydate'], "%Y-%m-%d"), reverse=False)
+            for x in sorted_data:
+                self.expCard(name=x['name'],expdate=x['planexpirydate'])
+        else:
+            self.ids.mainboxx.add_widget(MDLabel(
+                    adaptive_size=True,
+                    pos_hint={"center_x": 0.5, "center_y": 0.5},
+                    text="No Expiring Subcriptions.",
+                    allow_selection=True,
+                    padding=("4dp", "4dp"),
+                ))
         
         self.loader.close_dlg()
     def availble_seats_popup(self):
