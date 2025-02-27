@@ -1,6 +1,6 @@
 from main_imports import MDDialog,MDDialogHeadlineText,MDDialogSupportingText
 from libs.applibs import utils
-
+import asynckivy as ak
 from supabase import create_client, Client
 from gotrue.errors import AuthApiError
 
@@ -17,7 +17,7 @@ def login_with_email_password(email, password):
         # Sign in using the 'auth' method
         isinternet=utils.is_internet_available()
         if isinternet:
-            response = supabase.auth.sign_in_with_password({"email": email, "password": password})
+            response =  supabase.auth.sign_in_with_password({"email": email, "password": password})
             return response  # Return user details on success
         else:
             utils.snack("red","No Internet Connection..")

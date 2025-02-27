@@ -1,11 +1,11 @@
 
-from main_imports import MDScreen,MDRelativeLayout,FitImage,MDDialog,MDDialogHeadlineText,MDDialogContentContainer,MDWidget,MDLabel,MDListItemHeadlineText,MDListItemSupportingText,NumericProperty, dp,StringProperty,MDCard,MDIconButton,MDListItemLeadingAvatar,BoxLayout,MDButton,MDButton,BoxLayout,MDListItem
+from main_imports import MDScreen,MDRelativeLayout,MDButtonIcon,FitImage,MDDialog,MDDialogHeadlineText,MDDialogContentContainer,MDWidget,MDLabel,MDListItemHeadlineText,MDListItemSupportingText,NumericProperty, dp,StringProperty,MDCard,MDIconButton,MDListItemLeadingAvatar,BoxLayout,MDButton,MDButton,BoxLayout,MDListItem
 from libs.applibs import utils
 from kivy.clock import Clock
 from datetime import datetime
 from libs.applibs.supabase_db import *
 from libs.applibs.loader import Dialog_cls
-
+from libs.applibs.whatsapp import send_messages
 
 
 utils.load_kv("dash.kv")
@@ -114,7 +114,8 @@ class LandingScreen(MDScreen):
         
         exp_members_query = """SELECT DISTINCT ON (c.id) 
                                     c.id, 
-                                    c.name, 
+                                    c.name,
+                                    c.phone_number, 
                                     p.planstartdate,
                                     p.planexpirydate
                                 FROM "Customers" c
@@ -143,7 +144,7 @@ class LandingScreen(MDScreen):
         if expiring_members:
             sorted_data = sorted(expiring_members, key=lambda x: datetime.strptime(x['planexpirydate'], "%Y-%m-%d"), reverse=False)
             for x in sorted_data:
-                self.expCard(name=x['name'],expdate=x['planexpirydate'])
+                self.expCard(name=x['name'],expdate=x['planexpirydate'],phone=x['phone_number'])
         else:
             self.ids.mainboxx.add_widget(MDLabel(
                     adaptive_size=True,
@@ -198,7 +199,22 @@ class LandingScreen(MDScreen):
         # print("This is Good :: ",item_text)
         self.dialog.dismiss()
         self.parent.change_screen("seat")
-    def expCard(self,name,expdate,img="assets/img/blank_profile.png"):
+    def expCard(self,name,expdate,phone,img="assets/img/blank_profile.png"):
+        phone_no = "+91"+str(phone)
+        msg = f"""
+                Hi {name},
+
+                This is a reminder that your NexGen Study Center subscription is expiring on *{utils.date_format(expdate)}*.
+
+                To avoid any interruption in your study schedule, please renew your subscription at the earliest.
+
+                You can reply to this message or contact us directly for assistance.
+
+                Thank you for choosing NexGen Study Center!
+
+                Best regards,
+                NexGen Study Center Team
+                """
         card = MDCard(
                 orientation="horizontal",
                 elevation= .8,
@@ -249,9 +265,14 @@ class LandingScreen(MDScreen):
             role="medium",
             pos_hint= {"center_y": 0.2,"right": 1}
         )
-
+        whatsapp = MDIconButton(
+                    icon="whatsapp",
+                    style= "standard",
+                    pos_hint={"top": 1, "right": 1},
+                    on_release=send_messages(phone_numbers=phone_no,message=msg))
         # Add widgets to the card
         main.add_widget(profile_image)
+        main.add_widget(whatsapp)
         main.add_widget(name_label)
         main.add_widget(date_label)
         card.add_widget(main)

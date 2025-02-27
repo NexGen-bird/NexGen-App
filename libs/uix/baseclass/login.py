@@ -1,7 +1,6 @@
 from main_imports import MDScreen,MDDialog,dp,MDDialogHeadlineText,MDDialogSupportingText
 from libs.applibs import utils
 from supabase_lib.supabase_auth import login_with_email_password,send_password_reset_email
-from kivy.core.window import Window
 
 utils.load_kv("login.kv")
 

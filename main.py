@@ -69,6 +69,7 @@ class NexGenApp(MDApp):
         that need before start application all other method and code 
         write here.
         """
+        self.theme_cls.primary_palette = "Lavender"
         # Create the root layout as an MDNavigationLayout to include the navigation drawer
         nav_layout = MDNavigationLayout()
 

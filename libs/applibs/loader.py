@@ -2,6 +2,7 @@ from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import (
     MDDialog,MDDialogContentContainer)
+
 KV = '''
 <Details>:
     pos_hint: {'center_x': .5, 'center_y': .5}
