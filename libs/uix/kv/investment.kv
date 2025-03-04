@@ -1,4 +1,4 @@
-<CustomOneLineIconListItem>
+<CustomOneLineIconListItem1>
     padding: "10dp"
     # spacing: "10dp"
     size_hint: None, None
@@ -144,47 +144,9 @@
             role:"medium"
             theme_text_color: "Custom"
             text_color: app.getval("TEXT_PRIMARY")
-<OverviewCards>
-    padding: "10dp"
-    # size_hint: None, None
-    # size: "240dp", "100dp"
-    size_hint: .3,1.3
-    pos_hint:{"center_x": 0.5}
-    md_bg_color: app.getval("CARD_BACKGROUND")
-    style: "outlined"
-    
 
-    MDRelativeLayout:
-         
-        MDLabel:
-            text: root.cardlabel
-            adaptive_size: True
-            color: "grey"
-            pos_hint: {"top": 1, "left": 1}
-            bold: False
-            font_style: "Title"
-            role:"small"
-        
-
-        MDLabel:
-            text: "₹ "+str(root.amount)
-            adaptive_size: True
-            color: "grey"
-            pos: "12dp", "12dp"
-            bold: True
-            font_style: "Title"
-            role:"small"
-            theme_text_color: "Custom"
-            text_color: root.color
-            pos_hint: {"bottom": 1, "left": 1}
-
-        # MDFabButton:
-        #     icon: "calendar"
-        #     # style: "small"
-        #     size_hint: .3,.5
-        #     pos_hint: {"top": 1, "right": 1}
-<Transactions>:
-    name: "transactions"
+<InvestmentTransactions>:
+    name: "investment"
     theme_bg_color: "Custom"
     md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
@@ -221,7 +183,7 @@
                 MDButton:
                     id: back
                     style: "filled"
-                    pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                    pos_hint: {"left": 1,"center_y": 0.5}
                     theme_bg_color: "Custom"
                     md_bg_color: app.getval("PRIMARY_COLOR")
                     on_release: root.parent.previous_screen()
@@ -229,16 +191,155 @@
                     MDButtonText:
                         text: "Back"
                 MDLabel:
-                    text: " Transactions "
+                    text: " Investements & Returns "
                     pos_hint: {"center_x": .5}
             MDBoxLayout:
-                id: box
-                adaptive_size: True
-                spacing: "22dp"
-                padding: "15dp"
-                size_hint: 1,None
-                pos_hint: {"center_x": .5, "center_y": .5}
-                
+                id: box1
+                # adaptive_size: True
+                adaptive_height: True
+                spacing: "5dp"
+                # pos_hint: {"center_x": .5, "center_y": .5}
+                MDCard:
+                    orientation: "vertical"
+                    padding: "16dp"
+                    size_hint_x: 0.3
+                    size_hint_y: None
+                    height: self.minimum_height
+                    pos_hint: {"center_x": 0.5}
+                    radius: [20, 20, 20, 20]
+                    style: "elevated"
+                    elevation:0.8
+                    theme_shadow_color: "Custom"
+                    shadow_color: (0, 0, 0, 0.1) 
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("CARD_BACKGROUND")
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: "10dp"
+                        adaptive_height: True
+                        MDLabel:
+                            text: "Abhijit Shinde"
+                            font_style: "Title"
+                            role:"medium"
+                            halign: "center"
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
+                        
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        adaptive_height: True
+                        spacing: "10dp"
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "Invested"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_SECONDARY")
+                            MDLabel:
+                                id: ainvested
+                                text: root.ainvestment if root.ainvestment!=None else "0"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_PRIMARY")
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "Returns"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_SECONDARY")
+                            MDLabel:
+                                id: areturns
+                                text: root.areturns if root.areturns!=None else "0"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_PRIMARY")
+                       
+                MDCard:
+                    orientation: "vertical"
+                    padding: "16dp"
+                    size_hint_x: 0.3
+                    size_hint_y: None
+                    height: self.minimum_height
+                    pos_hint: {"center_x": 0.5}
+                    radius: [20, 20, 20, 20]
+                    style: "elevated"
+                    elevation:0.8
+                    theme_shadow_color: "Custom"
+                    shadow_color: (0, 0, 0, 0.1) 
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("CARD_BACKGROUND")
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: "10dp"
+                        adaptive_height: True
+                        MDLabel:
+                            text: "Jayesh Thakre"
+                            font_style: "Title"
+                            role:"medium"
+                            halign: "center"
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
+                        
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        adaptive_height: True
+                        spacing: "10dp"
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "Invested"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_SECONDARY")
+                            MDLabel:
+                                id: jinvested
+                                text: root.jinvestment if root.jinvestment!=None else "0"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_PRIMARY")
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "Returns"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_SECONDARY")
+                            MDLabel:
+                                id: jreturns
+                                text: root.jreturns if root.jreturns!=None else "0"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_PRIMARY")
 
             MDBoxLayout:
                 id: filters
@@ -272,7 +373,7 @@
             
 
             RecycleView:
-                id: rv
+                id: rv1
                 key_viewclass: 'viewclass'
                 key_size: 'height'
                 # size_hint: .9,dp(70)

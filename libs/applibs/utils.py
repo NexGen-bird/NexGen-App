@@ -268,3 +268,33 @@ def add_current_time_to_date(date_str):
     
     # Format the result
     return full_datetime.strftime("%Y-%m-%d %H:%M:%S.%f")
+
+def format_number(n: float) -> str:
+    """
+    Convert a number into a readable format using absolute values, K (thousand), L (lakh), and Cr (crore).
+    
+    Args:
+        n (float): The number to be formatted.
+    
+    Returns:
+        str: The formatted number as a string.
+    """
+    abs_n = abs(n)
+    
+    if abs_n >= 10**7:  # Crore
+        value = n / 10**7
+        suffix = " Cr"
+    elif abs_n >= 10**5:  # Lakh
+        value = n / 10**5
+        suffix = " L"
+    elif abs_n >= 10**3:  # Thousand
+        value = n / 10**3
+        suffix = " K"
+    else:
+        value = n
+        suffix = ""
+    
+    # Format the number, removing .00 if whole
+    formatted = f"{value:.2f}".rstrip("0").rstrip(".") + suffix
+    
+    return formatted

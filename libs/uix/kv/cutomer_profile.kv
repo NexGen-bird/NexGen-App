@@ -1,67 +1,13 @@
-<ExpansionPanelItem>
 
-    MDExpansionPanelHeader:
-
-        MDListItem:
-            theme_bg_color: "Custom"
-            md_bg_color: self.theme_cls.surfaceContainerLowColor
-            ripple_effect: False
-
-            MDListItemSupportingText:
-                text: "Supporting text"
-
-            TrailingPressedIconButton:
-                id: chevron
-                icon: "chevron-right"
-                on_release: app.screen_manager.get_screen("customer_profile").tap_expansion_chevron(root, chevron)
-
-    MDExpansionPanelContent:
-        orientation: "vertical"
-        padding: 0
-        md_bg_color: self.theme_cls.surfaceContainerLowestColor
-
-        MDLabel:
-            text: "Channel information"
-            adaptive_height: True
-            padding_x: "5dp"
-            padding_y: "5dp"
-
-        MDListItem:
-            theme_bg_color: "Custom"
-            md_bg_color: self.theme_cls.surfaceContainerLowestColor
-
-            MDListItemLeadingIcon:
-                icon: "email"
-
-            MDListItemHeadlineText:
-                text: "Email"
-
-            MDListItemSupportingText:
-                text: "kivydevelopment@gmail.com"
-
-        MDListItem:
-            theme_bg_color: "Custom"
-            md_bg_color: self.theme_cls.surfaceContainerLowestColor
-
-            MDListItemLeadingIcon:
-                icon: "instagram"
-
-            MDListItemHeadlineText:
-                text: "Instagram"
-
-            MDListItemSupportingText:
-                text: "Account"
-
-            MDListItemTertiaryText:
-                text: "www.instagram.com/KivyMD"
 <CustomerProfile>:
     name:"customer_profile"
-    md_bg_color: "#fcfbff"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             theme_bg_color: "Custom"
-            md_bg_color: "#192134"
+            md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
@@ -85,6 +31,12 @@
                 pos_hint: {"left": 1, "top": 1}
                 user_font_size: "24sp"
                 on_release: root.go_back(self)
+            MDIconButton:
+                icon: "whatsapp"
+                style: "standard"
+                pos_hint: {"top": 1, "right": 1}
+                on_release: root.send_whatsapp_messages(root.phone,root.username,root.expiry_date)
+
 
             # Profile Card
             MDCard:
@@ -95,7 +47,7 @@
                 radius: [15, 15, 15, 15]
                 style:"outlined"
                 theme_bg_color: "Custom"
-                md_bg_color: "#fcfbff"
+                md_bg_color: app.getval("CARD_BACKGROUND")
 
                 FitImage:
                     source: root.profile_image
@@ -103,7 +55,7 @@
                     size: "100dp", "100dp"
                     radius: [self.width,]
                     pos_hint: {"center_x": 0.5, "center_y": 1}
-
+                
                 MDLabel:
                     text: root.username
                     font_style: "Headline"
@@ -129,15 +81,15 @@
 
             # Transactional History Button
             MDCard:
-                size_hint: 0.9, 0.09
+                size_hint: 0.9, 0.1
                 pos_hint: {"center_x": 0.5, "center_y": 0.39}
                 orientation: "horizontal"
                 padding: "10dp"
-                style:"outlined"
+                style:"elevated"
                 ripple_behavior: True
                 on_release: root.navigate_transactions()
                 theme_bg_color: "Custom"
-                md_bg_color: "#fcfbff"
+                md_bg_color: app.getval("CARD_BACKGROUND")
 
                 MDLabel:
                     text: "Transactional History"
@@ -154,11 +106,11 @@
                 pos_hint: {"center_x": 0.5, "center_y": 0.25}
                 orientation: "horizontal"
                 padding: "10dp"
-                style:"outlined"
+                style:"elevated"
                 ripple_behavior: True
                 on_release: root.navigate_subcriptions()
                 theme_bg_color: "Custom"
-                md_bg_color: "#fcfbff"
+                md_bg_color: app.getval("CARD_BACKGROUND")
 
                 MDLabel:
                     text: "Subcription History"
@@ -179,9 +131,9 @@
                 padding: "10dp"
                 ripple_behavior: True
                 on_release: root.go_to_user_details()
-                style:"outlined"
+                style:"elevated"
                 theme_bg_color: "Custom"
-                md_bg_color: "#fcfbff"
+                md_bg_color: app.getval("CARD_BACKGROUND")
 
                 MDLabel:
                     text: root.username + " Details"

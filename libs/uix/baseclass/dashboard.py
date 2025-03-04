@@ -1,5 +1,5 @@
 
-from main_imports import MDScreen,MDRelativeLayout,MDButtonIcon,FitImage,MDDialog,MDDialogHeadlineText,MDDialogContentContainer,MDWidget,MDLabel,MDListItemHeadlineText,MDListItemSupportingText,NumericProperty, dp,StringProperty,MDCard,MDIconButton,MDListItemLeadingAvatar,BoxLayout,MDButton,MDButton,BoxLayout,MDListItem
+from main_imports import MDScreen,MDApp,MDRelativeLayout,MDButtonIcon,FitImage,MDDialog,MDDialogHeadlineText,MDDialogContentContainer,MDWidget,MDLabel,MDListItemHeadlineText,MDListItemSupportingText,NumericProperty, dp,StringProperty,MDCard,MDIconButton,MDListItemLeadingAvatar,BoxLayout,MDButton,MDButton,BoxLayout,MDListItem
 from libs.applibs import utils
 from kivy.clock import Clock
 from datetime import datetime
@@ -8,12 +8,17 @@ from libs.applibs.loader import Dialog_cls
 from libs.applibs.whatsapp import send_messages
 
 
+
+
+
+
 utils.load_kv("dash.kv")
 class Item(MDListItem):
     divider = None
     source = StringProperty()
 
 class LandingScreen(MDScreen):
+    app = MDApp.get_running_app()
     total_members = StringProperty()
     expired_count = StringProperty()
     active_members = StringProperty()
@@ -91,8 +96,8 @@ class LandingScreen(MDScreen):
             utils.snack("red","No Internet Connection..")
             
         if collection:
-            self.collection_amount = str("0" if collection[0]['total_revenue']==None else "{}{}".format("₹", collection[0]["total_revenue"]))
-            self.expense_amount = str("0" if collection[0]['total_expenses']==None else "{}{}".format("₹",collection[0]["total_expenses"]))
+            self.collection_amount = str("0" if collection[0]['total_revenue']==None else "{}{}".format("₹", utils.format_number(float(collection[0]["total_revenue"]))))
+            self.expense_amount = str("0" if collection[0]['total_expenses']==None else "{}{}".format("₹",utils.format_number(float(collection[0]["total_expenses"]))))
         active_members_query = """select count(distinct customerid)
                                 from subscription
                                 where isactive=1
@@ -105,7 +110,7 @@ class LandingScreen(MDScreen):
         if active_members:
             self.active_members = str("0" if active_members[0]['count']==None else active_members[0]['count'])
         month_start,month_end = utils.get_previous_month_range()
-        self.pnl_amount = str(0 if get_net_profit(month_start,month_end)==None else get_net_profit(month_start,month_end))
+        self.pnl_amount = str(0 if get_net_profit(month_start,month_end)==None else utils.format_number(float(get_net_profit(month_start,month_end))))
         
         self.ids.morningshift.text = self.shifts['morning']
         self.ids.afternoonshift.text = self.shifts['afternoon']
@@ -120,7 +125,7 @@ class LandingScreen(MDScreen):
                                     p.planexpirydate
                                 FROM "Customers" c
                                 INNER JOIN "subscription"  p ON c.id = p.customerid
-                                where p.planexpirydate > current_date
+                                where p.planexpirydate >= current_date
                                 """
         expired_count = """
                         select count(distinct customerid)
@@ -200,21 +205,20 @@ class LandingScreen(MDScreen):
         self.dialog.dismiss()
         self.parent.change_screen("seat")
     def expCard(self,name,expdate,phone,img="assets/img/blank_profile.png"):
-        phone_no = "+91"+str(phone)
+        phone_no = "91"+str(phone)
         msg = f"""
-                Hi {name},
+Hi {name},
 
-                This is a reminder that your NexGen Study Center subscription is expiring on *{utils.date_format(expdate)}*.
+This is a reminder that your NexGen Study Center subscription is expiring on *{utils.date_format(expdate)}*.
 
-                To avoid any interruption in your study schedule, please renew your subscription at the earliest.
+To avoid any interruption in your study schedule, please renew your subscription at the earliest.
 
-                You can reply to this message or contact us directly for assistance.
+You can reply to this message or contact us directly for assistance.
 
-                Thank you for choosing NexGen Study Center!
+Thank you for choosing NexGen Study Center!
 
-                Best regards,
-                NexGen Study Center Team
-                """
+Best regards,
+NexGen Study Center Team"""
         card = MDCard(
                 orientation="horizontal",
                 elevation= .8,
@@ -224,8 +228,8 @@ class LandingScreen(MDScreen):
                 spacing = "5dp",
                 pos_hint= {"center_x": 0.5},
                 radius= [20, 20, 20, 20],
-                # theme_bg_color= "Custom",
-                # md_bg_color= "#fcfbff",
+                theme_bg_color= "Custom",
+                md_bg_color= "#FFFFFF",
                 style= "elevated",
                 # md_bg_color= utils.get_background_color(expdate)
             )
@@ -269,7 +273,7 @@ class LandingScreen(MDScreen):
                     icon="whatsapp",
                     style= "standard",
                     pos_hint={"top": 1, "right": 1},
-                    on_release=send_messages(phone_numbers=phone_no,message=msg))
+                    on_release=lambda x: send_messages(phone_numbers=phone_no, message=msg))
         # Add widgets to the card
         main.add_widget(profile_image)
         main.add_widget(whatsapp)

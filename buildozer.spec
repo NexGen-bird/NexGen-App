@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0, https://github.com/kivymd/KivyMD/archive/master.zip, asyncgui, materialyoucolor,exceptiongroup,asynckivy,pillow==10.1.0,websockets, typing-extensions, sniffio, six, propcache, packaging, multidict, idna, hyperframe, hpack, h11, frozenlist, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic-core, httpcore, h2, deprecation, anyio, aiosignal, pydantic, httpx, aiohttp, realtime, supafunc, storage3, postgrest, gotrue, supabase
+requirements = python3,kivy==2.3.0, https://github.com/kivymd/KivyMD/archive/master.zip, asyncgui, materialyoucolor,exceptiongroup,asynckivy,pillow==10.1.0,websockets, typing-extensions, sniffio, six, propcache, packaging, multidict, idna, hyperframe, hpack, h11, frozenlist, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic-core, httpcore, h2, deprecation, anyio, aiosignal, pydantic, httpx, aiohttp, realtime, supafunc, storage3, postgrest, gotrue, supabase, pyjnius
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -87,7 +87,7 @@ android.presplash_color = white
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/
 # for general documentation.
 # Lottie files can be created using various tools, like Adobe After Effect or Synfig.
-#android.presplash_lottie = "path/to/lottie/file.json"
+android.presplash_lottie = %(source.dir)s/assets/presplash.json
 
 # (str) Adaptive icon of the application (used if Android API level is 26+ at runtime)
 #icon.adaptive_foreground.filename = %(source.dir)s/data/icon_fg.png

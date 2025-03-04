@@ -3,7 +3,7 @@ from libs.applibs import utils
 from libs.applibs.supabase_db import *
 from libs.applibs.loader import Dialog_cls
 
-utils.load_kv("expired_sub.kv")
+utils.load_kv("subcriptions.kv")
 
 class SubcriptionCard(MDCard):
     id = StringProperty()
@@ -24,7 +24,7 @@ class EListItems(MDListItem):
     Expired_on = StringProperty()
     status = StringProperty()
 
-class ExpiredCustomersList(MDScreen):
+class SubcriptionCardList(MDScreen):
     temp_list = []
     customer_list = []
     plan = {1:"Day",2:"Monthly",3:"Querterly",4:"Half Yearly",5:"Yearly"}

@@ -11,6 +11,7 @@ class ListItems(MDListItem):
     name = StringProperty()
     expiry_date = StringProperty()
     status = StringProperty()
+    phone = StringProperty()
 
 class CustomersList(MDScreen):
     temp_list = []
@@ -31,7 +32,8 @@ class CustomersList(MDScreen):
                                 c.created_at,
                                 p.isactive, 
                                 p.planstartdate, 
-                                p.planexpirydate
+                                p.planexpirydate,
+                                c.phone_number
                             FROM "Customers" c
                             JOIN "subscription"  p ON c.id = p.customerid::uuid
                             ORDER BY c.id, p.planstartdate DESC
@@ -52,7 +54,8 @@ class CustomersList(MDScreen):
                     "avatar_source":"assets/img/blank_profile.png",
                     "name":x["name"],
                     "expiry_date":utils.date_format(x["planexpirydate"]),
-                    "status":"Active" if x["isactive"] == 1 else "Expired"
+                    "status":"Active" if x["isactive"] == 1 else "Expired",
+                    "phone_number": x["phone_number"]
                 }
                 print("All Customers----->",(list_item))
                 self.temp_list.append(list_item)
@@ -71,6 +74,7 @@ class CustomersList(MDScreen):
             self.set_list_items(self.search_redirect,True)
         else:
             self.set_list_items()
+    
     def on_leave(self):
         self.search_redirect = ""
         self.ids.search_field.text = ""
@@ -89,6 +93,7 @@ class CustomersList(MDScreen):
                     "name":item["name"],
                     "expiry_date":item["expiry_date"],
                     "status":item["status"],
+                    "phone":item["phone_number"],
                     "callback": lambda x: self.get_text(item["custid"]),
                 }
             )

@@ -4,7 +4,7 @@
     size_hint: None, None
     size: "640dp", "150dp"
     theme_bg_color: "Custom"
-    md_bg_color: "white"
+    md_bg_color: app.getval("CARD_BACKGROUND")
     style: "outlined"
  
     MDRelativeLayout:
@@ -108,36 +108,18 @@
             font_style: "Title"
             role:"medium"
 
-            
-# <EListItems>:
-    # theme_bg_color:"Custom"
-    # divider:True
-    # md_bg_color:self.theme_cls.transparentColor
-    # # on_release: print("Test --- >",root.name,root.custid)
-    # on_release:app.screen_manager.get_screen("expired_list").get_text(root.custid) 
-    # MDListItemLeadingAvatar:
-    #     source:root.avatar_source
-    # MDListItemHeadlineText:
-    #     text: root.name
 
-    # MDListItemSupportingText:
-    #     text:"Expired on : "+ str(root.Expired_on)
-
-    # MDListItemTertiaryText:
-    #     text:root.status
-    #     theme_text_color:"Custom"
-    #     text_color:"#3cb043" if root.status == "Active" else "#ff0f0f"
-
-<ExpiredCustomersList>:
-    name:"expired_list"
-    md_bg_color: "#fcfbff"
+<SubcriptionCardList>:
+    name:"subcription_list"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
         orientation: "vertical"
         
         # Fixed Top App Bar
         MDTopAppBar:
             theme_bg_color: "Custom"
-            md_bg_color: "#192134"
+            md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
@@ -158,19 +140,21 @@
             padding: dp(20)
             MDBoxLayout:
                 adaptive_height: True
-                size_hint: .88,None
+                size_hint: 1,None
                 pos_hint:{"center_x": 0.5}
                 MDButton:
                     id: back
                     style: "filled"
-                    pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                    pos_hint: {"left": 1,"center_y": 0.5}
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("PRIMARY_COLOR")
                     on_release: root.parent.previous_screen()
 
                     MDButtonText:
                         text: "Back"
                 MDLabel:
                     text: " Subcriptions "
-                    pos_hint: {"center_x": .5}
+                    pos_hint: {"center_x": 1,"center_y": .5}
             MDBoxLayout:
                 id: filters
                 adaptive_height: True
@@ -203,7 +187,8 @@
                 key_size: 'height'
                 # spacing:dp(10)
                 # padding: dp(10)
-
+                theme_bg_color: "Custom"
+                md_bg_color: app.getval("BACKGROUND_COLOR")
                 RecycleBoxLayout:
                     spacing: dp(10)
                     padding: dp(10)
@@ -212,3 +197,5 @@
                     size_hint_y: None
                     height: self.minimum_height
                     orientation: 'vertical'
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("BACKGROUND_COLOR") 

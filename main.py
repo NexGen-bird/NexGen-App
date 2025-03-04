@@ -39,8 +39,9 @@ from libs.uix.baseclass.customer_profile import CustomerProfile
 from libs.uix.baseclass.customers_list import CustomersList
 from libs.uix.baseclass.admission_form_screen import AdmissionFormScreen
 from libs.uix.baseclass.transactions import Transactions
+from libs.uix.baseclass.investment import InvestmentTransactions
 from libs.uix.baseclass.add_transactions import AddTransactions
-from libs.uix.baseclass.expired_sub import ExpiredCustomersList
+from libs.uix.baseclass.subcriptions import SubcriptionCardList
 
 
 #--[End Import All Baseclasses from lib.baseclass ]
@@ -67,9 +68,10 @@ class NexGenApp(MDApp):
         """
         This method call before on_start() method so anything
         that need before start application all other method and code 
-        write here.
+        write here. 
         """
-        self.theme_cls.primary_palette = "Lavender"
+        self.theme_cls.primary_palette = "Mediumaquamarine"  # Needed, but we override below
+        self.theme_cls.primary_color = "#5ABFAD"
         # Create the root layout as an MDNavigationLayout to include the navigation drawer
         nav_layout = MDNavigationLayout()
 
@@ -77,16 +79,16 @@ class NexGenApp(MDApp):
         nav_drawer = MDNavigationDrawer(
             radius=(0, dp(16), dp(16), 0),
         )
-        # nav_drawer.theme_bg_color="Custom"
-        # nav_drawer.md_bg_color="#192134"
+        nav_drawer.theme_bg_color="Custom"
+        nav_drawer.md_bg_color=self.getval("BACKGROUND_COLOR")
         # Create the navigation drawer menu with items
         drawer_menu = MDNavigationDrawerMenu()
         drawer_header = MDNavigationDrawerLabel(text="NexGen Self Study Center",)
         drawer_item1 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(
                                 text="Dashboard",
-                                focus_color="#192134",
-                                text_color="#ed991f",
+                                focus_color="#5ABFAD",
+                                text_color="#222222",
                                 
                             ),
                             on_release=lambda x: self.switch_screen("land")
@@ -94,45 +96,52 @@ class NexGenApp(MDApp):
         
         drawer_item2 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Customer List",
-            focus_color="#192134",
-            text_color="#ed991f",
+            focus_color="#5ABFAD",
+            text_color="#222222",
         ),
             on_release=lambda x: self.switch_screen("customers_list"))
         
         drawer_item3 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Seats",
-            focus_color="#192134",
-            text_color="#ed991f",
+            focus_color="#5ABFAD",
+            text_color="#222222",
             ),
             on_release=lambda x : self.switch_screen("seat")
         )
         drawer_item4 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Admission Form",
-            focus_color="#192134",
-            text_color="#ed991f",
+            focus_color="#5ABFAD",
+            text_color="#222222",
             ),
             on_release=lambda x : self.switch_screen("admission_form")
         )
         drawer_item5 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Transactions",
-            focus_color="#192134",
-            text_color="#ed991f",
+            focus_color="#5ABFAD",
+            text_color="#222222",
             ),
             on_release=lambda x : self.switch_screen("transactions")
         )
         drawer_item6 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Add Transaction",
-            focus_color="#192134",
-            text_color="#ed991f",
+            focus_color="#5ABFAD",
+            text_color="#222222",
             ),
             on_release=lambda x : self.switch_screen("addTxn")
         )
         drawer_item7 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Subcriptions",
-            focus_color="#192134",
-            text_color="#ed991f",
+            focus_color="#5ABFAD",
+            text_color="#222222",
             ),
-            on_release=lambda x : self.switch_screen("expired_list")
+            on_release=lambda x : self.switch_screen("subcription_list")
+        )
+        drawer_item8 = MDNavigationDrawerItem(
+            MDNavigationDrawerItemText(text="Personal Investment",
+            focus_color="#5ABFAD",
+            text_color="#222222",
+            ),
+            on_release=lambda x : self.switch_screen("investment")
         )
         # Add items to the drawer menu
         drawer_menu.add_widget(drawer_header)
@@ -150,6 +159,8 @@ class NexGenApp(MDApp):
         drawer_menu.add_widget(drawer_item6)
         drawer_menu.add_widget(MDNavigationDrawerDivider())
         drawer_menu.add_widget(drawer_item7)
+        drawer_menu.add_widget(MDNavigationDrawerDivider())
+        drawer_menu.add_widget(drawer_item8)
 
         # Add menu to the drawer
         nav_drawer.add_widget(drawer_menu)
@@ -157,6 +168,7 @@ class NexGenApp(MDApp):
         # Initialize the screen manager and add screens
         self.screen_manager = Root()
         self.screen_manager.add_widget(Login_Screen())
+        self.screen_manager.add_widget(InvestmentTransactions())
         self.screen_manager.add_widget(Transactions())
         self.screen_manager.add_widget(AddTransactions())
         self.screen_manager.add_widget(LandingScreen())
@@ -164,7 +176,7 @@ class NexGenApp(MDApp):
         self.screen_manager.add_widget(SeatRegisterScreen())
         self.screen_manager.add_widget(CustomerProfile())
         self.screen_manager.add_widget(CustomersList())
-        self.screen_manager.add_widget(ExpiredCustomersList())
+        self.screen_manager.add_widget(SubcriptionCardList())
         
         # Add the screen manager and navigation drawer to the layout
         nav_layout.add_widget(self.screen_manager)
@@ -177,7 +189,16 @@ class NexGenApp(MDApp):
         self.screen_manager.change_screen(screename)
         self.root.children[0].set_state("close")
     
+    def getval(self,value):
+        import configparser
+        # Initialize parser
+        config = configparser.ConfigParser()
+        # Read the file
+        config.read('colors.ini')
 
+        # Access values
+        debug_mode = config.get('color', value)
+        return debug_mode
     def logout(self):
         print("Inside Logout....")
         logout()

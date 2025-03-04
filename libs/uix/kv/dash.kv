@@ -1,12 +1,13 @@
 <LandingScreen>:
     name: "land"
-    md_bg_color: "#fcfbff"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
         orientation: "vertical"
         # Fixed Top App Bar
         MDTopAppBar:
             theme_bg_color: "Custom"
-            md_bg_color: "#32B6CBff"
+            md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
@@ -46,8 +47,11 @@
                         height: self.minimum_height
                         pos_hint: {"center_x": 0.5}
                         radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
-                        md_bg_color: "#32B6CBff"  # Blue color
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
                         
                         FitImage:
                             source: "assets/project_icons/partner_4237167.png"  # Replace with your image path
@@ -64,6 +68,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                         MDLabel:
                             text: root.total_members
                             font_style: "Title"
@@ -72,6 +78,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                             
                     # Active members
                     MDCard:
@@ -82,8 +90,11 @@
                         height: self.minimum_height
                         pos_hint: {"center_x": 0.5}
                         radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
-                        md_bg_color: "#32B6CBff"  # Blue color
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
                         
                         FitImage:
                             source: "assets/project_icons/live-streaming_13437574.png"  # Replace with your image path
@@ -100,6 +111,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                         MDLabel:
                             text: root.active_members
                             font_style: "Title"
@@ -108,6 +121,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                 # Expired & P&L
                 MDBoxLayout:
                     id:subbox
@@ -122,8 +137,11 @@
                         height: self.minimum_height
                         pos_hint: {"center_x": 0.5}
                         radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
-                        md_bg_color: "#32B6CBff"  # Blue color
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
                         
                         FitImage:
                             source: "assets/project_icons/partner_4237167.png"  # Replace with your image path
@@ -140,6 +158,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                         MDLabel:
                             text: root.expired_count
                             font_style: "Title"
@@ -148,6 +168,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                             
                     # Active members
                     MDCard:
@@ -158,8 +180,11 @@
                         height: self.minimum_height
                         pos_hint: {"center_x": 0.5}
                         radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
-                        md_bg_color: "#32B6CBff"  # Blue color
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
                         
                         FitImage:
                             source: "assets/project_icons/trend_2601595.png"  # Replace with your image path
@@ -176,6 +201,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                         # MDLabel:
                         #     text: "15 Feb 2025 - 15 Mar 2025"
                         #     font_style: "Title"
@@ -192,6 +219,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                 
                 # Expired & Due Amount 
                 MDBoxLayout:
@@ -207,8 +236,11 @@
                         height: self.minimum_height
                         pos_hint: {"center_x": 0.5}
                         radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
-                        md_bg_color: "#32B6CBff"  # Blue color
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
                         
                         FitImage:
                             source: "assets/project_icons/pay_625599.png"  # Replace with your image path
@@ -225,6 +257,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                         MDLabel:
                             text: root.collection_amount
                             font_style: "Title"
@@ -233,6 +267,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                             
                     # Total Expense
                     MDCard:
@@ -243,8 +279,11 @@
                         height: self.minimum_height
                         pos_hint: {"center_x": 0.5}
                         radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
-                        md_bg_color: "#32B6CBff"  # Blue color
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
                         
                         FitImage:
                             source: "assets/project_icons/money_13680601.png"  # Replace with your image path
@@ -261,6 +300,8 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                         MDLabel:
                             text: root.expense_amount
                             font_style: "Title"
@@ -269,9 +310,9 @@
                             halign: "center"
                             adaptive_height: True
                             pos_hint: {"center_y": 0.5}
-                        
-                    
-                
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
+
                 # Spacer between cards
                 Widget:
                     size_hint_y: None
@@ -285,8 +326,12 @@
                     height: self.minimum_height
                     pos_hint: {"center_x": 0.5}
                     radius: [20, 20, 20, 20]
+                    style: "elevated"
+                    elevation:0.8
+                    theme_shadow_color: "Custom"
+                    shadow_color: (0, 0, 0, 0.1) 
                     theme_bg_color: "Custom"
-                    md_bg_color: "#FEBE04ff"
+                    md_bg_color: app.getval("CARD_BACKGROUND")
                     MDBoxLayout:
                         orientation: "horizontal"
                         spacing: "10dp"
@@ -297,7 +342,14 @@
                             role:"large"
                             halign: "left"
                             theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
+                            text_color: app.getval("TEXT_PRIMARY")
+                        FitImage:
+                            source: "assets/img/Blog post-bro.png"
+                            size_hint: None, None
+                            fit_mode: "fill"
+                            # size: 300, 300
+                            pos_hint: {"top": 1, "right": 1}
+                            opacity: 1  # Adjust opacity (0 = fully transparent, 1 = fully visible)
                         # MDIconButton:
                         #     icon: "arrow-right"
                         #     pos_hint: {"center_y": 0.5}
@@ -317,7 +369,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: 1, 1, 1, 1
+                                text_color: app.getval("TEXT_SECONDARY")
                             MDLabel:
                                 id: morningshift
                                 text: "0"
@@ -326,7 +378,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: "#00008B"
+                                text_color: app.getval("TEXT_PRIMARY")
                         MDBoxLayout:
                             orientation: "vertical"
                             adaptive_height: True
@@ -337,7 +389,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: 1, 1, 1, 1
+                                text_color: app.getval("TEXT_SECONDARY")
                             MDLabel:
                                 id: afternoonshift
                                 text: "0"
@@ -346,7 +398,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: "#00008B"
+                                text_color: app.getval("TEXT_PRIMARY")
                         MDBoxLayout:
                             orientation: "vertical"
                             adaptive_height: True
@@ -357,7 +409,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: 1, 1, 1, 1
+                                text_color: app.getval("TEXT_SECONDARY")
                             MDLabel:
                                 id: eveningshift
                                 text: "0"
@@ -366,7 +418,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: "#00008B"
+                                text_color: app.getval("TEXT_PRIMARY")
                         MDBoxLayout:
                             orientation: "vertical"
                             adaptive_height: True
@@ -377,7 +429,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: 1, 1, 1, 1
+                                text_color: app.getval("TEXT_SECONDARY")
                             MDLabel:
                                 id: nightshift
                                 text: "0"
@@ -386,7 +438,7 @@
                                 halign: "center"
                                 adaptive_height: True
                                 theme_text_color: "Custom"
-                                text_color: "#00008B"
+                                text_color: app.getval("TEXT_PRIMARY")
 
                         
 
@@ -398,7 +450,7 @@
                     orientation: "horizontal"
                     adaptive_height: True
                     spacing: "5dp"
-                    padding: ("39dp",0,"48dp","15dp")
+                    # padding: ("39dp",0,"48dp","15dp")
                     MDLabel:
                         text: "Expiring Subscriptions"
                         font_style: "Title"
@@ -408,7 +460,7 @@
                     
                     MDIconButton:
                         icon: "arrow-right"
-                        pos_hint: {"center_x": 1,"center_x":1}
+                        pos_hint: {"center_y": 0.5,"right":1}
                         on_release: root.rediret_expired_customer() # Right arrow opens pop
                 MDBoxLayout:
                     id:mainboxx

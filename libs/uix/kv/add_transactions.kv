@@ -28,7 +28,8 @@
         pos_hint: {"center_y": .5}
 <AddTransactions>:
     name: "addTxn"
-    md_bg_color: "#fcfbff"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
         orientation: "vertical"
         # padding: "20dp"
@@ -36,7 +37,7 @@
 
         MDTopAppBar:
             theme_bg_color: "Custom"
-            md_bg_color: "#192134"
+            md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
@@ -61,6 +62,8 @@
                 id: back
                 style: "filled"
                 pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                theme_bg_color: "Custom"
+                md_bg_color: app.getval("PRIMARY_COLOR")
                 on_release: root.parent.previous_screen()
 
                 MDButtonText:
@@ -72,6 +75,8 @@
                 icon: "qrcode"
                 style: "standard"
                 pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                theme_bg_color: "Custom"
+                md_bg_color: app.getval("PRIMARY_COLOR")
                 on_release: root.show_qr()
 
                 
@@ -323,6 +328,8 @@
                 MDButton:
                     style: "filled"
                     pos_hint: {"center_x": 0.5}
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("PRIMARY_COLOR")
                     on_release: 
                         root.submit_form()
                     MDButtonText:

@@ -1,6 +1,7 @@
 <AdmissionFormScreen>:
     name: "admission_form"
-    md_bg_color: "#fcfbff"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
         orientation: "vertical"
         # padding: "20dp"
@@ -8,7 +9,7 @@
 
         MDTopAppBar:
             theme_bg_color: "Custom"
-            md_bg_color: "#192134"
+            md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
@@ -33,6 +34,8 @@
                 id: back
                 style: "filled"
                 pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                theme_bg_color: "Custom"
+                md_bg_color: app.getval("PRIMARY_COLOR")
                 on_release: root.parent.previous_screen()
 
                 MDButtonText:
@@ -205,6 +208,8 @@
                     MDButtonIcon:
                         x: text.x - (self.width + dp(10))
                         icon: "file-image-plus"
+                        theme_bg_color: "Custom"
+                        md_bg_color: app.getval("PRIMARY_COLOR")
 
                     MDButtonText:
                         id: text
@@ -213,6 +218,8 @@
                 MDButton:
                     style: "filled"
                     pos_hint: {"center_x": 0.5}
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("PRIMARY_COLOR")
                     on_release: 
                         root.submit_form()
                     MDButtonText:

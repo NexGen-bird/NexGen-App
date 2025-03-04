@@ -2,6 +2,7 @@ from main_imports import MDScreen,MDButton,MDWidget,StringProperty, MDButtonText
 from libs.applibs import utils
 from libs.applibs.supabase_db import *
 from libs.applibs.loader import Dialog_cls
+from libs.applibs.whatsapp import send_messages
 #  Expansion 
 # import asynckivy
 # from kivy.animation import Animation
@@ -12,14 +13,6 @@ from libs.applibs.loader import Dialog_cls
 # from kivymd.uix.list import MDListItemTrailingIcon
 
 utils.load_kv("cutomer_profile.kv")
-# class ExpansionPanelItem(MDExpansionPanel):
-#     ...
-
-
-# class TrailingPressedIconButton(
-#     ButtonBehavior, RotateBehavior, MDListItemTrailingIcon
-# ):
-#     ...
 
 
 class CustomerProfile(MDScreen):
@@ -62,6 +55,23 @@ class CustomerProfile(MDScreen):
         # Function to go back to the previous screen
         print("Back to previous screen")
         self.parent.previous_screen()
+    
+    def send_whatsapp_messages(self,phone,name,expdate):
+        phone_no = "91"+str(phone)
+        msg = f"""
+Hi {name},
+
+This is a reminder that your NexGen Study Center subscription is expiring on *{expdate}*.
+
+To avoid any interruption in your study schedule, please renew your subscription at the earliest.
+
+You can reply to this message or contact us directly for assistance.
+
+Thank you for choosing NexGen Study Center!
+
+Best regards,
+NexGen Study Center Team"""
+        send_messages(phone_numbers=phone_no, message=msg)
 
     def go_to_transaction_history(self):
         # Implement the navigation to the Transactional History page
@@ -122,5 +132,5 @@ class CustomerProfile(MDScreen):
         self.parent.change_screen("transactions")
     def navigate_subcriptions(self):
         print(self.username)
-        self.parent.get_screen("expired_list").profile_redirect1 = self.username
-        self.parent.change_screen("expired_list")
+        self.parent.get_screen("subcription_list").profile_redirect1 = self.username
+        self.parent.change_screen("subcription_list")

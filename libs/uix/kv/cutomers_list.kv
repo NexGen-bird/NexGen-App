@@ -16,17 +16,21 @@
         text:root.status
         theme_text_color:"Custom"
         text_color:"#3cb043" if root.status == "Active" else "#ff0f0f"
+    # MDListItemTrailingIcon:
+    #     icon: "whatsapp"
+        # on_press: app.screen_manager.get_screen("customers_list").send_whatsapp_messages(root.phone,root.name,str(root.expiry_date))
 
 <CustomersList>:
     name:"customers_list"
-    md_bg_color: "#fcfbff"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
         orientation: "vertical"
         
         # Fixed Top App Bar
         MDTopAppBar:
             theme_bg_color: "Custom"
-            md_bg_color: "#192134"
+            md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
@@ -46,6 +50,8 @@
             orientation: 'vertical'
             spacing: dp(10)
             padding: dp(20)
+            theme_bg_color: "Custom"
+            md_bg_color: "#F4F4F4"
             MDBoxLayout:
                 id: mainbox
                 orientation: 'horizontal'
@@ -56,6 +62,8 @@
                     id: back
                     style: "filled"
                     pos_hint: {"center_x": 0.5,"center_y": 0.5}
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("PRIMARY_COLOR")
                     on_release: root.parent.previous_screen()
 
                     MDButtonText:
@@ -68,6 +76,8 @@
                 adaptive_height: True
                 size_hint: .88,None
                 pos_hint:{"center_x": 0.5}
+                theme_bg_color: "Custom"
+                md_bg_color: app.getval("BACKGROUND_COLOR")
 
                 # MDIconButton:
                 #     icon: 'account-search'
@@ -93,6 +103,8 @@
                 id: rv
                 key_viewclass: 'viewclass'
                 key_size: 'height'
+                theme_bg_color: "Custom"
+                md_bg_color: app.getval("BACKGROUND_COLOR")
 
                 RecycleBoxLayout:
                     padding: dp(10)
@@ -101,3 +113,5 @@
                     size_hint_y: None
                     height: self.minimum_height
                     orientation: 'vertical'
+                    theme_bg_color: "Custom"
+                    md_bg_color: app.getval("BACKGROUND_COLOR")

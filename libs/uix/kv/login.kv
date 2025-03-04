@@ -1,7 +1,8 @@
 <Login_Screen>:
     name: "login"
     MDFloatLayout:
-        md_bg_color: 1,1,1,1
+        theme_bg_color: "Custom"
+        md_bg_color: app.getval("BACKGROUND_COLOR")
         
         MDLabel:
             text: "W e l c o m e   !"
@@ -9,7 +10,7 @@
             font_size: "26sp"
             pos_hint:{"center_x":0.5,"center_y":.85}
             halign:"center"
-            color: rgba(0,0,59,255)
+            color: app.getval("TEXT_SECONDARY")
         MDLabel:
             text: "Sign in to continue."
             # markup:True
@@ -17,7 +18,7 @@
             font_size: "17sp"
             halign:"center"
             pos_hint:{"center_y":.79}
-            color: rgba(248, 178, 45,255)
+            color: app.getval("TEXT_PRIMARY")
         MDFloatLayout:
             size_hint: .80,.07
             pos_hint:{"center_x":0.53,"center_y":.63}
@@ -25,6 +26,8 @@
                 id: Email
                 mode: "outlined"
                 pos_hint:{"center_x":.43,"center_y":0.5}
+                theme_line_color: "Custom"
+                ine_color_focus: app.getval("PRIMARY_COLOR")
                 MDTextFieldHintText:
                     text: "Email"
             
@@ -55,7 +58,9 @@
             style: "filled"
             pos_hint:{"center_x":.5,"center_y":.35}
             size_hint:.66,.065
-            background_color:0,0,0,0
+            theme_bg_color: "Custom"
+            md_bg_color: app.getval("BUTTON_PRIMARY_BG")
+            # background_color:0,0,0,0
             font_name: "assets/fonts/Poppins-Bold.ttf"
             on_release:
                 root.login(Email.text,Password.text)

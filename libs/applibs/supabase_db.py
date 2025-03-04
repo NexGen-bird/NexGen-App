@@ -188,6 +188,25 @@ def get_transactionspagedata():
 
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
+def get_investmenttransactionspagedata():
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_user()
+
+        if not user:
+             
+             utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("fetch_investment_transaction_details").execute()
+            #  
+            return response.data
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 def get_subcriptionpagedata():
     isinternet = utils.is_internet_available()
@@ -225,7 +244,27 @@ def get_net_profit(start_date,end_date):
 
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
     
+def get_investment_details(name):
+    print("This is name -->",name)
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_user()
+
+        if not user:
+             
+             utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("get_investment_details", {"staffname": str(name)}).execute()
+            return response.data
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+        
 def get_expense_profit():
     isinternet = utils.is_internet_available()
 
@@ -288,18 +327,18 @@ def insert_addmission(data):
 def run_sql(query):
     isinternet = utils.is_internet_available()
 
-    try:
-        user = supabase.auth.get_user()
+    # try:
+    user = supabase.auth.get_user()
 
-        if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
-        elif not isinternet:
-            utils.snack("red", "No Internet Connection.")
-        else:
-            response = supabase.rpc("execute_sql", {"query": query}).execute()
-            return response.data
+    if not user:
+            
+            utils.snack("red","No active session. Please Re-login.")
+    elif not isinternet:
+        utils.snack("red", "No Internet Connection.")
+    else:
+        response = supabase.rpc("execute_sql", {"query": query}).execute()
+        return response.data
 
-    except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+    # except Exception as e:
+    #    utils.snack("red",f"Error fetching user: {e}, Re-Login")
     

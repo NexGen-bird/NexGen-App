@@ -4,14 +4,9 @@ from libs.applibs import utils
 from libs.applibs import utils,supabase_db as db
 from libs.applibs.loader import Dialog_cls
 
-utils.load_kv("transactions.kv")
-class OverviewCards(MDCard):
-    '''Implements a material card.'''
+utils.load_kv("investment.kv")
 
-    cardlabel = StringProperty()
-    amount = NumericProperty()
-    color= StringProperty()
-class CustomOneLineIconListItem(MDCard):
+class CustomOneLineIconListItem1(MDCard):
     Name = StringProperty()
     Date = StringProperty()
     txn_type = StringProperty()
@@ -21,16 +16,21 @@ class CustomOneLineIconListItem(MDCard):
     payment_method = StringProperty()
     description = StringProperty()
     transaction_for = StringProperty()
-class Transactions(MDScreen):
+class InvestmentTransactions(MDScreen):
     usertype="Member"
     transaction_list = []
     profile_redirect = ""
+    ainvestment = StringProperty()
+    areturns = StringProperty()
+    jinvestment = StringProperty()
+    jreturns = StringProperty()
     def on_pre_enter(self):
         print("start enter")
         loader = Dialog_cls()
         loader.open_dlg()
         print("L1 enter")
-        response = db.get_transactionspagedata()
+        response = db.get_investmenttransactionspagedata()
+
         if response:
             self.transaction_list = response
             loader.close_dlg()
@@ -38,22 +38,38 @@ class Transactions(MDScreen):
         else:
             loader.close_dlg()
             print("L3 enter")
-            utils.snack("red","Sorry could not get transactions")
+            utils.snack("red","Sorry could not get Investment")
+
+        jinv_data = db.get_investment_details('jayesh thakre')
+        ainv_data = db.get_investment_details('abhijit shinde')
+        print("jinv_data -- > ",jinv_data)
+        print("ainv_data -- > ",ainv_data)
+        if jinv_data:
+            loader.open_dlg()
+            self.jinvestment = utils.format_number(jinv_data[0]['investment']) if jinv_data[0]['investment']!=None else "0"
+            self.jreturns = utils.format_number(jinv_data[0]['returns']) if jinv_data[0]['returns']!=None else "0"
+            loader.close_dlg()
+
+        else:
+            loader.close_dlg()
+            print("L3 enter")
+            utils.snack("red","Sorry could not get Investment")
+        if ainv_data:
+            loader.open_dlg()
+            self.ainvestment = utils.format_number(ainv_data[0]['investment']) if ainv_data[0]['investment']!=None else "0"
+            self.areturns = utils.format_number(ainv_data[0]['returns']) if ainv_data[0]['returns'] !=None else "0"
+            loader.close_dlg()
+
+        else:
+            loader.close_dlg()
+            print("L3 enter")
+            utils.snack("red","Sorry could not get Investment")
+        print("This is investemnt data abhijit -->",ainv_data)
+        print("This is investemnt data jayesh-->",jinv_data)
+
 
     def on_enter(self):
-        profit, expenses = db.get_expense_profit()
-        box_layoput = self.ids.box
-        if box_layoput.children:
-            box_layoput.clear_widgets()
-        self.ids.box.add_widget(
-            OverviewCards(cardlabel="Expenses",amount=int(expenses),color="red")
-        )
-        self.ids.box.add_widget(
-            OverviewCards(cardlabel="Profit",amount=int(profit),color="green")
-        )
-        self.ids.box.add_widget(
-            MDFabButton(icon="plus",style= "standard",theme_bg_color= "Custom",md_bg_color="#E8E8E8", pos_hint={"center_y":0.65,"right":1},on_release=lambda x : self.parent.change_screen("addTxn"))
-        )
+
         if self.profile_redirect != "":
             self.set_txns(self.profile_redirect,True)
         else:
@@ -63,7 +79,7 @@ class Transactions(MDScreen):
         self.profile_redirect = ""
         self.ids.search_field.text = ""
 
-        self.ids.rv.data = []
+        self.ids.rv1.data = []
         self.set_txns()
     def change_lay(self):
         print("Inside Change lay")
@@ -105,7 +121,7 @@ class Transactions(MDScreen):
             text=text.lower()
         # print(len([sdate,edate,member,txn_type])) 
         def add_txn(txn):
-            self.ids.rv.data.append(
+            self.ids.rv1.data.append(
                 {
                     "viewclass": "CustomOneLineIconListItem",
                     "Name": "No Name" if txn["name"]==None else txn["name"],                    
@@ -121,7 +137,7 @@ class Transactions(MDScreen):
                 }
             )
 
-        self.ids.rv.data = []
+        self.ids.rv1.data = []
         if search:
             for txn in self.transaction_list:
                 if text in ("No Name" if txn["name"]==None else txn["name"]).lower():
@@ -168,4 +184,4 @@ class Transactions(MDScreen):
         else:
             for txn in self.transaction_list:
                 add_txn(txn)
-        print(self.ids.rv.data)
+        print(self.ids.rv1.data)

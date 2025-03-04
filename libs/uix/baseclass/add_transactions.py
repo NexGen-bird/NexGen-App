@@ -1,5 +1,5 @@
 from kivy.properties import StringProperty
-from main_imports import MDScreen,MDBoxLayout,MDDropdownMenu,ListProperty,BooleanProperty,NumericProperty,Window,MDFileManager,MDSnackbar,MDSnackbarText,Clock,MDModalDatePicker,MDModalInputDatePicker,MDSnackbarText,MDSnackbarSupportingText,dp
+from main_imports import MDScreen,MDBoxLayout,MDButtonText,MDDialogButtonContainer,MDButton,MDWidget,MDDropdownMenu,ListProperty,BooleanProperty,NumericProperty,Window,MDFileManager,MDSnackbar,MDSnackbarText,Clock,MDModalDatePicker,MDModalInputDatePicker,MDSnackbarText,MDSnackbarSupportingText,dp
 from libs.applibs import utils
 from datetime import date
 from libs.applibs.supabase_db import *
@@ -37,7 +37,6 @@ class AddTransactions(MDScreen):
     shifts_selected1 = []
     is_weekend = BooleanProperty()
     plantypeid = NumericProperty()
-
     def on_pre_enter(self):
         pass
 
@@ -53,6 +52,41 @@ class AddTransactions(MDScreen):
         else:
             print("inside else ")
             self.txn_of="General"
+        self.dialog = MDDialog(
+            MDDialogHeadlineText(
+                text="Adding Investment or Salary?",
+                halign="left",
+            ),
+            MDDialogSupportingText(
+                text="""
+Note:
+incase of investment-
+transaction type - 'IN'
+description - 'investment'
+transaction made to - nexgen
+
+incase of Salary-
+transaction type - 'OUT'
+description - 'salary'
+transaction made to - name of staff
+""",
+                halign="left",
+            ),
+            # MDDialogButtonContainer(
+            #     MDWidget(),
+            #     # MDButton(
+            #     #     MDButtonText(text="Cancel"),
+            #     #     style="text",
+            #     #     on_release=lambda x:self.close_dialog()
+            #     # ),
+            #     # MDButton(
+            #     #     MDButtonText(text="Discard"),
+            #     #     style="text",
+            #     #     on_release=lambda x:self.dialog.dismiss()
+            #     # ),
+            #     spacing="8dp",
+            # ),
+        ).open()
     
     def on_leave(self):
         self.txn_of = ""
@@ -481,7 +515,7 @@ class AddTransactions(MDScreen):
             else:
                 utils.snack(color="red",text= "Please Fill all Fields..")
 
-        else:
+        elif self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
             print("Inside only insert Transaction ")
             if "customer_phone_number" in self.addmission_form_data:
                 res = insert_addmission(self.addmission_form_data)
@@ -493,6 +527,8 @@ class AddTransactions(MDScreen):
                     utils.snack(color="red",text="Admission Submition Fail!")
             else:
                 utils.snack(color="red",text="Admission form data not present.")
+        else:
+            utils.snack(color="red",text="Please fill app the details.")
 
 
         print(data)
