@@ -27,14 +27,11 @@ class EListItems(MDListItem):
 class SubcriptionCardList(MDScreen):
     temp_list = []
     customer_list = []
-    plan = {1:"Day",2:"Monthly",3:"Querterly",4:"Half Yearly",5:"Yearly"}
+    plan = {1:"Day",2:"Monthly",3:"Querterly",4:"Half Yearly",5:"Yearly",6:"Week-End"}
     shift = {1:"6am to 12pm",2:"12pm to 6pm",3:"6pm to 12am",4:"12am to 6am"}
     profile_redirect1 = ""
     def on_enter(self):
         self.temp_list.clear()
-    # Define the dialog
-        # for x in range(38):
-        #     self.ids.main_scroll.add_widget(self.create_list_item(email=str(x),avatar_source="assets/img/blank_profile.png"))
         loader = Dialog_cls()
         loader.open_dlg()
         

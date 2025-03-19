@@ -1,6 +1,7 @@
 from main_imports import MDScreen,MDDialog,dp,MDDialogHeadlineText,MDDialogSupportingText
 from libs.applibs import utils
 from supabase_lib.supabase_auth import login_with_email_password,send_password_reset_email
+from libs.applibs.loader import Dialog_cls
 
 utils.load_kv("login.kv")
 
@@ -28,6 +29,8 @@ class Login_Screen(MDScreen):
         self.ids.Password.text = ""
     def login(self, email: str, password: str):
         # Validate input fields
+        loader = Dialog_cls()
+        loader.open_dlg(islogin=True)
         if self.is_remember:
             utils.write_json_file(r"libs/applibs/remember_login.json",email,password,True)
         if not email.strip():
@@ -43,6 +46,7 @@ class Login_Screen(MDScreen):
             
             if user:
                 self.auth_token = user.session.access_token
+                loader.close_dlg()
                 self.parent.change_screen("land")
             else:
                 utils.snack(color="red", text="Invalid email or password.")

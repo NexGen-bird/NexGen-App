@@ -73,9 +73,11 @@
                         MDTextFieldMaxLengthText:
                             max_text_length: 12
                 MDTextField:
+                    id: name_field
                     mode: "outlined"
                     text: root.full_name
-                    on_text: root.full_name = self.text
+                    # on_text: root.full_name = self.text
+                    on_text: root.update_menu1(self.text)
                     size_hint: .8,None
                     pos_hint:{"center_x": 0.5}
                     MDTextFieldHintText:

@@ -6,10 +6,7 @@ from datetime import datetime
 from libs.applibs.supabase_db import *
 from libs.applibs.loader import Dialog_cls
 from libs.applibs.whatsapp import send_messages
-
-
-
-
+import threading
 
 
 utils.load_kv("dash.kv")
@@ -24,27 +21,38 @@ class LandingScreen(MDScreen):
     active_members = StringProperty()
     collection_amount = StringProperty()
     expense_amount = StringProperty()
+    net_pnl = StringProperty()
     pnl_amount = StringProperty()
     morning= StringProperty()
     afternoon= StringProperty()
     evening= StringProperty()
     night= StringProperty()
-    shifts = {"morning": "45", "afternoon": "45", "evening": "45","night":"45"}
+    weekend= StringProperty()
+    shifts = {"morning": "45", "afternoon": "45", "evening": "45","night":"45","weekend":"20"}
     dialog = None
     
     
     def on_pre_enter(self):
         self.loader = Dialog_cls()
         self.loader.open_dlg()
+        weekend_ppl_count = """
+                            SELECT 20-COUNT(DISTINCT customerid) as count
+                            FROM subscription
+                            WHERE isactive = 1 and planstartdate < current_date and planduerationid = 6
+                            """
         shiftwiseactivecount = """
                                 SELECT CONCAT('Shift',shiftid, ':', 45-COUNT(DISTINCT seatid)) as count
                                 FROM subscription
-                                WHERE isactive = 1  -- Filter for active subscriptions
+                                WHERE isactive = 1 and planstartdate < current_date and planduerationid != 6-- Filter for active subscriptions
                                 GROUP BY shiftid
                                 """
         isinternet=utils.is_internet_available()
         if isinternet:
             shiftcount = run_sql(shiftwiseactivecount)
+            weekendcount = run_sql(weekend_ppl_count)
+            if weekendcount:
+                # print("Weekend batch --> ",weekendcount)
+                self.shifts["weekend"] = str(weekendcount[0]['count'])
             if shiftcount:
                 # Mapping shift names to dictionary keys
                 shift_mapping = {
@@ -98,6 +106,7 @@ class LandingScreen(MDScreen):
         if collection:
             self.collection_amount = str("0" if collection[0]['total_revenue']==None else "{}{}".format("₹", utils.format_number(float(collection[0]["total_revenue"]))))
             self.expense_amount = str("0" if collection[0]['total_expenses']==None else "{}{}".format("₹",utils.format_number(float(collection[0]["total_expenses"]))))
+            self.net_pnl ="{}{}".format("₹", utils.format_number(float(int(0 if collection[0]['total_revenue']==None else collection[0]['total_revenue']) - int(0 if collection[0]['total_expenses']==None else collection[0]['total_expenses']))))        
         active_members_query = """select count(distinct customerid)
                                 from subscription
                                 where isactive=1
@@ -109,20 +118,22 @@ class LandingScreen(MDScreen):
             utils.snack("red","No Internet Connection..")
         if active_members:
             self.active_members = str("0" if active_members[0]['count']==None else active_members[0]['count'])
-        month_start,month_end = utils.get_previous_month_range()
+        month_start,month_end = utils.get_current_month_range()
         self.pnl_amount = str(0 if get_net_profit(month_start,month_end)==None else utils.format_number(float(get_net_profit(month_start,month_end))))
         
         self.ids.morningshift.text = self.shifts['morning']
         self.ids.afternoonshift.text = self.shifts['afternoon']
         self.ids.eveningshift.text = self.shifts['evening']
         self.ids.nightshift.text = self.shifts['night']
+        self.ids.weekend.text = self.shifts['weekend']
         
         exp_members_query = """SELECT DISTINCT ON (c.id) 
                                     c.id, 
                                     c.name,
                                     c.phone_number, 
                                     p.planstartdate,
-                                    p.planexpirydate
+                                    p.planexpirydate,
+                                    c.profile_image
                                 FROM "Customers" c
                                 INNER JOIN "subscription"  p ON c.id = p.customerid
                                 where p.planexpirydate >= current_date
@@ -149,7 +160,7 @@ class LandingScreen(MDScreen):
         if expiring_members:
             sorted_data = sorted(expiring_members, key=lambda x: datetime.strptime(x['planexpirydate'], "%Y-%m-%d"), reverse=False)
             for x in sorted_data:
-                self.expCard(name=x['name'],expdate=x['planexpirydate'],phone=x['phone_number'])
+                self.expCard(id=x['id'],name=x['name'],expdate=x['planexpirydate'],phone=x['phone_number'],img=x['profile_image'])
         else:
             self.ids.mainboxx.add_widget(MDLabel(
                     adaptive_size=True,
@@ -204,7 +215,10 @@ class LandingScreen(MDScreen):
         # print("This is Good :: ",item_text)
         self.dialog.dismiss()
         self.parent.change_screen("seat")
-    def expCard(self,name,expdate,phone,img="assets/img/blank_profile.png"):
+    def expCard(self,id,name,expdate,phone,img=""):
+        if img == "":
+            img = "assets/img/blank_profile.png"
+        # img = search_profile_img(str(id))
         phone_no = "91"+str(phone)
         msg = f"""
 Hi {name},

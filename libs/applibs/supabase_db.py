@@ -54,10 +54,10 @@ def get_all_customers():
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 # Get customer details
-def get_customers_details(contact_number):
+def get_customers_details(column_name,contact_number):
     isinternet=utils.is_internet_available()
     if isinternet:
-        response = supabase.table("Customers").select("*").eq("phone_number", contact_number).execute()
+        response = supabase.table("Customers").select("*").eq(column_name, contact_number).execute()
         # supabase.auth.sign_out()
         print(response.data)
         return response.data
@@ -118,7 +118,24 @@ def get_all_customers_contact():
 
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
-    
+
+def get_all_customers_names():
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_user()
+
+        if not user:
+             
+             utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("get_names").execute()
+            return response.data
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
 #  Add Transaction
 def create_transaction(txn_date,transaction_type,amount,txn_made_by, payment_method, description, transaction_for,transaction_made_to):
     data = {
@@ -327,18 +344,98 @@ def insert_addmission(data):
 def run_sql(query):
     isinternet = utils.is_internet_available()
 
-    # try:
-    user = supabase.auth.get_user()
+    try:
+        user = supabase.auth.get_user()
 
-    if not user:
-            
-            utils.snack("red","No active session. Please Re-login.")
-    elif not isinternet:
-        utils.snack("red", "No Internet Connection.")
-    else:
-        response = supabase.rpc("execute_sql", {"query": query}).execute()
-        return response.data
+        if not user:
+                
+                utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("execute_sql", {"query": query}).execute()
+            return response.data
 
-    # except Exception as e:
-    #    utils.snack("red",f"Error fetching user: {e}, Re-Login")
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+def upload_image(imagepath,imagename):
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_user()
+
+        if not user:
+                
+                utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            with open(imagepath, "rb") as f:
+                response = (
+                    supabase.storage
+                    .from_("customer_images")
+                    .upload(
+                        file=f,
+                        path=f"{imagename}.png",
+                        file_options={"content-type":"image/png"}
+                    )
+                )
+            return response
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
+def get_profile_img(imagename):
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_user()
+
+        if not user:
+                
+                utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = (
+            supabase.storage
+            .from_("customer_images")
+            .get_public_url(f"{imagename}.png")
+            )
+            return response
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
+def search_profile_img(imagename):
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_user()
+
+        if not user:
+                
+                utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = (
+                supabase.storage
+                .from_("customer_images")
+                .list(
+                    options = {
+                        "limit": 100,
+                        "offset": 0,
+                        "sortBy": {"column": "name", "order": "desc"},
+                        "search": imagename,
+                    }
+                )
+            )
+            if response:
+                return get_profile_img(imagename)
+            else:
+                return "assets/img/blank_profile.png"
+
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")

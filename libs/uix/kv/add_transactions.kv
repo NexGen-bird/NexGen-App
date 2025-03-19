@@ -1,5 +1,5 @@
 <Check@MDCheckbox>:
-    group: 'group'
+    # group: 'group'
     size_hint: None, None
     size: dp(48), dp(48)
 <CheckBoxButton>:
@@ -231,7 +231,7 @@
                         disabled: True if root.txn_of != "Admission" else False
                         on_active:root.update_batch(True)
                     MDLabel:
-                        text: "Week-End"
+                        text: "Locker"
                         adaptive_height: True
                         padding_x: "7dp"
                         pos_hint: {"center_y": .5}

@@ -2,7 +2,7 @@ from main_imports import MDScreen,MDLabel,MDListItem,MDBoxLayout,StringProperty,
 from libs.applibs import utils
 from libs.applibs.supabase_db import *
 from libs.applibs.loader import Dialog_cls
-
+import time
 utils.load_kv("cutomers_list.kv")
 
 class ListItems(MDListItem):
@@ -17,11 +17,9 @@ class CustomersList(MDScreen):
     temp_list = []
     customer_list = []
     search_redirect = ""
+    
     def on_enter(self):
         self.temp_list.clear()
-    # Define the dialog
-        # for x in range(38):
-        #     self.ids.main_scroll.add_widget(self.create_list_item(email=str(x),avatar_source="assets/img/blank_profile.png"))
         loader = Dialog_cls()
         loader.open_dlg()
         query_customer_list = """
@@ -33,7 +31,8 @@ class CustomersList(MDScreen):
                                 p.isactive, 
                                 p.planstartdate, 
                                 p.planexpirydate,
-                                c.phone_number
+                                c.phone_number,
+                                c.profile_image
                             FROM "Customers" c
                             JOIN "subscription"  p ON c.id = p.customerid::uuid
                             ORDER BY c.id, p.planstartdate DESC
@@ -51,7 +50,7 @@ class CustomersList(MDScreen):
         
                 list_item = {
                     "custid":x["id"],
-                    "avatar_source":"assets/img/blank_profile.png",
+                    "avatar_source":x["profile_image"],
                     "name":x["name"],
                     "expiry_date":utils.date_format(x["planexpirydate"]),
                     "status":"Active" if x["isactive"] == 1 else "Expired",
@@ -163,6 +162,7 @@ class CustomersList(MDScreen):
                 customer_profile.email = data[0]["email"]
                 customer_profile.phone = data[0]["phone_number"]
                 customer_profile.address = data[0]["address"]
+                customer_profile.profile_image = data[0]["profile_image"]
                 self.parent.change_screen("customer_profile")
             else:
                 print("No data found.....")

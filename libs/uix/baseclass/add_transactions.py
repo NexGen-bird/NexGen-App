@@ -3,10 +3,8 @@ from main_imports import MDScreen,MDBoxLayout,MDButtonText,MDDialogButtonContain
 from libs.applibs import utils
 from datetime import date
 from libs.applibs.supabase_db import *
-# from libs.uix.baseclass.admission_form_screen import AdmissionFormScreen
 from libs.applibs.paymentQR import QRDialog_cls
-from datetime import datetime
-
+from libs.applibs.whatsapp import send_messages
 
 utils.load_kv("add_transactions.kv")
 class CheckBoxButton(MDBoxLayout):
@@ -35,7 +33,7 @@ class AddTransactions(MDScreen):
     menu = None
     shifts_selected = ListProperty([])
     shifts_selected1 = []
-    is_weekend = BooleanProperty()
+    is_locker = BooleanProperty()
     plantypeid = NumericProperty()
     def on_pre_enter(self):
         pass
@@ -48,10 +46,15 @@ class AddTransactions(MDScreen):
         if AS.contact_number:
             print("inside if ")
             self.txn_of="Admission"
-
+            self.transaction_made_for= "admission"
+            self.transaction_made_by = self.addmission_form_data['customer_name']
+            self.transaction_made_to = "abhijit shinde"
+            self.transaction_type = "IN"
+            self.ids.txntype_text.text = self.transaction_type
         else:
             print("inside else ")
             self.txn_of="General"
+            # self.transaction_made_by = "nexgen"
         self.dialog = MDDialog(
             MDDialogHeadlineText(
                 text="Adding Investment or Salary?",
@@ -105,7 +108,7 @@ transaction made to - name of staff
         self.menu = None
         self.shifts_selected.clear()
         self.shifts_selected1.clear()
-        self.is_weekend = False
+        self.is_locker = False
         self.plantypeid = 0
         self.ids.txn_mode.text = "Txn Mode"
         self.ids.txntype_text.text = "Txn Type"
@@ -153,6 +156,7 @@ transaction made to - name of staff
         self.change_txn_in(text_item)
         print("Menu Selected --> ",text_item)
         self.txn_of = text_item
+        
         self.transaction_made_for = text_item
         self.menu.dismiss()
     
@@ -329,6 +333,10 @@ transaction made to - name of staff
     def menu_txntypecallback(self, text_item):
         self.ids.txntype_text.text = text_item
         self.transaction_type = text_item
+        if text_item == "OUT":
+            self.transaction_made_by = "nexgen"
+        else:
+            self.transaction_made_by = ""
         self.menu.dismiss()
         print("STate ---> ",self.menu.state)
 
@@ -342,6 +350,8 @@ transaction made to - name of staff
             self.plan_type = 4
         elif text_item=="Yearly":
             self.plan_type = 5
+        elif text_item=="Week-End":
+            self.plan_type = 6
         elif text_item=="Day":
             self.plan_type = 1
             self.plantypeid = 4
@@ -380,95 +390,105 @@ transaction made to - name of staff
         self.transaction_startdate,self.transaction_enddate = utils.calculate_end_dates(self.transaction_date,plantype)
 
 
-    def update_batch(self,isweekend):
-        self.is_weekend = isweekend
+    def update_batch(self,is_locker):
+        self.is_locker = is_locker
         self.amount_by_shift(self.ids.shift.text)
         
 
     def amount_by_shift(self,shift):
-        print("IS WEEKEND Value --->",self.is_weekend)
-        if self.is_weekend == False:
-            if self.plan_type == 3:
-                if "1 Shifts" in shift:
-                    self.amount = "3560"
-                elif "2 Shifts" in shift:
-                    self.amount = "6270"
-                elif "3 Shifts" in shift:
-                    self.amount = "8100"
-                elif "Ultimate plan" in shift:
-                    self.amount = "9975"
-                
-            elif self.plan_type == 4:
-                if "1 Shifts" in shift:
-                    self.amount = "7125"
-                elif "2 Shifts" in shift:
-                    self.amount = "12540"
-                elif "3 Shifts" in shift:
-                    self.amount = "16245"
-                elif "Ultimate plan" in shift:
-                    self.amount = "19950"
-            elif self.plan_type == 5:
-                if "1 Shifts" in shift:
-                    self.amount = "13500"
-                elif "2 Shifts" in shift:
-                    self.amount = "23760"
-                elif "3 Shifts" in shift:
-                    self.amount = "30780"
-                elif "Ultimate plan" in shift:
-                    self.amount = "37800"
-            elif self.plan_type == 1:
-                if "3 Shifts" in shift:
-                    self.amount = "250"
-            else:
-                if "1 Shifts" in shift:
-                    self.amount = "1250"
-                elif "2 Shifts" in shift:
-                    self.amount = "2200"
-                elif "3 Shifts" in shift:
-                    self.amount = "2850"
-                elif "Ultimate plan" in shift:
-                    self.amount = "3500"
+        # print("IS WEEKEND Value --->",self.is_weekend)
+        if self.plan_type == 3:
+            if "1 Shifts" in shift:
+                self.amount = "3560"
+            elif "2 Shifts" in shift:
+                self.amount = "6270"
+            elif "3 Shifts" in shift:
+                self.amount = "8100"
+            elif "Ultimate plan" in shift:
+                self.amount = "9975"
+            
+        elif self.plan_type == 4:
+            if "1 Shifts" in shift:
+                self.amount = "7125"
+            elif "2 Shifts" in shift:
+                self.amount = "12540"
+            elif "3 Shifts" in shift:
+                self.amount = "16245"
+            elif "Ultimate plan" in shift:
+                self.amount = "19950"
+        elif self.plan_type == 5:
+            if "1 Shifts" in shift:
+                self.amount = "13500"
+            elif "2 Shifts" in shift:
+                self.amount = "23760"
+            elif "3 Shifts" in shift:
+                self.amount = "30780"
+            elif "Ultimate plan" in shift:
+                self.amount = "37800"
+        elif self.plan_type == 1:
+            if "3 Shifts" in shift:
+                self.amount = "250"
+        elif self.plan_type == 6:
+            if "1 Shifts" in shift:
+                self.amount = "550"
+            elif "2 Shifts" in shift:
+                self.amount = "850"
+            elif "3 Shifts" in shift:
+                self.amount = "1250"
+            elif "Ultimate plan" in shift:
+                self.amount = "1700"
         else:
-            if self.plan_type == 3:
-                if "1 Shifts" in shift:
-                    self.amount = "1560"
-                elif "2 Shifts" in shift:
-                    self.amount = "2420"
-                elif "3 Shifts" in shift:
-                    self.amount = "3560"
-                elif "Ultimate plan" in shift:
-                    self.amount = "4840"
+            if "1 Shifts" in shift:
+                self.amount = "1250"
+            elif "2 Shifts" in shift:
+                self.amount = "2200"
+            elif "3 Shifts" in shift:
+                self.amount = "2850"
+            elif "Ultimate plan" in shift:
+                self.amount = "3500"
+        if self.is_locker == True:
+            self.amount = str(int(self.amount)+250)
+        # else:
+        #     if self.plan_type == 3:
+        #         if "1 Shifts" in shift:
+        #             self.amount = "1560"
+        #         elif "2 Shifts" in shift:
+        #             self.amount = "2420"
+        #         elif "3 Shifts" in shift:
+        #             self.amount = "3560"
+        #         elif "Ultimate plan" in shift:
+        #             self.amount = "4840"
                 
-            elif self.plan_type == 4:
-                if "1 Shifts" in shift:
-                    self.amount = "3135"
-                elif "2 Shifts" in shift:
-                    self.amount = "4845"
-                elif "3 Shifts" in shift:
-                    self.amount = "7125"
-                elif "Ultimate plan" in shift:
-                    self.amount = "9690"
-            elif self.plan_type == 5:
-                if "1 Shifts" in shift:
-                    self.amount = "5940"
-                elif "2 Shifts" in shift:
-                    self.amount = "9690"
-                elif "3 Shifts" in shift:
-                    self.amount = "13500"
-                elif "Ultimate plan" in shift:
-                    self.amount = "18360"
-            elif self.plan_type == 1:
-                if "3 Shifts" in shift:
-                    self.amount = "250"
-            else:
-                if "1 Shifts" in shift:
-                    self.amount = "550"
-                elif "2 Shifts" in shift:
-                    self.amount = "850"
-                elif "3 Shifts" in shift:
-                    self.amount = "1250"
-                elif "Ultimate plan" in shift:
-                    self.amount = "1700"
+        #     elif self.plan_type == 4:
+        #         if "1 Shifts" in shift:
+        #             self.amount = "3135"
+        #         elif "2 Shifts" in shift:
+        #             self.amount = "4845"
+        #         elif "3 Shifts" in shift:
+        #             self.amount = "7125"
+        #         elif "Ultimate plan" in shift:
+        #             self.amount = "9690"
+        #     elif self.plan_type == 5:
+        #         if "1 Shifts" in shift:
+        #             self.amount = "5940"
+        #         elif "2 Shifts" in shift:
+        #             self.amount = "9690"
+        #         elif "3 Shifts" in shift:
+        #             self.amount = "13500"
+        #         elif "Ultimate plan" in shift:
+        #             self.amount = "18360"
+        #     elif self.plan_type == 1:
+        #         if "3 Shifts" in shift:
+        #             self.amount = "250"
+        #     else:
+        #         if "1 Shifts" in shift:
+        #             self.amount = "550"
+        #         elif "2 Shifts" in shift:
+        #             self.amount = "850"
+        #         elif "3 Shifts" in shift:
+        #             self.amount = "1250"
+        #         elif "Ultimate plan" in shift:
+        #             self.amount = "1700"
 
     def submit_form(self):
         # Logic for form submission (printing entered data as a placeholder)
@@ -490,10 +510,23 @@ transaction made to - name of staff
             "customer_planexpirydate": self.transaction_enddate,
             "customer_paymenttype": self.transaction_mode,
             "customer_isactive": 1
+            # "is_locker": 1 if self.is_locker==True else 0
         }
         # print("Before --- > ",self.addmission_form_data)
         final = self.addmission_form_data.update(data)
         print("After --- > ",self.addmission_form_data)
+        msg = f"""
+ID - 
+Name - {self.addmission_form_data['customer_name']}
+phone - {self.addmission_form_data['customer_phone_number']}
+Shift - {utils.get_shift_text(self.shifts_selected)}
+Payment mode - {self.transaction_mode}
+Payment Amount- {self.amount.strip()}
+Payment date - {utils.date_format(self.transaction_date)}
+Joining Date - {utils.date_format(self.transaction_startdate)}
+Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
+"""
+        number = "918108236131"
         # try:
         if self.txn_of != "Admission":
             print("Inside only insert Full ")
@@ -519,8 +552,18 @@ transaction made to - name of staff
             print("Inside only insert Transaction ")
             if "customer_phone_number" in self.addmission_form_data:
                 res = insert_addmission(self.addmission_form_data)
+                print("Admission Result --> ",res)
                 result = res.split(":")[0]
                 if result.strip()=="Pass":
+                    try:
+                        user_details = get_customers_details("phone_number",self.addmission_form_data['customer_phone_number'])
+                        user_id = user_details[0]['id']
+                        upload_image(self.addmission_form_data['customer_profile_image'],str(user_id))
+                        profile_url = get_profile_img(user_id)
+                        update_customer(self.addmission_form_data['customer_phone_number'],{"profile_image":f"{profile_url}"})
+                    except Exception as e:
+                        utils.snack("red",f"{e}")
+
                     utils.snack(color="green",text="Admission Submitted Successfully!")
                     self.parent.change_screen("customers_list")
                 else:
@@ -530,8 +573,8 @@ transaction made to - name of staff
         else:
             utils.snack(color="red",text="Please fill app the details.")
 
-
-        print(data)
+        send_messages(phone_numbers=number,message=msg)
+        # print(data)
         # except:
         # print("Something went wrong please try after some time or contact admin.")
         

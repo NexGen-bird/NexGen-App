@@ -21,36 +21,15 @@ class CustomerProfile(MDScreen):
     username = StringProperty()
     join_date = StringProperty()
     expiry_date = StringProperty()
-    profile_image = "assets/img/blank_profile.png" # Path to user's profile image
+    profile_image = StringProperty() # Path to user's profile image
     dob = StringProperty()
     email= StringProperty()
     phone = StringProperty()
     address = StringProperty()
 
     def on_enter(self):
-        # async def set_panel_list():
-        #     for i in range(2):
-        #         await asynckivy.sleep(0)
-        #         self.ids.container.add_widget(ExpansionPanelItem())
-
-        # asynckivy.start(set_panel_list())
-        
-        print("Inside page -- >",self.username,self.join_date,self.expiry_date,self.dob,self.email,self.phone,self.address)
-        # else:
-        #     print("No Customer ID found...")
-    # def tap_expansion_chevron(
-    #         self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton
-    #     ):
-    #         Animation(
-    #             padding=[0, dp(12), 0, dp(12)]
-    #             if not panel.is_open
-    #             else [0, 0, 0, 0],
-    #             d=0.2,
-    #         ).start(panel)
-    #         panel.open() if not panel.is_open else panel.close()
-    #         panel.set_chevron_down(
-    #             chevron
-    #         ) if not panel.is_open else panel.set_chevron_up(chevron)
+        # print("Inside page -- >",self.username,self.join_date,self.expiry_date,self.dob,self.email,self.phone,self.address)
+        pass
     def go_back(self, instance):
         # Function to go back to the previous screen
         print("Back to previous screen")

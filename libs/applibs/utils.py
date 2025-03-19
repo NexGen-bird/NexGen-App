@@ -189,7 +189,8 @@ def calculate_end_dates(input_date, plantype):
         # Parse the input date string to a date object
         start_date = datetime.strptime(str(input_date), '%Y-%m-%d').date()
     except ValueError:
-        raise ValueError("Invalid input date format. Use 'YYYY-MM-DD'.")
+        snack("red","Invalid input date format. Use 'YYYY-MM-DD'.")
+        # raise ValueError("Invalid input date format. Use 'YYYY-MM-DD'.")
 
     # Map plan types to duration
     durations = {
@@ -197,36 +198,36 @@ def calculate_end_dates(input_date, plantype):
         3: relativedelta(months=3),
         4: relativedelta(months=6),
         5: relativedelta(years=1),
+        6: relativedelta(months=1),
         1: relativedelta(days=1)
         
     }
 
     if plantype not in durations:
-        raise ValueError("Invalid plan type. Choose from 'Month', 'Quarter', 'Half Year', or 'Year'.")
+        snack("red","Choose from 'Month', 'Quarter', 'Half Year', or 'Year'.")
+        # raise ValueError("Invalid plan type. Choose from 'Month', 'Quarter', 'Half Year', or 'Year'.")
 
     # Calculate the end date and reduce one day
     end_date = start_date + durations[plantype] - relativedelta(days=1)  # Subtract 2 days
 
     return str(start_date), str(end_date)
-def get_previous_month_range(input_date=None):
+def get_current_month_range(input_date=None):
     """
-    Returns the start and end date of the previous month's period.
-    - Start date: Always 15th of the previous month.
-    - End date: Always 14th of the current month.
+    Returns the start and end date of the current month's period.
+    - Start date: Always 15th of the current month.
+    - End date: Always 15th of the next month.
     
     If input_date is not provided, it defaults to today's date.
     """
     if input_date is None:
         input_date = date.today()
-    print(input_date)
-    if input_date.day >= 15:
-        # Current month is fine
-        start_date = date(input_date.year, input_date.month - 1, 15) if input_date.month > 1 else date(input_date.year - 1, 12, 15)
-        end_date = date(input_date.year, input_date.month, 14)
+
+    start_date = date(input_date.year, input_date.month, 15)
+
+    if input_date.month == 12:  # December case, roll over to next year
+        end_date = date(input_date.year + 1, 1, 14)
     else:
-        # Go one more month back
-        start_date = date(input_date.year, input_date.month - 2, 15) if input_date.month > 2 else date(input_date.year - 1, 12 + (input_date.month - 2), 15)
-        end_date = date(input_date.year, input_date.month - 1, 14) if input_date.month > 1 else date(input_date.year - 1, 12, 14)
+        end_date = date(input_date.year, input_date.month + 1, 14)
 
     return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
 
@@ -298,3 +299,33 @@ def format_number(n: float) -> str:
     formatted = f"{value:.2f}".rstrip("0").rstrip(".") + suffix
     
     return formatted
+
+def get_shift_text(shift_list):
+    shift_times = {
+        1: "6am to 12pm",
+        2: "12pm to 6pm",
+        3: "6pm to 12am",
+        4: "12am to 6am"
+    }
+    
+    if not shift_list:
+        return "No shifts selected"
+    
+    shift_list = sorted(set(shift_list))  # Remove duplicates and sort
+    
+    # Check for consecutive shifts
+    if all(shift_list[i] + 1 == shift_list[i + 1] for i in range(len(shift_list) - 1)):
+        start_time = shift_times[shift_list[0]].split(" to ")[0]
+        end_time = shift_times[shift_list[-1]].split(" to ")[1]
+        return f"{len(shift_list)} shifts ({start_time} to {end_time})"
+    
+    # Non-continuous shifts
+    def get_ordinal(n):
+        if 10 <= n % 100 <= 20:
+            suffix = "th"
+        else:
+            suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+        return f"{n}{suffix}"
+    
+    shift_positions = [get_ordinal(shift) for shift in shift_list]
+    return " & ".join(shift_positions) + " shifts"

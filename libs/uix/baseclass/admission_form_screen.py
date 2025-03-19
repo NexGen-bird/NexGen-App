@@ -24,12 +24,14 @@ class AdmissionFormScreen(MDScreen):
     address = StringProperty("")
     education_qualification = StringProperty("")
     joining_for = StringProperty("")
-    profile_image = "profile.png"
+    profile_image = "assets/img/blank_profile.png"
     all_customer_contacts = list()
+    all_customer_names = list()
     filtered_data = []
     
     def on_pre_enter(self):
         self.contacts = db.get_all_customers_contact()
+        self.names = db.get_all_customers_names()
         print("This is all customer contacts ----> ",self.contacts)
     def on_enter(self):
         loader = Dialog_cls()
@@ -41,8 +43,20 @@ class AdmissionFormScreen(MDScreen):
         else:
             loader.close_dlg()
             utils.snack("red","Sorry could not get contacts")
+        if self.names:
+            self.all_customer_names = self.names
+            loader.close_dlg()
+        else:
+            loader.close_dlg()
+            utils.snack("red","Sorry could not get Names")
         self.menu = MDDropdownMenu(
             caller=self.ids.contact_field,
+            items=[],
+            position="bottom",
+            width_mult=4,
+        )
+        self.menu_list = MDDropdownMenu(
+            caller=self.ids.name_field,
             items=[],
             position="bottom",
             width_mult=4,
@@ -60,27 +74,40 @@ class AdmissionFormScreen(MDScreen):
         self.joining_for = ""
         self.profile_image = ""  
         self.contact_number = ""
-    def set_item(self, text_item):
-        self.contact_number = text_item
+    def set_item(self,text_item, is_name=False):
+        if is_name == True:
+            self.contact_number = text_item
+        else:
+            self.full_name = text_item
         loader = Dialog_cls()
         try:
             loader.open_dlg()
-            response = db.get_customers_details(text_item)
+            if is_name == True:
+                response = db.get_customers_details("name",text_item)
+            else:
+                response = db.get_customers_details("phone_number",text_item)
             if response:
                 self.fill_existing_customer_details(response[0])
                 loader.close_dlg()
         except:
             loader.close_dlg()
             utils.snack("red","Something went wrong No Customer data fetched")
-        self.menu.dismiss()
+        if is_name == True:
+            self.menu_list.dismiss()
+        else:
+            self.menu.dismiss()
+    
     def fill_existing_customer_details(self,details):
         loader = Dialog_cls()
         loader.open_dlg()
+        self.contact_number = details["phone_number"]
         self.full_name = details["name"]
         self.date_of_birth = details["dob"]
         customer_age=self.calculate_age(self.date_of_birth)
         self.age = str(customer_age)+" years"
         self.gender = details["gender"]
+        if self.gender:
+            self.ids.drop_text.text = self.gender
         self.email_id = details["email"]
         self.address = details["address"]
         self.education_qualification = details["education"]
@@ -112,6 +139,32 @@ class AdmissionFormScreen(MDScreen):
                 self.menu.open()
         else:
             self.menu.dismiss()
+    
+    def update_menu1(self, query):
+        self.full_name = query
+        # Filter data based on the query
+        if query:
+            if len(query)>3:
+                self.filtered_data = [item for item in self.all_customer_names if query.lower() in item.lower()]
+        else:
+            self.filtered_data = []
+
+        # Update menu items
+        menu_items = [
+            {
+                "text": f"{i}",
+                "on_release": lambda x=f"{i}": self.set_item(x,True),
+            } for i in self.filtered_data
+        ]
+        self.menu_list.items = menu_items
+        self.menu_list.position="bottom"
+
+        # Open the menu if there are items to show
+        if self.filtered_data:
+            if not self.menu_list.parent:
+                self.menu_list.open()
+        else:
+            self.menu_list.dismiss()
 
     # File manager----------------------------------
     def file_manager_open(self):
@@ -186,9 +239,12 @@ class AdmissionFormScreen(MDScreen):
     def on_ok(self, instance_date_picker):
         print("inside On OK method")
         instance_date_picker.dismiss()
-        self.date_of_birth = str(instance_date_picker.get_date()[0])
-        customer_age = self.calculate_age(self.date_of_birth)
-        self.age = str(customer_age)+" years"
+        try:
+            self.date_of_birth = str(instance_date_picker.get_date()[0])
+            customer_age = self.calculate_age(self.date_of_birth)
+            self.age = str(customer_age)+" years"
+        except:
+            utils.snack("red","Please select proper date format..")
 
         
 

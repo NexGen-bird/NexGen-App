@@ -39,49 +39,7 @@
                     orientation: "horizontal"
                     adaptive_height: True
                     spacing: "5dp"
-                    MDCard:
-                        orientation: "vertical"
-                        spacing: "15dp"
-                        size_hint_x: 0.3
-                        size_hint_y: None
-                        height: self.minimum_height
-                        pos_hint: {"center_x": 0.5}
-                        radius: [20, 20, 20, 20]
-                        style: "elevated"
-                        theme_shadow_color: "Custom"
-                        shadow_color: (0, 0, 0, 0.1) 
-                        theme_bg_color: "Custom"
-                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
-                        
-                        FitImage:
-                            source: "assets/project_icons/partner_4237167.png"  # Replace with your image path
-                            size_hint: None, None
-                            size: "50dp", "50dp"
-                            pos_hint: {"center_x": 0.5}
-                            # radius: [50, 50, 50, 50]
-                        
-                        MDLabel:
-                            text: "Total Members"
-                            font_style: "Title"
-                            role: "small"
-                            halign: "left"
-                            halign: "center"
-                            adaptive_height: True
-                            pos_hint: {"center_y": 0.5}
-                            theme_text_color: "Custom"
-                            text_color: app.getval("TEXT_PRIMARY")
-                        MDLabel:
-                            text: root.total_members
-                            font_style: "Title"
-                            role: "large"
-                            halign: "left"
-                            halign: "center"
-                            adaptive_height: True
-                            pos_hint: {"center_y": 0.5}
-                            theme_text_color: "Custom"
-                            text_color: app.getval("TEXT_PRIMARY")
-                            
-                    # Active members
+                    # Active Members
                     MDCard:
                         orientation: "vertical"
                         spacing: "15dp"
@@ -101,8 +59,8 @@
                             size_hint: None, None
                             size: "50dp", "50dp"
                             pos_hint: {"center_x": 0.5}
-                            # radius: [50, 50, 50, 50]  # Ensures circular shape
-
+                            # radius: [50, 50, 50, 50]
+                        
                         MDLabel:
                             text: "Active Members"
                             font_style: "Title"
@@ -123,12 +81,8 @@
                             pos_hint: {"center_y": 0.5}
                             theme_text_color: "Custom"
                             text_color: app.getval("TEXT_PRIMARY")
-                # Expired & P&L
-                MDBoxLayout:
-                    id:subbox
-                    orientation: "horizontal"
-                    adaptive_height: True
-                    spacing: "5dp"
+                            
+                    # Expired members
                     MDCard:
                         orientation: "vertical"
                         spacing: "15dp"
@@ -148,8 +102,8 @@
                             size_hint: None, None
                             size: "50dp", "50dp"
                             pos_hint: {"center_x": 0.5}
-                            # radius: [50, 50, 50, 50]
-                        
+                            # radius: [50, 50, 50, 50]  # Ensures circular shape
+
                         MDLabel:
                             text: "Expired Subcriptions"
                             font_style: "Title"
@@ -170,8 +124,12 @@
                             pos_hint: {"center_y": 0.5}
                             theme_text_color: "Custom"
                             text_color: app.getval("TEXT_PRIMARY")
-                            
-                    # Active members
+                # P&L
+                MDBoxLayout:
+                    id:subbox
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
                     MDCard:
                         orientation: "vertical"
                         spacing: "15dp"
@@ -191,10 +149,10 @@
                             size_hint: None, None
                             size: "50dp", "50dp"
                             pos_hint: {"center_x": 0.5}
-                            # radius: [50, 50, 50, 50]  # Ensures circular shape
-
+                            # radius: [50, 50, 50, 50]
+                        
                         MDLabel:
-                            text: "Previous Month P&L"
+                            text: "Current Month P&L"
                             font_style: "Title"
                             role: "small"
                             halign: "left"
@@ -203,14 +161,6 @@
                             pos_hint: {"center_y": 0.5}
                             theme_text_color: "Custom"
                             text_color: app.getval("TEXT_PRIMARY")
-                        # MDLabel:
-                        #     text: "15 Feb 2025 - 15 Mar 2025"
-                        #     font_style: "Title"
-                        #     role: "small"
-                        #     halign: "left"
-                        #     halign: "center"
-                        #     adaptive_height: True
-                        #     pos_hint: {"center_y": 0.5}
                         MDLabel:
                             text: root.pnl_amount
                             font_style: "Title"
@@ -221,8 +171,52 @@
                             pos_hint: {"center_y": 0.5}
                             theme_text_color: "Custom"
                             text_color: app.getval("TEXT_PRIMARY")
+                            
+                    # Net P&L
+                    MDCard:
+                        orientation: "vertical"
+                        spacing: "15dp"
+                        size_hint_x: 0.3
+                        size_hint_y: None
+                        height: self.minimum_height
+                        pos_hint: {"center_x": 0.5}
+                        radius: [20, 20, 20, 20]
+                        style: "elevated"
+                        theme_shadow_color: "Custom"
+                        shadow_color: (0, 0, 0, 0.1) 
+                        theme_bg_color: "Custom"
+                        md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
+                        
+                        FitImage: 
+                            source: "assets/project_icons/profit_12177228.png"  # Replace with your image path
+                            size_hint: None, None
+                            size: "50dp", "50dp"
+                            pos_hint: {"center_x": 0.5}
+                            # radius: [50, 50, 50, 50]  # Ensures circular shape
+
+                        MDLabel:
+                            text: "Net P&L"
+                            font_style: "Title"
+                            role: "small"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
+                        
+                        MDLabel:
+                            text: root.net_pnl
+                            font_style: "Title"
+                            role: "large"
+                            halign: "left"
+                            halign: "center"
+                            adaptive_height: True
+                            pos_hint: {"center_y": 0.5}
+                            theme_text_color: "Custom"
+                            text_color: app.getval("TEXT_PRIMARY")
                 
-                # Expired & Due Amount 
+                # Total Collection 
                 MDBoxLayout:
                     id:subbox1
                     orientation: "horizontal"
@@ -432,6 +426,26 @@
                                 text_color: app.getval("TEXT_SECONDARY")
                             MDLabel:
                                 id: nightshift
+                                text: "0"
+                                font_style: "Title"
+                                role:"medium"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_PRIMARY")
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            adaptive_height: True
+                            MDLabel:
+                                text: "Weekend"
+                                font_style: "Title"
+                                role:"small"
+                                halign: "center"
+                                adaptive_height: True
+                                theme_text_color: "Custom"
+                                text_color: app.getval("TEXT_SECONDARY")
+                            MDLabel:
+                                id: weekend
                                 text: "0"
                                 font_style: "Title"
                                 role:"medium"
