@@ -8,7 +8,6 @@ from kivymd.uix.snackbar.snackbar import MDSnackbar,MDSnackbarActionButton
 from kivymd.uix.label.label import MDLabel
 from kivy.metrics import dp
 from supabase_lib.supabase_auth import *
-
 #--[Start platform specific code]
 """This code to detect it's Android or not 
 if it's not android than app window size change in android phone size"""
@@ -70,6 +69,7 @@ class NexGenApp(MDApp):
         that need before start application all other method and code 
         write here. 
         """
+        Window.bind(on_keyboard=self.key_input)
         self.theme_cls.primary_palette = "Mediumaquamarine"  # Needed, but we override below
         self.theme_cls.primary_color = "#5ABFAD"
         # Create the root layout as an MDNavigationLayout to include the navigation drawer
@@ -188,7 +188,10 @@ class NexGenApp(MDApp):
     def switch_screen(self,screename):
         self.screen_manager.change_screen(screename)
         self.root.children[0].set_state("close")
-    
+    def key_input(self, window, key, scancode, codepoint, modifier):
+      if key == 27:
+        self.screen_manager.previous_screen()
+      
     def getval(self,value):
         import configparser
         # Initialize parser

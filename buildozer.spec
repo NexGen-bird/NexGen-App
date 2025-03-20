@@ -13,7 +13,7 @@ package.domain = org.NexGen
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,json,jpeg
+source.include_exts = py,png,jpg,kv,atlas,json,jpeg,ini
 
 # (list) List of inclusions using pattern matching
 source.include_patterns = assets/*
@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0, https://github.com/kivymd/KivyMD/archive/master.zip, asyncgui, materialyoucolor,exceptiongroup,asynckivy,pillow==10.1.0,websockets, typing-extensions, sniffio, six, propcache, packaging, multidict, idna, hyperframe, hpack, h11, frozenlist, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic-core, httpcore, h2, deprecation, anyio, aiosignal, pydantic, httpx, aiohttp, realtime, supafunc, storage3, postgrest, gotrue, supabase, pyjnius
+requirements = python3,kivy==2.3.0, https://github.com/kivymd/KivyMD/archive/master.zip, android, asyncgui, materialyoucolor,exceptiongroup,asynckivy,pillow==10.1.0,websockets, typing-extensions, sniffio, six, propcache, packaging, multidict, idna, hyperframe, hpack, h11, frozenlist, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic-core, httpcore, h2, deprecation, anyio, aiosignal, pydantic, httpx, aiohttp, realtime, supafunc, storage3, postgrest, gotrue, supabase, pyjnius, configparser
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -96,7 +96,7 @@ android.presplash_lottie = %(source.dir)s/assets/presplash.json
 # (list) Permissions
 # (See https://python-for-android.readthedocs.io/en/latest/buildoptions/#build-options-1 for all the supported syntaxes and properties)
 #android.permissions = android.permission.INTERNET, (name=android.permission.WRITE_EXTERNAL_STORAGE;maxSdkVersion=18)
-android.permissions = INTERNET, ACCESS_NETWORK_STATE
+android.permissions = INTERNET, ACCESS_NETWORK_STATE, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
 

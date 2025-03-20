@@ -435,7 +435,5 @@ def search_profile_img(imagename):
                 return get_profile_img(imagename)
             else:
                 return "assets/img/blank_profile.png"
-
-
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")

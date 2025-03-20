@@ -3,8 +3,11 @@ from main_imports import MDScreen,MDDropdownMenu,Window,MDFileManager,MDSnackbar
 from libs.applibs import utils,supabase_db as db
 from libs.applibs.loader import Dialog_cls
 from datetime import datetime
+import platform
 # from libs.uix.baseclass.add_transactions import AddTransactions
 import os
+from android.storage import primary_external_storage_path
+primary_ext_storage = primary_external_storage_path()
 
 utils.load_kv("admission_form_screen.kv")
 class AdmissionFormScreen(MDScreen):
@@ -168,8 +171,9 @@ class AdmissionFormScreen(MDScreen):
 
     # File manager----------------------------------
     def file_manager_open(self):
+        print(f"inside File manager, platform --> {platform.system()} ,storage path --> {primary_ext_storage}")
         self.file_manager.show(
-            os.path.expanduser("~"))  # output manager to the screen
+            primary_ext_storage if platform.system() == "Android" else os.path.expanduser("~"))  # output manager to the screen
         self.manager_open = True
 
     def select_path(self, path: str):
