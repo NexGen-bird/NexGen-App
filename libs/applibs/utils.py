@@ -308,10 +308,22 @@ def get_shift_text(shift_list):
         4: "12am to 6am"
     }
     
+    def get_ordinal(n):
+        if 10 <= n % 100 <= 20:
+            suffix = "th"
+        else:
+            suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+        return f"{n}{suffix}"
+    
     if not shift_list:
         return "No shifts selected"
     
     shift_list = sorted(set(shift_list))  # Remove duplicates and sort
+    
+    # Check for single shift
+    if len(shift_list) == 1:
+        shift = shift_list[0]
+        return f"{get_ordinal(shift)} shift ({shift_times[shift]})"
     
     # Check for consecutive shifts
     if all(shift_list[i] + 1 == shift_list[i + 1] for i in range(len(shift_list) - 1)):
@@ -320,12 +332,5 @@ def get_shift_text(shift_list):
         return f"{len(shift_list)} shifts ({start_time} to {end_time})"
     
     # Non-continuous shifts
-    def get_ordinal(n):
-        if 10 <= n % 100 <= 20:
-            suffix = "th"
-        else:
-            suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
-        return f"{n}{suffix}"
-    
     shift_positions = [get_ordinal(shift) for shift in shift_list]
     return " & ".join(shift_positions) + " shifts"

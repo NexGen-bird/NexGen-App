@@ -515,17 +515,6 @@ transaction made to - name of staff
         # print("Before --- > ",self.addmission_form_data)
         final = self.addmission_form_data.update(data)
         print("After --- > ",self.addmission_form_data)
-        msg = f"""
-ID - 
-Name - {self.addmission_form_data['customer_name']}
-phone - {self.addmission_form_data['customer_phone_number']}
-Shift - {utils.get_shift_text(self.shifts_selected)}
-Payment mode - {self.transaction_mode}
-Payment Amount- {self.amount.strip()}
-Payment date - {utils.date_format(self.transaction_date)}
-Joining Date - {utils.date_format(self.transaction_startdate)}
-Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
-"""
         number = "918108236131"
         # try:
         if self.txn_of != "Admission":
@@ -556,11 +545,23 @@ Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
                 result = res.split(":")[0]
                 if result.strip()=="Pass":
                     try:
-                        user_details = get_customers_details("phone_number",self.addmission_form_data['customer_phone_number'])
-                        user_id = user_details[0]['id']
-                        upload_image(self.addmission_form_data['customer_profile_image'],str(user_id))
-                        profile_url = get_profile_img(user_id)
-                        update_customer(self.addmission_form_data['customer_phone_number'],{"profile_image":f"{profile_url}"})
+                        # user_details = get_customers_details("phone_number",self.addmission_form_data['customer_phone_number'])
+                        # user_id = user_details[0]['id']
+                        # upload_image(self.addmission_form_data['customer_profile_image'],str(user_id))
+                        # profile_url = get_profile_img(user_id)
+                        # update_customer(self.addmission_form_data['customer_phone_number'],{"profile_image":f"{profile_url}"})
+                        msg = f"""
+                ID - NG
+                Name - {self.addmission_form_data['customer_name']}
+                phone - {self.addmission_form_data['customer_phone_number']}
+                Shift - {utils.get_shift_text(self.shifts_selected)}
+                Payment mode - {self.transaction_mode}
+                Payment Amount- {self.amount.strip()}
+                Payment date - {utils.date_format(self.transaction_date)}
+                Joining Date - {utils.date_format(self.transaction_startdate)}
+                Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
+                """
+                        send_messages(phone_numbers=number,message=msg)
                     except Exception as e:
                         utils.snack("red",f"{e}")
 
@@ -573,7 +574,6 @@ Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
         else:
             utils.snack(color="red",text="Please fill app the details.")
 
-        send_messages(phone_numbers=number,message=msg)
         # print(data)
         # except:
         # print("Something went wrong please try after some time or contact admin.")

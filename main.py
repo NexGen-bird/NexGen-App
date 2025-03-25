@@ -8,6 +8,20 @@ from kivymd.uix.snackbar.snackbar import MDSnackbar,MDSnackbarActionButton
 from kivymd.uix.label.label import MDLabel
 from kivy.metrics import dp
 from supabase_lib.supabase_auth import *
+
+def requestAccessToAllFiles():
+    from jnius import autoclass
+    PythonActivity = autoclass('org.kivy.android.PythonActivity')
+    Environment = autoclass('android.os.Environment')
+    Uri = autoclass('android.net.Uri')
+    Intent = autoclass('android.content.Intent')
+    Settings = autoclass('android.provider.Settings')
+    mActivity = PythonActivity.mActivity
+    if not Environment.isExternalStorageManager(): # Checks if already Managing stroage
+        intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+        intent.setData(Uri.parse(f"package:{mActivity.getPackageName()}")) # package:package.domain.package.name
+        mActivity.startActivity(intent)
+requestAccessToAllFiles()
 #--[Start platform specific code]
 """This code to detect it's Android or not 
 if it's not android than app window size change in android phone size"""

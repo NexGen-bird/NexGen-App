@@ -5,19 +5,13 @@ from libs.applibs.loader import Dialog_cls
 from datetime import datetime
 import platform
 # from libs.uix.baseclass.add_transactions import AddTransactions
-import os
-from android.storage import primary_external_storage_path
-primary_ext_storage = primary_external_storage_path()
+from plyer import filechooser
 
 utils.load_kv("admission_form_screen.kv")
 class AdmissionFormScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Window.bind(on_keyboard=self.events)
-        self.manager_open = False
-        self.file_manager = MDFileManager(
-            exit_manager=self.exit_manager, select_path=self.select_path,preview=True,
-        )
+        
     full_name = StringProperty("")
     date_of_birth = StringProperty("")
     gender = StringProperty("")
@@ -171,42 +165,27 @@ class AdmissionFormScreen(MDScreen):
 
     # File manager----------------------------------
     def file_manager_open(self):
-        print(f"inside File manager, platform --> {platform.system()} ,storage path --> {primary_ext_storage}")
-        self.file_manager.show(
-            primary_ext_storage if platform.system() == "Android" else os.path.expanduser("~"))  # output manager to the screen
-        self.manager_open = True
-
-    def select_path(self, path: str):
         '''
-        It will be called when you click on the file name
-        or the catalog selection button.
-
-        :param path: path to the selected directory or file;
+        Call plyer filechooser API to run a filechooser Activity.
         '''
-        self.profile_image = path
-        self.exit_manager()
+        print("inside function...")
+        filechooser.open_file(on_selection=self.handle_selection)
+
+    def handle_selection(self, selection):
+        '''
+        Callback function for handling the selection response from Activity.
+        '''
+        print(f"Final selected path ---> {selection}")
+        self.profile_image = str(selection[0])
         MDSnackbar(
             MDSnackbarText(
-                text=path,
+                text=str(selection[0]),
             ),
             y=dp(24),
             pos_hint={"center_x": 0.5},
             size_hint_x=0.8,
         ).open()
 
-    def exit_manager(self, *args):
-        '''Called when the user reaches the root of the directory tree.'''
-
-        self.manager_open = False
-        self.file_manager.close()
-
-    def events(self, instance, keyboard, keycode, text, modifiers):
-        '''Called when buttons are pressed on the mobile device.'''
-
-        if keyboard in (1001, 27):
-            if self.manager_open:
-                self.file_manager.back()
-        return True
 
     # End file manager---------------------------------
 
@@ -307,7 +286,8 @@ class AdmissionFormScreen(MDScreen):
                 "customer_education": self.education_qualification.strip(),
                 "customer_joining_for": self.joining_for.strip(),
                 "customer_address": self.address.strip(),
-                "customer_profile_image": self.profile_image.strip(),
+                "customer_profile_image": "assets/img/female.jpg" if self.gender == "Female" else "assets/img/male.jpg",
+                # "customer_profile_image": self.profile_image.strip(),
             }
             # create_customer = supabase_db.create_customer(name=self.full_name,dob=self.date_of_birth,gender=self.gender,phone_number=self.contact_number,email=self.email_id,education=self.education_qualification,joining_for=self.joining_for,address=self.address,profile_image=self.profile_image)
             # print(create_customer)
