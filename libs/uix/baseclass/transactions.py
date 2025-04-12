@@ -25,7 +25,8 @@ class Transactions(MDScreen):
     usertype="Member"
     transaction_list = []
     profile_redirect = ""
-    def on_pre_enter(self):
+
+    def on_enter(self):
         print("start enter")
         loader = Dialog_cls()
         loader.open_dlg()
@@ -39,12 +40,10 @@ class Transactions(MDScreen):
             loader.close_dlg()
             print("L3 enter")
             utils.snack("red","Sorry could not get transactions")
-
-    def on_enter(self):
         profit, expenses = db.get_expense_profit()
         box_layoput = self.ids.box
         if box_layoput.children:
-            box_layoput.clear_widgets()
+            box_layoput.clear_widgets() 
         self.ids.box.add_widget(
             OverviewCards(cardlabel="Expenses",amount=int(expenses),color="red")
         )
@@ -129,6 +128,12 @@ class Transactions(MDScreen):
                 elif text in str(int(txn["amount"])):
                     add_txn(txn)
                 elif text in ("No Txn_type" if txn["transaction_type"]==None else txn["transaction_type"]).lower():
+                    add_txn(txn)
+                elif text in ("No Transaction date" if str(utils.date_format(txn["transaction_date"]))==None else str(utils.date_format(txn["transaction_date"]))).lower():
+                    add_txn(txn)
+                elif text in ("No Transaction date" if txn["description"]==None else txn["description"]).lower():
+                    add_txn(txn)
+                elif text in ("No Transaction made to" if txn["transaction_made_to"]==None else txn["transaction_made_to"]).lower():
                     add_txn(txn)
         elif txnfilter:
             ll =[]

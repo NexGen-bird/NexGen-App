@@ -14,6 +14,16 @@ class Item(MDListItem):
     divider = None
     source = StringProperty()
 
+class ExpItem(MDCard):
+    id = StringProperty()
+    name = StringProperty()
+    expdate = StringProperty()
+    phone = StringProperty()
+    img = "assets/img/blank_profile.png" #StringProperty()
+    expcolor = "" #utils.get_background_color(expdate)
+    msg = StringProperty()
+    def whatsappmsg(self,phone,msg):
+        send_messages(phone,msg)
 class LandingScreen(MDScreen):
     app = MDApp.get_running_app()
     total_members = StringProperty()
@@ -38,12 +48,12 @@ class LandingScreen(MDScreen):
         weekend_ppl_count = """
                             SELECT 20-COUNT(DISTINCT customerid) as count
                             FROM subscription
-                            WHERE isactive = 1 and planstartdate < current_date and planduerationid = 6
+                            WHERE isactive = 1 and planstartdate <= current_date and planduerationid = 6
                             """
         shiftwiseactivecount = """
                                 SELECT CONCAT('Shift',shiftid, ':', 45-COUNT(DISTINCT seatid)) as count
                                 FROM subscription
-                                WHERE isactive = 1 and planstartdate < current_date and planduerationid != 6-- Filter for active subscriptions
+                                WHERE isactive = 1 and planstartdate <= current_date and planduerationid != 6-- Filter for active subscriptions
                                 GROUP BY shiftid
                                 """
         isinternet=utils.is_internet_available()
@@ -118,7 +128,7 @@ class LandingScreen(MDScreen):
             utils.snack("red","No Internet Connection..")
         if active_members:
             self.active_members = str("0" if active_members[0]['count']==None else active_members[0]['count'])
-        month_start,month_end = utils.get_current_month_range()
+        month_start,month_end = utils.get_current_period_range()
         self.pnl_amount = str(0 if get_net_profit(month_start,month_end)==None else utils.format_number(float(get_net_profit(month_start,month_end))))
         
         self.ids.morningshift.text = self.shifts['morning']
@@ -216,8 +226,8 @@ class LandingScreen(MDScreen):
         self.dialog.dismiss()
         self.parent.change_screen("seat")
     def expCard(self,id,name,expdate,phone,img=""):
-        if img == "":
-            img = "assets/img/blank_profile.png"
+        # if img == "":
+        img = "assets/img/blank_profile.png"
         # img = search_profile_img(str(id))
         phone_no = "91"+str(phone)
         msg = f"""
@@ -299,6 +309,8 @@ NexGen Study Center Team"""
             size_hint_y= None,
             height= "5dp",
         ))
+        
+        
     
 
 

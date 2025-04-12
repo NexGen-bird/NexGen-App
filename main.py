@@ -55,6 +55,7 @@ from libs.uix.baseclass.transactions import Transactions
 from libs.uix.baseclass.investment import InvestmentTransactions
 from libs.uix.baseclass.add_transactions import AddTransactions
 from libs.uix.baseclass.subcriptions import SubcriptionCardList
+from libs.uix.baseclass.dash import LandingScreen1
 
 
 #--[End Import All Baseclasses from lib.baseclass ]
@@ -186,6 +187,7 @@ class NexGenApp(MDApp):
         self.screen_manager.add_widget(Transactions())
         self.screen_manager.add_widget(AddTransactions())
         self.screen_manager.add_widget(LandingScreen())
+        self.screen_manager.add_widget(LandingScreen1())
         self.screen_manager.add_widget(AdmissionFormScreen())
         self.screen_manager.add_widget(SeatRegisterScreen())
         self.screen_manager.add_widget(CustomerProfile())

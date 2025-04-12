@@ -1,8 +1,10 @@
 from supabase_lib.supabase_config import supabase
 from supabase_lib.supabase_auth import *
-from main_imports import MDApp
-
+from kivy.app import App
 # Create a new customer
+def session_timeout():
+    app = App.get_running_app()
+    app.switch_screen("login")
 def create_customer(name, dob, gender, phone_number, email, education, joining_for, address, profile_image):
     data = {
         "name": name,
@@ -18,10 +20,10 @@ def create_customer(name, dob, gender, phone_number, email, education, joining_f
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
+            session_timeout()
             utils.snack("red","No active session. please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
@@ -39,11 +41,11 @@ def get_all_customers():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -56,23 +58,31 @@ def get_all_customers():
 # Get customer details
 def get_customers_details(column_name,contact_number):
     isinternet=utils.is_internet_available()
-    if isinternet:
-        response = supabase.table("Customers").select("*").eq(column_name, contact_number).execute()
-        # supabase.auth.sign_out()
-        print(response.data)
-        return response.data
-    else:
-        utils.snack("red","No Internet Connection..")
+    try:
+        user = supabase.auth.get_session()
+
+        if not user:
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.table("Customers").select("*").eq(column_name, contact_number).execute()
+            # supabase.auth.sign_out()
+            print(response.data)
+            return response.data
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
 # Update a customer
 def update_customer(contact_number, updates):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -87,11 +97,11 @@ def delete_customer(customer_name):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -105,11 +115,11 @@ def get_all_customers_contact():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -123,11 +133,11 @@ def get_all_customers_names():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -151,11 +161,11 @@ def create_transaction(txn_date,transaction_type,amount,txn_made_by, payment_met
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -173,11 +183,11 @@ def get_all_transactions():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -191,11 +201,12 @@ def get_transactionspagedata():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
              
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -210,11 +221,11 @@ def get_investmenttransactionspagedata():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -229,11 +240,11 @@ def get_subcriptionpagedata():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -246,21 +257,18 @@ def get_subcriptionpagedata():
     
 def get_net_profit(start_date,end_date):
     isinternet = utils.is_internet_available()
-
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
-        elif not isinternet:
-            utils.snack("red", "No Internet Connection.")
+            session_timeout()
+        
         else:
             response = supabase.rpc("get_net_profit", {"start_date": start_date, "end_date": end_date}).execute()
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+       return {"error": f"Error fetching data: {e}"}
 
     
 def get_investment_details(name):
@@ -268,11 +276,11 @@ def get_investment_details(name):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -286,11 +294,11 @@ def get_expense_profit():
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -307,11 +315,11 @@ def delete_transaction(transaction_id):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -326,11 +334,11 @@ def insert_addmission(data):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-             
-             utils.snack("red","No active session. Please Re-login.")
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -342,31 +350,27 @@ def insert_addmission(data):
     
 
 def run_sql(query):
-    isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-                
-                utils.snack("red","No active session. Please Re-login.")
-        elif not isinternet:
-            utils.snack("red", "No Internet Connection.")
+            session_timeout()
         else:
             response = supabase.rpc("execute_sql", {"query": query}).execute()
             return response.data
 
     except Exception as e:
-       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+       return {"error": f"Error fetching data: {e}"}
 def upload_image(imagepath,imagename):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-                
-                utils.snack("red","No active session. Please Re-login.")
+            session_timeout()    
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -389,11 +393,11 @@ def get_profile_img(imagename):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-                
-                utils.snack("red","No active session. Please Re-login.")
+            session_timeout()    
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:
@@ -411,11 +415,11 @@ def search_profile_img(imagename):
     isinternet = utils.is_internet_available()
 
     try:
-        user = supabase.auth.get_user()
+        user = supabase.auth.get_session()
 
         if not user:
-                
-                utils.snack("red","No active session. Please Re-login.")
+            session_timeout()    
+            utils.snack("red","No active session. Please Re-login.")
         elif not isinternet:
             utils.snack("red", "No Internet Connection.")
         else:

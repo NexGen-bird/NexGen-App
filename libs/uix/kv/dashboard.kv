@@ -1,5 +1,5 @@
-<LandingScreen>:
-    name: "land1"
+<LandingScreen1>:
+    name: "land"
     theme_bg_color: "Custom"
     md_bg_color: app.getval("BACKGROUND_COLOR")
     MDBoxLayout:
@@ -9,6 +9,7 @@
             theme_bg_color: "Custom"
             md_bg_color: app.getval("PRIMARY_COLOR")
             elevation: 5
+            pos_hint: {"top": 1}
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "menu"
@@ -25,7 +26,6 @@
            
         ScrollView:  # Replaces the ScrollView
             id: refresh_layout  # Add this to reference for refresh completion
-            refresh_callback: root.refresh_data  # Call the refresh method when pulled down
             MDBoxLayout:
                 id:mainbox
                 orientation: "vertical"
@@ -479,25 +479,48 @@
                 MDBoxLayout:
                     id:mainboxx
                     orientation: "vertical"
-                    adaptive_height: True
-                    # size_hint: None,dp(70)
+                    # adaptive_height: True
+                    size_hint_y: None
+                    height: dp(500)
                     padding: "16dp"
                     spacing: "5dp"
                     # theme_bg_color: "Custom"
                     # md_bg_color: "#000000"
+                    RecycleView:
+                        id: rv
+                        key_viewclass: 'viewclass'
+                        key_size: 'height'
+                        # height: "48dp"
+
+                        RecycleBoxLayout:
+                            padding: dp(3)
+                            spacing: dp(10)
+                            default_size: None, dp(99)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            # height: "48dp"
+                            height: self.minimum_height
+                            orientation: 'vertical'
                           
             
-<Item>:
-    on_release: app.screen_manager.get_screen("land").item_clicked()
+<Item1>:
+    # on_release: app.screen_manager.get_screen("land").item_clicked()
     
     MDListItemLeadingAvatar:
         source: root.source
+    MDListItemHeadlineText:
+        text: "Headline"
 
-<ExpItem>:
+    MDListItemSupportingText:
+        text: "Supporting text"
+    MDListItemTrailingIcon:
+        icon: "whatsapp"
+
+<ExpItemcard>:
     orientation:"horizontal"
     elevation: .8
     size_hint: (None, None)
-    size: (dp(350), dp(100))
+    size: (dp(350), dp(350))
     padding: "10dp"
     spacing: "5dp"
     pos_hint: {"center_x": 0.5}
@@ -533,7 +556,7 @@
         MDLabel:
             text:str(root.expdate)
             theme_text_color:"Custom"
-            # text_color: root.expcolor
+            text_color: root.getcolor(root.expdate) if root.expdate != '' else [1,1,1,1]
             halign:"center"
             adaptive_size: True
             height:"20dp"

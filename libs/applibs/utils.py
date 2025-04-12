@@ -114,21 +114,21 @@ from datetime import datetime
 
 def get_background_color(planexpirydate):
     today = datetime.today().date()
-    expiry_date = datetime.strptime(planexpirydate, "%Y-%m-%d").date()
+    expiry_date = datetime.strptime(planexpirydate, "%d %b %Y").date()
     days_left = (expiry_date - today).days
-
-    if days_left == 0:
-        return "#cc3300"  # Red (Expiring today)
+    print("Days Left--> ",days_left)
+    if days_left <= 0:
+        return [204/255,51/255,0,1]#"#cc3300"  # Red (Expiring today)
     elif days_left == 1:
-        return "#cc3300"  # Light Red
+        return [204/255,51/255,0,1]#"#cc3300"  # Light Red
     elif days_left == 2:
-        return "#ff9966"  # Orange
+        return [255/255,153/255,102/255,1]#"#ff9966"  # Orange
     elif days_left == 3:
-        return "#FFBF69"  # Light Orange
+        return [255/255,191/255,105/255,1]#"#FFBF69"  # Light Orange
     elif 4 <= days_left <= 7:
-        return "#ffcc00"  # Yellow
+        return [255/255,204/255,0,1]#"#ffcc00"  # Yellow
     else:
-        return "#339900"  # Light Green (More than a week left)
+        return [51/255,153/255,0,1]#"#339900"  # Light Green (More than a week left)
 
 def date_format(input_date):
 
@@ -211,27 +211,35 @@ def calculate_end_dates(input_date, plantype):
     end_date = start_date + durations[plantype] - relativedelta(days=1)  # Subtract 2 days
 
     return str(start_date), str(end_date)
-def get_current_month_range(input_date=None):
+def get_current_period_range(input_date=None):
     """
-    Returns the start and end date of the current month's period.
-    - Start date: Always 15th of the current month.
-    - End date: Always 15th of the next month.
+    Returns the correct period based on the input date.
+    - If the date is before the 15th, returns the previous period (15th of last month → 14th of this month).
+    - If the date is 15th or later, returns the current period (15th of this month → 14th of next month).
     
     If input_date is not provided, it defaults to today's date.
     """
     if input_date is None:
         input_date = date.today()
 
-    start_date = date(input_date.year, input_date.month, 15)
-
-    if input_date.month == 12:  # December case, roll over to next year
-        end_date = date(input_date.year + 1, 1, 14)
+    if input_date.day < 15:
+        # Before the 15th, return the previous period
+        if input_date.month == 1:
+            start_date = date(input_date.year - 1, 12, 15)  # Previous year December
+            end_date = date(input_date.year, 1, 14)  # Current January 14
+        else:
+            start_date = date(input_date.year, input_date.month - 1, 15)  # Previous month 15th
+            end_date = date(input_date.year, input_date.month, 14)  # Current month 14th
     else:
-        end_date = date(input_date.year, input_date.month + 1, 14)
+        # On or after the 15th, return the current period
+        start_date = date(input_date.year, input_date.month, 15)
+
+        if input_date.month == 12:
+            end_date = date(input_date.year + 1, 1, 14)  # Next year January 14
+        else:
+            end_date = date(input_date.year, input_date.month + 1, 14)  # Next month 14th
 
     return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
-
-
 def write_json_file(filename, username, password,is_remember):
     """Writes a JSON file with the given username and password."""
     data = [{"username": username, "password": password,"is_remember":str(is_remember)}]

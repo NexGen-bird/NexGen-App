@@ -531,6 +531,21 @@ transaction made to - name of staff
                 result = res.split(":")[0]
                 if result.strip()=="Pass":
                     utils.snack(color="green",text="Transaction Submitted Successfully!")
+                    try:
+                        msg = f"""
+Transaction Type - OUT/Expense
+Transaction Date - {txn_date}
+Transaction Made By - {(self.transaction_made_by.lower()).strip()}
+Transaction Made To - {self.transaction_made_to.strip()}
+Amount - {self.amount}
+Mode of Transaction - {self.transaction_mode}
+Description - {self.transaction_made_for.strip()}
+
+"""
+                        send_messages(phone_numbers=number,message=msg)
+                    except Exception as e:
+                        utils.snack("red",f"{e}")
+
                     self.parent.change_screen("transactions")
                 else:
                     utils.snack(color="red",text= str(res.split(":")[1]))
@@ -544,6 +559,7 @@ transaction made to - name of staff
                 print("Admission Result --> ",res)
                 result = res.split(":")[0]
                 if result.strip()=="Pass":
+                    utils.snack(color="green",text="Admission Submitted Successfully!")
                     try:
                         # user_details = get_customers_details("phone_number",self.addmission_form_data['customer_phone_number'])
                         # user_id = user_details[0]['id']
@@ -551,24 +567,23 @@ transaction made to - name of staff
                         # profile_url = get_profile_img(user_id)
                         # update_customer(self.addmission_form_data['customer_phone_number'],{"profile_image":f"{profile_url}"})
                         msg = f"""
-                ID - NG
-                Name - {self.addmission_form_data['customer_name']}
-                phone - {self.addmission_form_data['customer_phone_number']}
-                Shift - {utils.get_shift_text(self.shifts_selected)}
-                Payment mode - {self.transaction_mode}
-                Payment Amount- {self.amount.strip()}
-                Payment date - {utils.date_format(self.transaction_date)}
-                Joining Date - {utils.date_format(self.transaction_startdate)}
-                Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
+ID - NG
+Name - {self.addmission_form_data['customer_name']}
+phone - {self.addmission_form_data['customer_phone_number']}
+Shift - {utils.get_shift_text(self.shifts_selected)}
+Payment mode - {self.transaction_mode}
+Payment Amount- {self.amount.strip()}
+Payment date - {utils.date_format(self.transaction_date)}
+Joining Date - {utils.date_format(self.transaction_startdate)}
+Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
                 """
                         send_messages(phone_numbers=number,message=msg)
                     except Exception as e:
                         utils.snack("red",f"{e}")
 
-                    utils.snack(color="green",text="Admission Submitted Successfully!")
-                    self.parent.change_screen("customers_list")
+                    # self.parent.change_screen("customers_list")
                 else:
-                    utils.snack(color="red",text="Admission Submition Fail!")
+                    utils.snack(color="red",text=str(res.split(":")[1]))
             else:
                 utils.snack(color="red",text="Admission form data not present.")
         else:
