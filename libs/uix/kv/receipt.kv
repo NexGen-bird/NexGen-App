@@ -1,0 +1,278 @@
+<ReceiptSentItem>
+    padding: "10dp"
+    # spacing: "10dp"
+    size_hint: None, None
+    size: "640dp", "150dp"
+    # style: "elevated"
+    # theme_shadow_color: "Custom"
+    # shadow_color: (0, 0, 0, 0.1) 
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("CARD_BACKGROUND")
+    style: "outlined"
+    # pos_hint: {"center_x": .5, "center_y": .8}
+
+    MDRelativeLayout:
+        MDLabel:
+            text: root.receiptid
+            adaptive_size: True
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+            pos_hint: {"top": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDIconButton:
+            icon:"receipt-text-send-outline"
+            style: "standard"
+            pos_hint:{"top": 1, "right": 1}
+            on_release:root.whatsappmsg(root.receiptid,root.customer_phone,root.receipt_url,root.customer_name)
+            adaptive_size: True
+    
+        MDLabel:
+            text: root.customer_name[:21]+str("...") if len(root.customer_name)>25 else root.customer_name
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+        
+        MDLabel:
+            text: root.transaction_date
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "right": 1}
+            bold: False
+            halign: "center"
+            font_style: "Title"
+            role:"medium"
+    
+        MDLabel:
+            text: root.shift
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"bottom": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+        
+        MDLabel:
+            text: "₹ "+str(root.payment_amount)
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"bottom": 1, "right": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+
+<ReceiptPendingItem>
+    padding: "10dp"
+    # spacing: "10dp"
+    size_hint: None, None
+    size: "640dp", "150dp"
+    # style: "elevated"
+    # theme_shadow_color: "Custom"
+    # shadow_color: (0, 0, 0, 0.1) 
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("CARD_BACKGROUND")
+    style: "outlined"
+    # pos_hint: {"center_x": .5, "center_y": .8}
+
+    MDRelativeLayout:
+        MDLabel:
+            text: root.receiptid
+            adaptive_size: True
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+            pos_hint: {"top": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+        MDIconButton:
+            icon:"receipt-text-send-outline"
+            style: "standard"
+            pos_hint:{"top": 1, "right": 1}
+            on_release:root.whatsappmsg(root.receiptid,root.customer_phone,root.receipt_url,root.customer_name)
+            adaptive_size: True
+    
+        MDLabel:
+            text: root.customer_name[:21]+str("...") if len(root.customer_name)>25 else root.customer_name
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+        
+        MDLabel:
+            text: root.transaction_date
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"y": 0.4, "right": 1}
+            bold: False
+            halign: "center"
+            font_style: "Title"
+            role:"medium"
+    
+        MDLabel:
+            text: root.shift
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"bottom": 1, "left": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+        
+        MDLabel:
+            text: "₹ "+str(root.payment_amount)
+            adaptive_size: True
+            color: "black"
+            pos_hint: {"bottom": 1, "right": 1}
+            bold: False
+            font_style: "Title"
+            role:"medium"
+            theme_text_color: "Custom"
+            text_color: app.getval("TEXT_PRIMARY")
+
+<Receipt>:
+    name:"receipt"
+    theme_bg_color: "Custom"
+    md_bg_color: app.getval("BACKGROUND_COLOR")
+    MDBoxLayout:
+        orientation: "vertical"
+        
+        # Fixed Top App Bar
+        MDTopAppBar:
+            theme_bg_color: "Custom"
+            md_bg_color: app.getval("PRIMARY_COLOR")
+            elevation: 5
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "menu"
+                    on_release: app.root.children[0].set_state("open")
+            MDTopAppBarTitle:
+                text: " "
+            MDTopAppBarTrailingButtonContainer:
+                # pos_hint: {"center_x": 1, "center_y": .5}
+
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    on_release: app.logout()
+
+        MDBoxLayout:
+            id: mainbox
+            orientation: 'vertical'
+            spacing: dp(10)
+            padding: dp(20)
+            theme_bg_color: "Custom"
+            md_bg_color: "#F4F4F4"
+            
+            # Main tab container (you will toggle views inside this)
+            MDScreenManager:
+                id: tab_content
+
+                MDScreen:
+                    name: "Pending Receipt"
+                    MDBoxLayout:
+                        id: mainboxx
+                        orientation: 'vertical'
+                        spacing: dp(10)
+                        padding: dp(20)
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#F4F4F4"
+                        MDBoxLayout:
+                            id: filters
+                            # adaptive_height: True
+                            size_hint: .98,None
+                            # pos_hint:{"center_x": 0.5}
+                            theme_bg_color: "Custom"
+                            md_bg_color: app.getval("BACKGROUND_COLOR")
+
+                            # MDIconButton:
+                            #     icon: 'account-search'
+
+                            MDTextField:
+                                id: search_field
+                                hint_text: 'Search Customer'
+                                # mode: "round"
+                                on_text: root.set_list_items(self.text, True)
+                                MDTextFieldLeadingIcon:
+                                    icon: "magnify"
+                                MDTextFieldHintText:
+                                    text: "Search Customers"
+                                    # mode: "persistent"
+                        
+                        RecycleView:
+                            id: rv
+                            key_viewclass: 'viewclass'
+                            key_size: 'height'
+                            theme_bg_color: "Custom"
+                            md_bg_color: app.getval("BACKGROUND_COLOR")
+
+                            RecycleBoxLayout:
+                                spacing: dp(10)
+                                padding: dp(10)
+                                default_size: None, dp(105)
+                                default_size_hint: 1, None
+                                size_hint_y: None
+                                height: self.minimum_height
+                                orientation: 'vertical'
+                                theme_bg_color: "Custom"
+                                md_bg_color: app.getval("BACKGROUND_COLOR")
+
+                MDScreen:
+                    name: "Sent Receipt"
+                    MDBoxLayout:
+                        id: mainboxsv
+                        orientation: 'vertical'
+                        spacing: dp(10)
+                        padding: dp(20)
+                        theme_bg_color: "Custom"
+                        md_bg_color: "#F4F4F4"
+                        
+                        RecycleView:
+                            id: sv
+                            key_viewclass: 'viewclass'
+                            key_size: 'height'
+                            theme_bg_color: "Custom"
+                            md_bg_color: app.getval("BACKGROUND_COLOR")
+
+                            RecycleBoxLayout:
+                                spacing: dp(10)
+                                padding: dp(10)
+                                default_size: None, dp(105)
+                                default_size_hint: 1, None
+                                size_hint_y: None
+                                height: self.minimum_height
+                                orientation: 'vertical'
+                                theme_bg_color: "Custom"
+                                md_bg_color: app.getval("BACKGROUND_COLOR")
+
+
+    # Bottom Navigation Bar
+    MDNavigationBar:
+        on_switch_tabs: root.on_navbar_switch(*args)
+
+        MDNavigationItem:
+            active: True
+            MDNavigationItemIcon:
+                icon: "receipt-text-clock"
+            MDNavigationItemLabel:
+                text: "Pending Receipt"
+                
+
+        MDNavigationItem:
+            MDNavigationItemIcon:
+                icon: "receipt-text-check"
+            MDNavigationItemLabel:
+                text: "Sent Receipt"

@@ -50,6 +50,7 @@ from libs.uix.baseclass.dashboard import LandingScreen
 from libs.uix.baseclass.seatregister import SeatRegisterScreen
 from libs.uix.baseclass.customer_profile import CustomerProfile
 from libs.uix.baseclass.customers_list import CustomersList
+from libs.uix.baseclass.receipt import Receipt
 from libs.uix.baseclass.admission_form_screen import AdmissionFormScreen
 from libs.uix.baseclass.transactions import Transactions
 from libs.uix.baseclass.investment import InvestmentTransactions
@@ -117,11 +118,11 @@ class NexGenApp(MDApp):
             on_release=lambda x: self.switch_screen("customers_list"))
         
         drawer_item3 = MDNavigationDrawerItem(
-            MDNavigationDrawerItemText(text="Seats",
+            MDNavigationDrawerItemText(text="Receipts",
             focus_color="#5ABFAD",
             text_color="#222222",
             ),
-            on_release=lambda x : self.switch_screen("seat")
+            on_release=lambda x : self.switch_screen("receipt")
         )
         drawer_item4 = MDNavigationDrawerItem(
             MDNavigationDrawerItemText(text="Admission Form",
@@ -165,8 +166,8 @@ class NexGenApp(MDApp):
         drawer_menu.add_widget(MDNavigationDrawerDivider())
         drawer_menu.add_widget(drawer_item2)
         drawer_menu.add_widget(MDNavigationDrawerDivider())
-        # drawer_menu.add_widget(drawer_item3)
-        # drawer_menu.add_widget(MDNavigationDrawerDivider())
+        drawer_menu.add_widget(drawer_item3)
+        drawer_menu.add_widget(MDNavigationDrawerDivider())
         drawer_menu.add_widget(drawer_item4)
         drawer_menu.add_widget(MDNavigationDrawerDivider())
         drawer_menu.add_widget(drawer_item5)
@@ -183,6 +184,7 @@ class NexGenApp(MDApp):
         # Initialize the screen manager and add screens
         self.screen_manager = Root()
         self.screen_manager.add_widget(Login_Screen())
+        self.screen_manager.add_widget(Receipt())
         self.screen_manager.add_widget(InvestmentTransactions())
         self.screen_manager.add_widget(Transactions())
         self.screen_manager.add_widget(AddTransactions())

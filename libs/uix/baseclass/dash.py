@@ -97,7 +97,7 @@ class LandingScreen1(MDScreen):
                         where isactive=1)
                         """
         month_start,month_end = utils.get_current_period_range()
-        
+        print("This is dates ---> ",month_start,month_end)
         api_tasks = {
             "shiftcount": partial(run_sql,shiftwiseactivecount),
             "weekendcount": partial(run_sql,weekend_ppl_count),
@@ -110,7 +110,7 @@ class LandingScreen1(MDScreen):
 
         results = {}
         login_with_email_password("abhijit.shinde@test.com","india@123")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             future_to_key = {
                 executor.submit(func): key for key, func in api_tasks.items()
             }

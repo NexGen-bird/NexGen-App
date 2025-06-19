@@ -17,6 +17,7 @@ class CheckItem(MDBoxLayout):
     active_val = BooleanProperty()
 class AddTransactions(MDScreen):
     addmission_form_data = dict()
+    planTypeSelected = StringProperty("")
     txn_of = StringProperty("")
     receipt_id = StringProperty("")
     transaction_date = StringProperty("")
@@ -342,6 +343,7 @@ transaction made to - name of staff
 
     def menu_plantypecallback(self, text_item):
         self.ids.plan_type.text = text_item
+        self.planTypeSelected = self.ids.plan_type.text
         if text_item=="Monthly":
             self.plan_type = 2
         elif text_item=="Quaterly":
@@ -519,20 +521,21 @@ transaction made to - name of staff
         # try:
         if self.txn_of != "Admission":
             print("Inside only insert Full ")
-            if self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
-                res = create_transaction(txn_date=txn_date,
-                                        transaction_type=self.transaction_type,
-                                        amount=int(self.amount),
-                                        txn_made_by=(self.transaction_made_by.lower()).strip(),
-                                        payment_method=self.transaction_mode,
-                                        transaction_for=self.txn_of.strip(),
-                                        description=self.transaction_made_for.strip(),
-                                        transaction_made_to= self.transaction_made_to.strip())
-                result = res.split(":")[0]
-                if result.strip()=="Pass":
-                    utils.snack(color="green",text="Transaction Submitted Successfully!")
-                    try:
-                        msg = f"""
+            try:
+                if self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
+                    res = create_transaction(txn_date=txn_date,
+                                            transaction_type=self.transaction_type,
+                                            amount=int(self.amount),
+                                            txn_made_by=(self.transaction_made_by.lower()).strip(),
+                                            payment_method=self.transaction_mode,
+                                            transaction_for=self.txn_of.strip(),
+                                            description=self.transaction_made_for.strip(),
+                                            transaction_made_to= self.transaction_made_to.strip())
+                    result = res.split(":")[0]
+                    if result.strip()=="Pass":
+                        utils.snack(color="green",text="Transaction Submitted Successfully!")
+                        try:
+                            msg = f"""
 Transaction Type - OUT/Expense
 Transaction Date - {txn_date}
 Transaction Made By - {(self.transaction_made_by.lower()).strip()}
@@ -542,15 +545,17 @@ Mode of Transaction - {self.transaction_mode}
 Description - {self.transaction_made_for.strip()}
 
 """
-                        send_messages(phone_numbers=number,message=msg)
-                    except Exception as e:
-                        utils.snack("red",f"{e}")
+                            send_messages(phone_numbers=number,message=msg)
+                        except Exception as e:
+                            utils.snack("red",f"{e}")
 
-                    self.parent.change_screen("transactions")
+                        self.parent.change_screen("transactions")
+                    else:
+                        utils.snack(color="red",text= str(res.split(":")[1]))
                 else:
-                    utils.snack(color="red",text= str(res.split(":")[1]))
-            else:
-                utils.snack(color="red",text= "Please Fill all Fields..")
+                    utils.snack(color="red",text= "Please Fill all Fields..")
+            except Exception as e:
+                utils.snack("red",f"{e}")
 
         elif self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
             print("Inside only insert Transaction ")
@@ -566,6 +571,29 @@ Description - {self.transaction_made_for.strip()}
                         # upload_image(self.addmission_form_data['customer_profile_image'],str(user_id))
                         # profile_url = get_profile_img(user_id)
                         # update_customer(self.addmission_form_data['customer_phone_number'],{"profile_image":f"{profile_url}"})
+                        receipt_data = {
+                            "customer_name": self.addmission_form_data['customer_name'],
+                            "customer_phone_number": self.addmission_form_data['customer_phone_number'],
+
+                            "customer_transaction_date": self.transaction_date,
+                            "customer_transaction_id": int((res.split(":")[2]).strip()),
+                            "customer_receiptid": str((res.split(":")[4]).strip()),
+                            "customer_payment_method": self.transaction_mode,
+                            "customer_amount": int(self.amount.strip()),
+
+                            "customer_planstartdate": self.transaction_startdate,
+                            "customer_planexpirydate": self.transaction_enddate,
+                            "customer_shift": utils.get_shift_text(self.shifts_selected),
+                            "customer_plantype": self.planTypeSelected
+                        }
+                        receipt_res = insert_receipt_data(receipt_data)
+                        print("receipt Result --> ",receipt_res)
+                        receipt_result = receipt_res.split(":")[0]
+                        if receipt_result.strip()=="Pass":
+                            utils.snack(color="green",text=receipt_res.split(":")[1])
+                        else:
+                            utils.snack(color="red",text=receipt_res.split(":")[1])
+
                         msg = f"""
 ID - NG
 Name - {self.addmission_form_data['customer_name']}
@@ -581,7 +609,7 @@ Subscription Expiry date - {utils.date_format(self.transaction_enddate)}
                     except Exception as e:
                         utils.snack("red",f"{e}")
 
-                    # self.parent.change_screen("customers_list")
+                    self.parent.change_screen("customers_list")
                 else:
                     utils.snack(color="red",text=str(res.split(":")[1]))
             else:

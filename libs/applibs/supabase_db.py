@@ -347,6 +347,24 @@ def insert_addmission(data):
 
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
+def insert_receipt_data(data):
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_session()
+
+        if not user:
+            session_timeout() 
+            utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("insert_receipt_data", data).execute()
+            return response.data
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
     
 
 def run_sql(query):
@@ -439,5 +457,25 @@ def search_profile_img(imagename):
                 return get_profile_img(imagename)
             else:
                 return "assets/img/blank_profile.png"
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
+# Update a customer
+def update_receipt_sent(receiptid):
+    # {"is_sent": 1}
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_session()
+
+        if not user:
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.table("receipts").update({"is_sent": 1}).eq("receiptid", receiptid).execute()
+            return response.data
+
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
