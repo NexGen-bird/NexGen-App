@@ -26,6 +26,7 @@ class ExpItem(MDCard):
         send_messages(phone,msg)
 class LandingScreen(MDScreen):
     app = MDApp.get_running_app()
+    
     total_members = StringProperty()
     expired_count = StringProperty()
     active_members = StringProperty()

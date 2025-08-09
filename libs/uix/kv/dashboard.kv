@@ -1,3 +1,5 @@
+#:import AKDualBarChart libs.applibs.dualbarchart
+
 <LandingScreen1>:
     name: "land"
     theme_bg_color: "Custom"
@@ -143,6 +145,16 @@
                         shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
                         md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
+                        MDFloatLayout:
+                            padding: "10dp"
+                            # adaptive_height: True
+                            pos_hint: {"center_x": 0.8, "center_y": 0.5}
+                            MDIconButton:
+                                id: expense_btn
+                                icon: "information"
+                                style: "standard"
+                                pos_hint: {"center_x": 0.5, "top":1}
+                                on_release: root.show_tooltip(self,root.pnl_amount_absolute,775)
                         
                         FitImage:
                             source: "assets/project_icons/trend_2601595.png"  # Replace with your image path
@@ -186,6 +198,16 @@
                         shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
                         md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
+                        MDFloatLayout:
+                            padding: "10dp"
+                            # adaptive_height: True
+                            pos_hint: {"center_x": 0.8, "center_y": 0.5}
+                            MDIconButton:
+                                id: pnl_btn
+                                icon: "information"
+                                style: "standard"
+                                pos_hint: {"center_x": 0.5, "top":1}
+                                on_release: root.show_tooltip(self,root.net_pnl_absolute,775)
                         
                         FitImage: 
                             source: "assets/project_icons/profit_12177228.png"  # Replace with your image path
@@ -235,6 +257,16 @@
                         shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
                         md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
+                        MDFloatLayout:
+                            padding: "10dp"
+                            # adaptive_height: True
+                            pos_hint: {"center_x": 0.8, "center_y": 0.5}
+                            MDIconButton:
+                                id: collection_btn
+                                icon: "information"
+                                style: "standard"
+                                pos_hint: {"center_x": 0.5, "top":1}
+                                on_release: root.show_tooltip(self,root.collection_amount_absolute,460)
                         
                         FitImage:
                             source: "assets/project_icons/pay_625599.png"  # Replace with your image path
@@ -278,6 +310,16 @@
                         shadow_color: (0, 0, 0, 0.1) 
                         theme_bg_color: "Custom"
                         md_bg_color: app.getval("CARD_BACKGROUND")  # Blue color
+                        MDFloatLayout:
+                            padding: "10dp"
+                            # adaptive_height: True
+                            pos_hint: {"center_x": 0.8, "center_y": 0.5}
+                            MDIconButton:
+                                id: expense_btn
+                                icon: "information"
+                                style: "standard"
+                                pos_hint: {"center_x": 0.5, "top":1}
+                                on_release: root.show_tooltip(self,root.expense_amount_absolute,460)
                         
                         FitImage:
                             source: "assets/project_icons/money_13680601.png"  # Replace with your image path
@@ -454,9 +496,88 @@
                                 theme_text_color: "Custom"
                                 text_color: app.getval("TEXT_PRIMARY")
 
-                        
-
+                Widget:
+                    size_hint_y: None
+                    height: "15dp"       
+                MDBoxLayout:
+                    id: collection_summary
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    # padding: ("39dp",0,"48dp","15dp")
+                    MDLabel:
+                        text: "Last 3 Months Summary"
+                        font_style: "Title"
+                        role:"large"
+                        halign: "left"
+                        adaptive_height: True
                 # Spacer between cards
+                Widget:
+                    size_hint_y: None
+                    height: "15dp"
+                
+                MDBoxLayout:
+                    id:subboxs
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    
+                    # heme_bg_color: "Custom"
+                    # md_bg_color: app.getval("PRIMARY_COLOR")  # Blue color
+                    
+                    AKDualBarChart:
+                        id: chart
+                        padding:"10dp"
+                        spacing: "10dp"
+                        radius: [20, 20, 20, 20]
+                        size_hint_y: None
+                        # height: "280dp"
+                        labels: True
+                        anim: True
+                        label_size: 15
+                        bars_radius: 0
+                Widget:
+                    size_hint_y: None
+                    height: "15dp"       
+                MDBoxLayout:
+                    id: admission_summary
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    # padding: ("39dp",0,"48dp","15dp")
+                    MDLabel:
+                        text: "Admission Summary"
+                        font_style: "Title"
+                        role:"large"
+                        halign: "left"
+                        adaptive_height: True
+                # Spacer between cards
+                Widget:
+                    size_hint_y: None
+                    height: "15dp"
+                
+                MDBoxLayout:
+                    id:subboxss
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    spacing: "5dp"
+                    
+                    # heme_bg_color: "Custom"
+                    # md_bg_color: app.getval("PRIMARY_COLOR")  # Blue color
+                    
+                    AKDualBarChart:
+                        id: chart_readmission
+                        padding:"10dp"
+                        spacing: "10dp"
+                        radius: [20, 20, 20, 20]
+                        size_hint_y: None
+                        # height: "280dp"
+                        labels: True
+                        anim: True
+                        label_size: 15
+                        bars_radius: 0            
+
+
                 Widget:
                     size_hint_y: None
                     height: "15dp"
@@ -515,7 +636,7 @@
         text: "Supporting text"
     MDListItemTrailingIcon:
         icon: "whatsapp"
-
+ 
 <ExpItemcard>:
     orientation:"horizontal"
     elevation: .8

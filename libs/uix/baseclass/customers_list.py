@@ -1,7 +1,8 @@
-from main_imports import MDScreen,MDLabel,MDListItem,MDBoxLayout,StringProperty,MDListItemLeadingAvatar,MDListItemHeadlineText,MDListItemSupportingText,MDListItemTertiaryText
+from main_imports import MDScreen,MDCard,MDLabel,MDListItem,MDBoxLayout,StringProperty,MDListItemLeadingAvatar,MDListItemHeadlineText,MDListItemSupportingText,MDListItemTertiaryText
 from libs.applibs import utils
 from libs.applibs.supabase_db import *
 from libs.applibs.loader import Dialog_cls
+from libs.applibs.whatsapp import send_messages
 from kivy.clock import Clock
 import threading
 import concurrent.futures
@@ -9,13 +10,15 @@ from functools import partial
 import time
 utils.load_kv("cutomers_list.kv")
 
-class ListItems(MDListItem):
+class ListItems(MDCard):
     custid = StringProperty()
     avatar_source = StringProperty()
     name = StringProperty()
     expiry_date = StringProperty()
     status = StringProperty()
     phone = StringProperty()
+    def whatsappmsg(self,phone,msg):
+        send_messages(phone,msg)
 
 class CustomersList(MDScreen):
     def __init__(self, **kwargs):
@@ -32,6 +35,7 @@ class CustomersList(MDScreen):
             return
         self.api_results = {}
         query_customer_list = """
+                            SELECT * FROM (
                             SELECT DISTINCT ON (c.id) 
                                 c.id, 
                                 c.name,
@@ -46,6 +50,8 @@ class CustomersList(MDScreen):
                             FROM "Customers" c
                             JOIN "subscription"  p ON c.id = p.customerid::uuid
                             ORDER BY c.id, p.planstartdate DESC
+                            ) AS latest_plans
+                            ORDER BY planstartdate DESC
                             """
         api_tasks = {
             "customers": partial(run_sql,query_customer_list),

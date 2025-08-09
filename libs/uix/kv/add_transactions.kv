@@ -224,12 +224,12 @@
                         text: "Regular"
                         adaptive_height: True
                         padding_x: "7dp"
-                        pos_hint: {"center_y": .5}
+                        pos_hint: {"center_y": .5}  
 
                     Check:
                         pos_hint: {'center_x': .6, 'center_y': .5}
                         disabled: True if root.txn_of != "Admission" else False
-                        on_active:root.update_batch(True)
+                        on_active:root.update_locker(True)
                     MDLabel:
                         text: "Locker"
                         adaptive_height: True
@@ -241,7 +241,7 @@
                     size_hint: .8,None
                     pos_hint:{"center_x": 0.5}
                     MDGridLayout:
-                        cols: 1
+                        cols: 2
                         spacing: "10dp"
                         size_hint_y: None
                         height: self.minimum_height
@@ -249,11 +249,21 @@
                             mode: "outlined"
                             text: root.amount
                             on_text: root.amount = self.text
-                            size_hint: .8,None
+                            size_hint: .5,None
                             pos_hint:{"center_x": 0.5}
                             input_filter:"int"
                             MDTextFieldHintText:
                                 text: "Amount (₹)"
+                        MDTextField:
+                            mode: "outlined"
+                            text: root.locker_no
+                            on_text: root.locker_no = self.text
+                            size_hint: .5,None
+                            pos_hint:{"center_x": 0.5}
+                            disabled: not root.is_locker
+                            input_filter:"int"
+                            MDTextFieldHintText:
+                                text: "Locker No"
                 MDBoxLayout:
                     orientation: "horizontal"
                     adaptive_height: True

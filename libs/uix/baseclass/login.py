@@ -47,7 +47,7 @@ class Login_Screen(MDScreen):
             if user:
                 self.auth_token = user.session.access_token
                 loader.close_dlg()
-                self.parent.change_screen("land")
+                self.parent.change_screen("subcription_list")
             else:
                 utils.snack(color="red", text="Invalid email or password.")
 

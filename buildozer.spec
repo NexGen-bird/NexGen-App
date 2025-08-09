@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0, https://github.com/kivymd/KivyMD/archive/master.zip, android, asyncgui, materialyoucolor,exceptiongroup,asynckivy,pillow==10.1.0,websockets, typing-extensions, sniffio, six, propcache, packaging, multidict, idna, hyperframe, hpack, h11, frozenlist, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic-core, httpcore, h2, deprecation, anyio, aiosignal, pydantic, httpx, aiohttp, realtime, supafunc, storage3, postgrest, gotrue, supabase, pyjnius, configparser,pyjwt
+requirements = python3,kivy==2.3.0, https://github.com/kivymd/KivyMD/archive/master.zip, https://github.com/kivymd-extensions/akivymd/archive/main.zip, android, asyncgui, materialyoucolor,exceptiongroup,asynckivy,pillow==10.1.0,websockets, typing-extensions, sniffio, six, propcache, packaging, multidict, idna, hyperframe, hpack, h11, frozenlist, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, python-dateutil, pydantic-core, httpcore, h2, deprecation, anyio, aiosignal, pydantic, httpx, aiohttp, realtime, supafunc, storage3, postgrest, gotrue, supabase, pyjnius, plyer, configparser, pyjwt
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes

@@ -24,6 +24,7 @@ class AddTransactions(MDScreen):
     plan_type = NumericProperty()
     shift = StringProperty("")
     amount = StringProperty("")
+    locker_no = StringProperty("")
     transaction_mode = StringProperty("")
     transaction_made_by = StringProperty("")
     transaction_startdate = StringProperty("")
@@ -44,6 +45,8 @@ class AddTransactions(MDScreen):
         print(self.addmission_form_data)
         AS = self.parent.get_screen("admission_form")
         print("Transactions >>>>>",AS.contact_number)
+        self.is_locker = False
+        self.locker_no = "0"
         if AS.contact_number:
             print("inside if ")
             self.txn_of="Admission"
@@ -52,6 +55,7 @@ class AddTransactions(MDScreen):
             self.transaction_made_to = "abhijit shinde"
             self.transaction_type = "IN"
             self.ids.txntype_text.text = self.transaction_type
+        
         else:
             print("inside else ")
             self.txn_of="General"
@@ -391,9 +395,11 @@ transaction made to - name of staff
         print(type(self.transaction_date))
         self.transaction_startdate,self.transaction_enddate = utils.calculate_end_dates(self.transaction_date,plantype)
 
-
-    def update_batch(self,is_locker):
+    def update_locker(self,is_locker):
         self.is_locker = is_locker
+        self.amount_by_shift(self.ids.shift.text)
+    def update_batch(self,is_locker):
+        # self.is_locker = is_locker
         self.amount_by_shift(self.ids.shift.text)
         
 
@@ -511,8 +517,9 @@ transaction made to - name of staff
             "customer_planstartdate": self.transaction_startdate,
             "customer_planexpirydate": self.transaction_enddate,
             "customer_paymenttype": self.transaction_mode,
-            "customer_isactive": 1
-            # "is_locker": 1 if self.is_locker==True else 0
+            "customer_isactive": 1,
+            "is_locker": 1 if self.is_locker==True else 0,
+            "locker_no": int(self.locker_no)
         }
         # print("Before --- > ",self.addmission_form_data)
         final = self.addmission_form_data.update(data)
@@ -557,7 +564,7 @@ Description - {self.transaction_made_for.strip()}
             except Exception as e:
                 utils.snack("red",f"{e}")
 
-        elif self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="":
+        elif self.transaction_type!="" and self.amount!="" and self.transaction_made_by!="" and self.transaction_mode!="" and self.txn_of!="" and self.transaction_made_for!="" and self.transaction_made_to!="" and self.locker_no != "":
             print("Inside only insert Transaction ")
             if "customer_phone_number" in self.addmission_form_data:
                 res = insert_addmission(self.addmission_form_data)
@@ -599,6 +606,7 @@ ID - NG
 Name - {self.addmission_form_data['customer_name']}
 phone - {self.addmission_form_data['customer_phone_number']}
 Shift - {utils.get_shift_text(self.shifts_selected)}
+Locker Number - {self.locker_no if self.is_locker else "No Locker Taken"}
 Payment mode - {self.transaction_mode}
 Payment Amount- {self.amount.strip()}
 Payment date - {utils.date_format(self.transaction_date)}

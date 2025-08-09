@@ -1,6 +1,7 @@
 from supabase_lib.supabase_config import supabase
 from supabase_lib.supabase_auth import *
 from kivy.app import App
+
 # Create a new customer
 def session_timeout():
     app = App.get_running_app()
@@ -460,7 +461,7 @@ def search_profile_img(imagename):
     except Exception as e:
        utils.snack("red",f"Error fetching user: {e}, Re-Login")
 
-# Update a customer
+# Update a Receipt sent
 def update_receipt_sent(receiptid):
     # {"is_sent": 1}
     isinternet = utils.is_internet_available()
@@ -475,6 +476,45 @@ def update_receipt_sent(receiptid):
             utils.snack("red", "No Internet Connection.")
         else:
             response = supabase.table("receipts").update({"is_sent": 1}).eq("receiptid", receiptid).execute()
+            return response.data
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
+# Past 3 month collection and expense data 
+def get_chart_data():
+    # {"is_sent": 1}
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_session()
+
+        if not user:
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("get_last_three_months_summary").execute()
+            return response.data
+
+    except Exception as e:
+       utils.snack("red",f"Error fetching user: {e}, Re-Login")
+
+def get_admission_chart_data():
+    # {"is_sent": 1}
+    isinternet = utils.is_internet_available()
+
+    try:
+        user = supabase.auth.get_session()
+
+        if not user:
+            session_timeout()
+            utils.snack("red","No active session. Please Re-login.")
+        elif not isinternet:
+            utils.snack("red", "No Internet Connection.")
+        else:
+            response = supabase.rpc("get_admissions_summary").execute()
             return response.data
 
     except Exception as e:

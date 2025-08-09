@@ -1,25 +1,53 @@
 <ListItems>:
-    theme_bg_color:"Custom"
-    divider:True
-    md_bg_color:self.theme_cls.transparentColor
-    # on_release: print("Test --- >",root.name,root.custid)
-    on_release:app.screen_manager.get_screen("customers_list").get_text(root.custid) 
-    MDListItemLeadingAvatar:
-        source:root.avatar_source
-    MDListItemHeadlineText:
-        text: root.name
+    orientation:"horizontal"
+    elevation: .8
+    size_hint: (None, None)
+    size: (dp(350), dp(350))
+    padding: "10dp"
+    spacing: "5dp"
+    pos_hint: {"center_x": 0.5}
+    radius: [20, 20, 20, 20]
+    theme_bg_color: "Custom"
+    md_bg_color: "#E1F4F1" if root.status == "Active" else "#FFECEC"#"#FFFFFF"
+    style: "elevated"
+    on_release:app.screen_manager.get_screen("customers_list").get_text(root.custid)
+    MDRelativeLayout:
+        FitImage:
+            source: root.avatar_source  # Image URL from data
+            # size_hint_y=None,
+            # height="80dp",
 
-    MDListItemSupportingText:
-        text:"Expired On : "+ str(root.expiry_date)
+            size_hint: (None, None)
+            size: (dp(60), dp(60))
+            radius: [self.width/2,]
+            pos_hint: {"center_y": 0.5}
+        MDIconButton:
+            icon:"whatsapp"
+            style: "standard"
+            pos_hint:{"top": 1, "right": 1}
+            on_release:root.whatsappmsg("91"+str(root.phone),"")
+        MDLabel:
+            text:root.name[:25]+".." if len(root.name)>25 else root.name
+            theme_text_color:"Primary"
+            halign:"left"
+            adaptive_size: True
+            height:"24dp"
+            font_style:"Title"
+            role:"medium"
+            pos_hint: {"center_y": 0.7,"x": 0.25}
+        
+        MDLabel:
+            text:"Expired On : "+ str(root.expiry_date)
+            # theme_text_color:"Custom"
+            # text_color: root.getcolor(root.expiry_date) if root.expdate != '' else [1,1,1,1]
+            halign:"center"
+            adaptive_size: True
+            height:"20dp"
+            font_style:"Title"
+            role:"medium"
+            pos_hint: {"center_y": 0.2,"x": 0.25}
 
-    MDListItemTertiaryText:
-        text:root.status
-        theme_text_color:"Custom"
-        text_color:"#3cb043" if root.status == "Active" else "#ff0f0f"
-    # MDListItemTrailingIcon:
-    #     icon: "whatsapp"
-        # on_press: app.screen_manager.get_screen("customers_list").send_whatsapp_messages(root.phone,root.name,str(root.expiry_date))
-
+   
 <CustomersList>:
     name:"customers_list"
     theme_bg_color: "Custom"
@@ -108,6 +136,7 @@
 
                 RecycleBoxLayout:
                     padding: dp(10)
+                    spacing: dp(10)
                     default_size: None, dp(67)
                     default_size_hint: 1, None
                     size_hint_y: None

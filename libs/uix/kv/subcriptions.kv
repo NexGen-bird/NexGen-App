@@ -4,7 +4,7 @@
     size_hint: None, None
     size: "640dp", "150dp"
     theme_bg_color: "Custom"
-    md_bg_color: app.getval("CARD_BACKGROUND")
+    md_bg_color: "#E1F4F1" if root.status == "Active" else "#FFECEC"
     style: "outlined"
  
     MDRelativeLayout:
@@ -57,9 +57,9 @@
             pos_hint: {"y": 0.4, "center_x": 0.5}
             bold: False
             font_style: "Title"
-            role:"medium"
+            role:"medium" 
         MDLabel:
-            text: "Seat No."
+            text: "Locker No."
             adaptive_size: True
             color: "grey"
             pos_hint: {"y": 0.6, "right": 1}
@@ -67,7 +67,7 @@
             font_style: "Title"
             role:"medium"
         MDLabel:
-            text: root.seatid
+            text: root.locker_no
             adaptive_size: True
             color: "black"
             pos_hint: {"y": 0.4, "right": 1}

@@ -277,7 +277,15 @@ def add_current_time_to_date(date_str):
     
     # Format the result
     return full_datetime.strftime("%Y-%m-%d %H:%M:%S.%f")
-
+def format_inr(amount):
+    s = str(amount)
+    if len(s) <= 3:
+        return s
+    else:
+        return s[:-3][::-1].replace(
+            s[:-3][::-1], 
+            ",".join([s[:-3][::-1][i:i+2] for i in range(0, len(s[:-3]), 2)])
+        )[::-1] + "," + s[-3:]
 def format_number(n: float) -> str:
     """
     Convert a number into a readable format using absolute values, K (thousand), L (lakh), and Cr (crore).

@@ -202,7 +202,7 @@ class AdmissionFormScreen(MDScreen):
         date_dialog.bind(on_ok=self.on_ok)
         date_dialog.bind(on_cancel=self.on_cancel)
         date_dialog.open()
-
+ 
     def on_edit(self, instance_date_picker):
         instance_date_picker.dismiss()
         print("Inside On edit main method")

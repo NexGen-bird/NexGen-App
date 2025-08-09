@@ -1,5 +1,5 @@
 
-from main_imports import MDScreen,MDApp,MDRelativeLayout,MDButtonIcon,FitImage,MDDialog,MDDialogHeadlineText,MDDialogContentContainer,MDWidget,MDLabel,MDListItemHeadlineText,MDListItemSupportingText,NumericProperty, dp,StringProperty,MDCard,MDIconButton,MDListItemLeadingAvatar,BoxLayout,MDButton,MDButton,BoxLayout,MDListItem
+from main_imports import MDScreen,MDApp,Window,MDRelativeLayout,MDButtonIcon,FitImage,MDDialog,MDDialogHeadlineText,MDDialogContentContainer,MDWidget,MDLabel,MDListItemHeadlineText,MDListItemSupportingText,NumericProperty, sp,dp,StringProperty,MDCard,MDIconButton,MDListItemLeadingAvatar,BoxLayout,MDButton,MDButton,BoxLayout,MDListItem
 from libs.applibs import utils
 from datetime import datetime
 from libs.applibs.supabase_db import *
@@ -10,6 +10,7 @@ import threading
 import concurrent.futures
 from functools import partial
 from datetime import datetime
+from libs.applibs.dualbarchart import  AKDualBarChart
 
 
 utils.load_kv("dashboard.kv")
@@ -40,9 +41,13 @@ class LandingScreen1(MDScreen):
     expired_count = StringProperty()
     active_members = StringProperty()
     collection_amount = StringProperty()
+    collection_amount_absolute = StringProperty()
     expense_amount = StringProperty()
+    expense_amount_absolute = StringProperty()
     net_pnl = StringProperty()
+    net_pnl_absolute = StringProperty()
     pnl_amount = StringProperty()
+    pnl_amount_absolute = StringProperty()
     morning= StringProperty()
     afternoon= StringProperty()
     evening= StringProperty()
@@ -53,6 +58,10 @@ class LandingScreen1(MDScreen):
     api_results = []
     val1 = ""
     val2 = ""
+    chart_month = []
+    chart_values = []
+    admission_chart_month = []
+    admission_chart_values = []
     def load_data_from_apis(self):
         # don't run if screen is inactive
         if not self.active:
@@ -110,18 +119,24 @@ class LandingScreen1(MDScreen):
 
         results = {}
         login_with_email_password("abhijit.shinde@test.com","india@123")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            future_to_key = {
-                executor.submit(func): key for key, func in api_tasks.items()
-            }
+        # with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        #     future_to_key = {
+        #         executor.submit(func): key for key, func in api_tasks.items()
+        #     }
 
-            for future in concurrent.futures.as_completed(future_to_key):
-                key = future_to_key[future]
-                try:
-                    results[key] = future.result()
-                except Exception as e:
-                    results[key] = f"Error: {str(e)}"
+        #     for future in concurrent.futures.as_completed(future_to_key):
+        #         key = future_to_key[future]
+        #         try:
+        #             results[key] = future.result()
+        #         except Exception as e:
+        #             results[key] = f"Error: {str(e)}"
 
+        # New Logic ------
+        for key, func in api_tasks.items():
+            try:
+                results[key] = func()
+            except Exception as e:
+                results[key] = f"Error: {str(e)}"
         self.api_results = results
         # Schedule UI update only if still active
         if self.active:
@@ -162,13 +177,17 @@ class LandingScreen1(MDScreen):
             self.ids.weekend.text = self.shifts['weekend']
             if collection:
                 self.collection_amount = str("0" if collection[0]['total_revenue']==None else "{}{}".format("₹", utils.format_number(float(collection[0]["total_revenue"]))))
+                self.collection_amount_absolute = str("0" if collection[0]['total_revenue']==None else "{}{}".format("₹", collection[0]["total_revenue"]))
                 self.expense_amount = str("0" if collection[0]['total_expenses']==None else "{}{}".format("₹",utils.format_number(float(collection[0]["total_expenses"]))))
+                self.expense_amount_absolute = str("0" if collection[0]['total_expenses']==None else "{}{}".format("₹",collection[0]["total_expenses"]))
                 self.net_pnl ="{}{}".format("₹", utils.format_number(float(int(0 if collection[0]['total_revenue']==None else collection[0]['total_revenue']) - int(0 if collection[0]['total_expenses']==None else collection[0]['total_expenses']))))        
+                self.net_pnl_absolute ="{}{}".format("₹", int(0 if collection[0]['total_revenue']==None else collection[0]['total_revenue']) - int(0 if collection[0]['total_expenses']==None else collection[0]['total_expenses']))      
             
             if active_members:
                 self.active_members = str("0" if active_members[0]['count']==None else active_members[0]['count'])
             
             self.pnl_amount = str(0 if pnl_amount==None else utils.format_number(float(pnl_amount)))
+            self.pnl_amount_absolute = str("{}{}".format("₹",0 if pnl_amount==None else pnl_amount))
             
 
             self.expired_count = str("0" if expired_count[0]['count']==None else expired_count[0]['count'])
@@ -190,6 +209,57 @@ class LandingScreen1(MDScreen):
         print("Start time --->",self.start_time)
         print("End time --->",end_time)
         print("time to complete api  --->",end_time-self.start_time)
+
+        # collection vs Expenses Chart Details
+        chart_data = get_chart_data()
+        if chart_data: 
+            for i in chart_data:
+                self.chart_month.append(i['month'])
+                self.chart_values.append([i['collection'],i['expense']])
+            chart = self.ids.chart
+            print(f"Chart ANimation {chart.anim}")
+            # self.chart_month.clear()
+            # self.chart_values.clear()
+            if self.chart_values and self.chart_month:
+                chart.height = "280dp"
+                chart.x_values= self.chart_month  # Numeric values
+                chart.y_values= self.chart_values
+                chart.current_bar_color=[0.2, 0.6, 1, 1]
+                chart.previous_bar_color=[1, 0.5, 0.2, 1]
+            else:
+                self.ids.collection_summary.clear_widgets()
+                chart.height = "0dp"
+
+        else:
+            chart = self.ids.chart
+            self.ids.collection_summary.clear_widgets()
+            chart.height = "0dp"
+            print("Collection chart is Null")
+
+        # Admission and reAdmissions chart
+        chart_readmission_data = get_admission_chart_data() 
+        if chart_readmission_data:
+            for i in chart_readmission_data:
+                self.admission_chart_month.append(i['month_label'])
+                self.admission_chart_values.append([i['new_admissions'],i['readmissions']])
+            print(f"Admission chart data MONTH --> {self.admission_chart_month}")
+            print(f"Admission chart data Value --> {self.admission_chart_values}")
+            chart_readmission = self.ids.chart_readmission
+            if self.admission_chart_month and self.admission_chart_values:
+                chart_readmission.height = "280dp"
+                chart_readmission.x_values= self.admission_chart_month  # Numeric values
+                chart_readmission.y_values= self.admission_chart_values
+                chart_readmission.current_bar_color=[0.2, 0.6, 1, 1]
+                chart_readmission.previous_bar_color=[1, 0.5, 0.2, 1]
+            else:
+                chart_readmission = self.ids.chart_readmission
+                self.ids.admission_summary.clear_widgets()
+                chart_readmission.height = "0dp"
+        else:
+            chart_readmission = self.ids.chart_readmission
+            self.ids.admission_summary.clear_widgets()
+            chart_readmission.height = "0dp"
+
         
         self.loader.close_dlg()
         
@@ -203,6 +273,7 @@ class LandingScreen1(MDScreen):
         self.loader.open_dlg()
         self.start_time=datetime.now()
         isinternet=utils.is_internet_available()
+
         if self.api_thread and self.api_thread.is_alive():
             print("Thread still running. Skipping new call.")
             return
@@ -211,6 +282,8 @@ class LandingScreen1(MDScreen):
             self.api_thread.start()
         else:
             utils.snack("red","No Internet Connection..")
+        
+        
         # pass
         # customer_count_query = """
         #                         select count(*)
@@ -346,10 +419,79 @@ NexGen Study Center Team"""
     def on_leave(self):
        self.ids.rv.data =[]
        self.active = False
+       self.chart_values.clear()
+       self.chart_month.clear()
+       self.admission_chart_month.clear()
+       self.admission_chart_values.clear()
     #    self.ids.mainboxx.clear_widgets()
     
     def rediret_expired_customer(self):
         self.parent.get_screen("customers_list").search_redirect = "expired"
         self.parent.change_screen("customers_list")
+    # Tooltip methods ----------
+    def show_tooltip(self, widget, amount,y_data):
+        if hasattr(self, 'tooltip_label') and self.tooltip_label:
+            self.remove_widget(self.tooltip_label)
+        
+        tooltip_text = (str(amount))
+        # Create a temporary label to measure size
+        temp_label = MDLabel(
+            text=tooltip_text,
+            font_size=sp(14),
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 1),
+            halign="left",
+            valign="top",
+            size_hint=(None, None),
+            shorten=False,
+        )
 
+        # Force wrap even for long words (e.g., number strings)
+        temp_label.texture_update()
+        print(f"Temp -->{temp_label.width},{temp_label.texture_size[1]}")
+        # Tooltip width and height based on text size
+        max_width = Window.width * 0.9  # 90% of screen width
+        min_width = dp(60)
+
+        tooltip_width = min(max(temp_label.texture_size[0] + dp(20), min_width), max_width)
+        tooltip_height = temp_label.texture_size[1] + dp(20)
+
+        # Calculate tooltip position and prevent overflow
+        x = widget.center_x - (tooltip_width / 2)
+        y = widget.top + dp(10)
+
+        # Prevent tooltip from going out of screen
+        x = max(dp(10), min(x, Window.width - tooltip_width - dp(10)))
+        y = min(y, Window.height - tooltip_height - dp(10))
+        print(f"Final size cal --> {x-(len(tooltip_text)*20)-15}, {y-(20/len(tooltip_text))-15}")
+        print(f"Final size --> {x}, {y}")
+        # Create a label positioned above the widget
+        self.tooltip_label = MDLabel(
+            text=tooltip_text,
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 1),
+            md_bg_color="#5ABFAD",
+            padding=(10),
+            # pos=(x, y),
+            pos=(x-(len(tooltip_text)*20)-5, y_data),# Upper 775 Lower 460
+            # pos_hint= {"center_x": 0.5, "center_y":0.5},
+            size_hint=(None, None),
+            # width=dp(250),
+            halign="center",
+            radius=[dp(10)]
+        )
+        print(x-(len(tooltip_text)*20)-5, (y-len(tooltip_text))/20-50)
+        self.tooltip_label.height = dp(len(tooltip_text)/10+40)
+        self.tooltip_label.width = dp(len(tooltip_text)*10+10)
+        # print(self.tooltip_label.texture_size[1])
+
+        self.add_widget(self.tooltip_label)
+
+        # Auto-hide after 2 seconds
+        Clock.schedule_once(self.hide_tooltip, 5)
+
+    def hide_tooltip(self, *args):
+        if hasattr(self, 'tooltip_label') and self.tooltip_label:
+            self.remove_widget(self.tooltip_label)
+            self.tooltip_label = None
             

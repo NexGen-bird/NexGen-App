@@ -40,9 +40,10 @@ Steps to download your receipt:
 
 If you face any issues, feel free to reply to this message.
 Thank you for choosing NexGen Self Study Center! 🙏
-"""
+"""     
+        whatsapp_number = "91"+str(phone)
         update_receipt_sent(receiptid)
-        send_messages(phone,final_message)
+        send_messages(whatsapp_number,final_message)
         Receipt().on_leave()
         Receipt().search_redirect = ""
         Receipt().ids.search_field.text = ""
@@ -80,8 +81,9 @@ Steps to download your receipt:
 If you face any issues, feel free to reply to this message.
 Thank you for choosing NexGen Self Study Center! 🙏
 """
+        whatsapp_number = "91"+str(phone)
         update_receipt_sent(receiptid)
-        send_messages(phone,final_message)
+        send_messages(whatsapp_number,final_message)
         Receipt().on_leave()
         Receipt().search_redirect = ""
         Receipt().ids.search_field.text = ""

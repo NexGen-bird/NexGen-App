@@ -46,7 +46,7 @@ Window.softinput_mode = "below_target"
 
 from libs.uix.baseclass.root import Root
 from libs.uix.baseclass.login import Login_Screen
-from libs.uix.baseclass.dashboard import LandingScreen
+# from libs.uix.baseclass.dashboard import LandingScreen
 from libs.uix.baseclass.seatregister import SeatRegisterScreen
 from libs.uix.baseclass.customer_profile import CustomerProfile
 from libs.uix.baseclass.customers_list import CustomersList
@@ -188,7 +188,7 @@ class NexGenApp(MDApp):
         self.screen_manager.add_widget(InvestmentTransactions())
         self.screen_manager.add_widget(Transactions())
         self.screen_manager.add_widget(AddTransactions())
-        self.screen_manager.add_widget(LandingScreen())
+        # self.screen_manager.add_widget(LandingScreen())
         self.screen_manager.add_widget(LandingScreen1())
         self.screen_manager.add_widget(AdmissionFormScreen())
         self.screen_manager.add_widget(SeatRegisterScreen())

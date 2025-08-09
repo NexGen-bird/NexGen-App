@@ -15,7 +15,8 @@ class SubcriptionCard(MDCard):
     shift = StringProperty()
     status = StringProperty()
     Color = StringProperty()
-    seatid = StringProperty()
+    locker_no = StringProperty()
+
 
 class EListItems(MDListItem):
     custid = StringProperty()
@@ -51,7 +52,7 @@ class SubcriptionCardList(MDScreen):
                     "planexpirydate":utils.date_format(x["planexpirydate"]),
                     "planduerationid":self.plan[x["planduerationid"]],
                     "shiftid":self.shift[x["shiftid"]],
-                    "seatid":str(x["seatid"]),
+                    "locker_no":str(x["locker_no"]),
                     "status":"Active" if x["isactive"] == 1 else "Expired",
                     "color":x["color"]
                 }
@@ -96,7 +97,7 @@ class SubcriptionCardList(MDScreen):
                     "expirydate":item["planexpirydate"],
                     "plan":item["planduerationid"],
                     "shift":item["shiftid"],
-                    "seatid":item["seatid"],
+                    "locker_no":item["locker_no"],
                     "status":item["status"],
                     "Color":item["color"],
                     "callback": lambda x: self.get_text(item["custid"]),
@@ -105,6 +106,7 @@ class SubcriptionCardList(MDScreen):
 
         self.ids.rv.data = []
         for Name in self.temp_list:
+            print(f"This is Name which passed --> {Name}")
             if search:
                 if text in Name["name"].lower():
                     add_item(Name)
@@ -112,7 +114,7 @@ class SubcriptionCardList(MDScreen):
                     add_item(Name)
                 elif text in Name["planexpirydate"].lower():
                     add_item(Name)
-                elif text in Name["shiftid"].lower():
+                elif text in str(Name["locker_no"]).lower():
                     add_item(Name)
                 elif text in Name["status"].lower():
                     add_item(Name)
